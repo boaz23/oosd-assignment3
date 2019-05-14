@@ -22,7 +22,13 @@ public abstract class Player extends Unit {
         this.level = level;
     }
 
-
-    public abstract void levelUp();
+    public void levelUp() {
+        experience = experience - (50 * level);
+        level++;
+        setHealthPool(getHealthPool() + (10 * level));
+        setCurrentHealth(getHealthPool());
+        setAttackPoints(getAttackPoints() + (5 * level));
+        setDefense(getDefense() + (2 * level));
+    }
     public abstract void useSpecialAbility();
 }

@@ -28,10 +28,11 @@ public class Rogue extends Player {
         if (currentEnergy <= 100)
             this.currentEnergy = currentEnergy;
         else
-            //exeption?
+            this.currentEnergy = 100;
     }
 
     public void levelUp() {
+        super.levelUp();
         currentEnergy = 100;
         setAttackPoints(getAttackPoints() + (3 * getLevel()));
     }

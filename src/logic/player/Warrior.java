@@ -4,8 +4,6 @@ import interfaces.Observable;
 
 public class Warrior extends Player {
 
-
-
     private Integer coolDown;
     private Integer remaining;
 
@@ -31,6 +29,7 @@ public class Warrior extends Player {
     }
 
     public void levelUp() {
+        super.levelUp();
         remaining = 0;
         setHealthPool(getHealthPool() + (5 * getLevel()));
         setDefense(getDefense() + getLevel());

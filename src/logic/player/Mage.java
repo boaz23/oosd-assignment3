@@ -67,6 +67,7 @@ public class Mage extends Player {
 
 
     public void levelUp() {
+        super.levelUp();
         manaPool = manaPool + (25 * getLevel());
         currentMana = Math.min(currentMana+(manaPool/4), manaPool);
         spellPower = spellPower + (10 * getLevel());
