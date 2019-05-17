@@ -1,6 +1,6 @@
-package logic.enemies;
+package dnd.logic.enemies;
 
-import logic.Tick;
+import dnd.logic.Tick;
 
 public class Trap extends Enemy {
     private int range;

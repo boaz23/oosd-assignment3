@@ -1,4 +1,4 @@
-package logic.enemies;
+package dnd.logic.enemies;
 
 public class Monster extends Enemy {
 
