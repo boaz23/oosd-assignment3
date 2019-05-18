@@ -1,5 +1,6 @@
 package dnd.logic.player;
 
+import dnd.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Unit;
 import dnd.logic.UnitType;
@@ -11,11 +12,14 @@ public abstract class Player extends Unit {
     private static final int LEVEL_ATTACK_DIFF = 5;
     private static final int LEVEL_DEFENSE_DIFF = 2;
 
-    protected Integer experience;
-    protected Integer level;
+    protected int experience;
+    protected int level;
 
-    public Player(UnitsInRangeFinder unitsInRangeFinder) {
-        super(unitsInRangeFinder);
+    public Player(String name,
+                  int healthPool, int attack, int defense,
+                  UnitsInRangeFinder unitsInRangeFinder,
+                  RandomGenerator randomGenerator) {
+        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
     }
 
     protected void levelUp() {

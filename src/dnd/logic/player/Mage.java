@@ -21,18 +21,14 @@ public class Mage extends Player {
     int hitTimes;
     int range;
 
-    public Mage(int spellPower,
-                int manaPool,
-                int cost,
-                int hitTimes,
-                int range,
+    public Mage(String name,
+                int healthPool, int attack, int defense,
+                UnitsInRangeFinder unitsInRangeFinder,
                 RandomGenerator randomGenerator,
-                UnitsInRangeFinder unitsInRangeFinder) {
-        super(unitsInRangeFinder);
+                int spellPower, int manaPool, int cost,
+                int hitTimes, int range) {
+        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
 
-        if (randomGenerator == null) {
-            throw new IllegalArgumentException("random generator cannot be null.");
-        }
         if (spellPower <= 0) {
             throw new IllegalArgumentException("spell power must be a positive number.");
         }

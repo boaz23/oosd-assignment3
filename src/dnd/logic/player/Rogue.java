@@ -1,5 +1,6 @@
 package dnd.logic.player;
 
+import dnd.RandomGenerator;
 import dnd.logic.*;
 import dnd.logic.enemies.Enemy;
 
@@ -14,8 +15,12 @@ public class Rogue extends Player {
     int cost;
     int currentEnergy;
 
-    public Rogue(int cost, UnitsInRangeFinder unitsInRangeFinder) {
-        super(unitsInRangeFinder);
+    public Rogue(String name,
+                 int healthPool, int attack, int defense,
+                 UnitsInRangeFinder unitsInRangeFinder,
+                 RandomGenerator randomGenerator,
+                 int cost) {
+        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
 
         if (cost < 0) {
             throw new IllegalArgumentException("cost must be a non-negative number.");

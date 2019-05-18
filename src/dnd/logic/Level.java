@@ -22,7 +22,7 @@ public class Level {
                 if (x == position.getX() & y == position.getY()) {
                     continue;
                 }
-                
+
                 BoardSquare square = board[x][y];
                 if (square.getSquareType() == BoardSqaureType.Unit) {
                     Unit unit = (Unit)square;

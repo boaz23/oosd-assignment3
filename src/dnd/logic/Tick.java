@@ -1,9 +1,15 @@
 package dnd.logic;
 
 public class Tick {
-    private int value;
+    private final int value;
+
+    public static final Tick Zero = new Tick(0);
 
     public Tick(int value) {
+        if (value < Zero.value) {
+            throw new IllegalArgumentException("tick value must be a non-negative number.");
+        }
+
         this.value = value;
     }
 
@@ -13,6 +19,10 @@ public class Tick {
 
     public int getValue() {
         return value;
+    }
+
+    public Tick decrement() {
+        return new Tick(Math.max(this.value - 1, Zero.value));
     }
 
     public boolean isGreaterThan(Tick other) {

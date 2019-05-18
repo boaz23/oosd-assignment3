@@ -1,5 +1,6 @@
 package dnd.logic.player;
 
+import dnd.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
 import dnd.logic.UnitsInRangeFinder;
@@ -10,19 +11,18 @@ public class Warrior extends Player {
 
     private static final int ABILITY_HEAL_POWER = 2;
 
-    private static final Tick AbilityReady = new Tick(0);
-
     Tick coolDown;
     Tick remaining;
 
-    public Warrior(Tick cooldown, UnitsInRangeFinder unitsInRangeFinder) {
-        super(unitsInRangeFinder);
+    public Warrior(String name,
+                   int healthPool, int attack, int defense,
+                   UnitsInRangeFinder unitsInRangeFinder,
+                   RandomGenerator randomGenerator,
+                   Tick cooldown) {
+        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
 
         if (cooldown == null) {
            throw new IllegalArgumentException("cooldown cannot be null.");
-        }
-        if (AbilityReady.isGreaterThan(cooldown)) {
-            throw new IllegalArgumentException("cooldown must be a non-negative number.");
         }
 
         this.coolDown = cooldown;
@@ -30,7 +30,7 @@ public class Warrior extends Player {
     }
 
     private void resetCooldown() {
-        this.remaining = AbilityReady;
+        this.remaining = Tick.Zero;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Warrior extends Player {
 
     @Override
     public void useSpecialAbility() throws LogicException {
-        if (this.remaining.isGreaterThan(AbilityReady)) {
+        if (this.remaining.isGreaterThan(Tick.Zero)) {
             throw new LogicException("Cannot use the special ability because the cooldown isn't ready.");
         }
 
@@ -53,8 +53,6 @@ public class Warrior extends Player {
 
     @Override
     public void onTick(Tick current) {
-        if (this.remaining.isGreaterThan(AbilityReady)) {
-            this.remaining = new Tick(this.remaining.getValue() - 1);
-        }
+        this.remaining = this.remaining.decrement();
     }
 }
