@@ -1,8 +1,7 @@
 package dnd.logic.player;
 
 import dnd.RandomGenerator;
-import dnd.logic.LogicException;
-import dnd.logic.Tick;
+import dnd.logic.*;
 import dnd.logic.enemies.Enemy;
 
 import java.util.List;
@@ -22,7 +21,15 @@ public class Mage extends Player {
     int hitTimes;
     int range;
 
-    public Mage(int spellPower, int manaPool, int cost, int hitTimes, int range, RandomGenerator randomGenerator) {
+    public Mage(int spellPower,
+                int manaPool,
+                int cost,
+                int hitTimes,
+                int range,
+                RandomGenerator randomGenerator,
+                UnitsInRangeFinder unitsInRangeFinder) {
+        super(unitsInRangeFinder);
+
         if (randomGenerator == null) {
             throw new IllegalArgumentException("random generator cannot be null.");
         }
@@ -68,14 +75,11 @@ public class Mage extends Player {
         }
 
         this.currentMana -= this.cost;
-        int hits = 0;
-        // TODO: get enemies in range
-        List<Enemy> enemiesInRange = getEnemiesInRange(this.range);
-        while (hits < this.hitTimes) {
+        List<Unit> enemiesInRange = this.unitsInRangeFinder.findUnitsInRange(this.position, this.range, UnitType.Enemy);
+        for (int hits = 0; hits < this.hitTimes; hits++) {
             // TODO: figure out what 'an enemy can defend itself' mean
             int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
             enemiesInRange.get(enemyIndex).takeDamage(this.spellPower);
-            hits++;
         }
     }
 

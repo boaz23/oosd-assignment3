@@ -2,6 +2,7 @@ package dnd.logic.player;
 
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
+import dnd.logic.UnitsInRangeFinder;
 
 public class Warrior extends Player {
     private static final int LEVEL_HEALTH_DIFF = 5;
@@ -14,7 +15,9 @@ public class Warrior extends Player {
     Tick coolDown;
     Tick remaining;
 
-    public Warrior(Tick cooldown) {
+    public Warrior(Tick cooldown, UnitsInRangeFinder unitsInRangeFinder) {
+        super(unitsInRangeFinder);
+
         if (cooldown == null) {
            throw new IllegalArgumentException("cooldown cannot be null.");
         }

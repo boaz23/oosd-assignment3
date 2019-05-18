@@ -1,7 +1,6 @@
 package dnd.logic.player;
 
-import dnd.logic.LogicException;
-import dnd.logic.Tick;
+import dnd.logic.*;
 import dnd.logic.enemies.Enemy;
 
 import java.util.List;
@@ -15,7 +14,13 @@ public class Rogue extends Player {
     int cost;
     int currentEnergy;
 
-    public Rogue(int cost) {
+    public Rogue(int cost, UnitsInRangeFinder unitsInRangeFinder) {
+        super(unitsInRangeFinder);
+
+        if (cost < 0) {
+            throw new IllegalArgumentException("cost must be a non-negative number.");
+        }
+
         this.cost = cost;
         this.currentEnergy = MAX_ENERGY;
     }
@@ -34,12 +39,11 @@ public class Rogue extends Player {
         }
 
         this.currentEnergy -= this.cost;
-        // TODO: get enemies in range
-        List<Enemy> enemiesInRange = getEnemiesInRange(ABILITY_RANGE);
-        for (Enemy enemy : enemiesInRange) {
+        List<Unit> enemiesInRange = this.unitsInRangeFinder.findUnitsInRange(this.position, ABILITY_RANGE, UnitType.Enemy);
+        for (Unit enemy : enemiesInRange) {
+            // TODO: figure out what 'an enemy can defend itself' mean
             enemy.takeDamage(this.attack);
         }
-        // TODO: figure out what 'an enemy can defend itself' mean
     }
 
     @Override

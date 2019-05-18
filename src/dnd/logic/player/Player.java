@@ -2,6 +2,8 @@ package dnd.logic.player;
 
 import dnd.logic.LogicException;
 import dnd.logic.Unit;
+import dnd.logic.UnitType;
+import dnd.logic.UnitsInRangeFinder;
 
 public abstract class Player extends Unit {
     private static final int LEVEL_EXP_DIFF = 50;
@@ -11,6 +13,10 @@ public abstract class Player extends Unit {
 
     protected Integer experience;
     protected Integer level;
+
+    public Player(UnitsInRangeFinder unitsInRangeFinder) {
+        super(unitsInRangeFinder);
+    }
 
     protected void levelUp() {
         this.experience -= this.level * LEVEL_EXP_DIFF;
@@ -26,12 +32,12 @@ public abstract class Player extends Unit {
             throw new IllegalArgumentException("exp gained must be a non-negative number.");
         }
 
-        int leftToNextLevel = getExpLeftToNextLevel();
-        while (exp > leftToNextLevel) {
-            exp -= leftToNextLevel;
-            this.experience += leftToNextLevel;
+        int expLeftToNextLevel = getExpLeftToNextLevel();
+        while (exp > expLeftToNextLevel) {
+            exp -= expLeftToNextLevel;
+            this.experience += expLeftToNextLevel;
             this.levelUp();
-            leftToNextLevel = getExpLeftToNextLevel();
+            expLeftToNextLevel = getExpLeftToNextLevel();
         }
 
         this.experience += exp;
@@ -42,4 +48,9 @@ public abstract class Player extends Unit {
     }
 
     public abstract void useSpecialAbility() throws LogicException;
+
+    @Override
+    public final UnitType getUnitType() {
+        return UnitType.Player;
+    }
 }
