@@ -12,7 +12,7 @@ public class Rogue extends Player {
     private static final int ENERGY_REGEN = 10;
     private static final int ABILITY_RANGE = 2;
 
-    int cost;
+    final int cost;
     int currentEnergy;
 
     public Rogue(String name,

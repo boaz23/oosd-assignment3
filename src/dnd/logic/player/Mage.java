@@ -17,9 +17,9 @@ public class Mage extends Player {
     int spellPower;
     int manaPool;
     int currentMana;
-    int cost;
-    int hitTimes;
-    int range;
+    final int cost;
+    final int hitTimes;
+    final int range;
 
     public Mage(String name,
                 int healthPool, int attack, int defense,

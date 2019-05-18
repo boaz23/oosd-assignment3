@@ -18,8 +18,10 @@ public class Level {
         List<Unit> unitsInRange = new ArrayList<>();
         for (int x = xStart; x < xEnd; x++) {
             for (int y = yStart; y < yEnd; y++) {
-                // ignore the given position
-                if (x == position.getX() & y == position.getY()) {
+                Point point = new Point(x, y);
+
+                // ignore points which are too far away and the given position
+                if (point.equals(position) | Point.distance(point, position) > range) {
                     continue;
                 }
 
@@ -45,8 +47,10 @@ public class Level {
 
         for (int x = xStart; x < xEnd; x++) {
             for (int y = yStart; y < yEnd; y++) {
-                // ignore the given position
-                if (x == position.getX() & y == position.getY()) {
+                Point point = new Point(x, y);
+
+                // ignore points which are too far away and the given position
+                if (point.equals(position) | Point.distance(point, position) > range) {
                     continue;
                 }
 

@@ -11,7 +11,7 @@ public class Warrior extends Player {
 
     private static final int ABILITY_HEAL_POWER = 2;
 
-    Tick coolDown;
+    final Tick coolDown;
     Tick remaining;
 
     public Warrior(String name,

@@ -37,4 +37,14 @@ public class Point {
         int dy = p.getY() - q.getY();
         return Math.sqrt((dx * dx) + (dy * dy));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Point)) {
+            return false;
+        }
+
+        Point other = (Point)obj;
+        return this.x == other.x & this.y == other.y;
+    }
 }
