@@ -7,7 +7,7 @@ import dnd.logic.player.Player;
 import java.util.List;
 
 public class Trap extends Enemy {
-    private static final int ATTACK_RANGE = 1;
+    private static final int ATTACK_RANGE = 2;
 
     private int relocationRange;
     private Tick relocationTime;

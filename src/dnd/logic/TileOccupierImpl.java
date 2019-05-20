@@ -1,5 +1,8 @@
 package dnd.logic;
 
+import dnd.ReadOnlySet;
+import dnd.ReadOnlySetImpl;
+
 import java.util.HashSet;
 import java.util.Set;
 

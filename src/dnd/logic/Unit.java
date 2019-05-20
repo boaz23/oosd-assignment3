@@ -1,6 +1,7 @@
 package dnd.logic;
 
 import dnd.RandomGenerator;
+import dnd.ReadOnlySet;
 
 public abstract class Unit extends TileOccupierImpl implements TickObserver {
     protected final String name;

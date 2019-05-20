@@ -58,7 +58,7 @@ public class Mage extends Player {
 
         this.spellPower = spellPower;
         this.manaPool = manaPool;
-        this.currentMana = getManaAddition();
+        this.currentMana = this.getManaAddition();
         this.cost = cost;
         this.hitTimes = hitTimes;
         this.range = range;
@@ -80,10 +80,12 @@ public class Mage extends Player {
 
         this.currentMana -= this.cost;
         List<TileOccupier> enemiesInRange = this.board.findTileOccupiers(this.position, this.range, EnemyPropertySet);
-        for (int hits = 0; hits < this.hitTimes; hits++) {
-            int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
-            Unit enemy = (Unit)enemiesInRange.get(enemyIndex);
-            this.attack(enemy, this.spellPower);
+        if (enemiesInRange.size() > 0) {
+            for (int hits = 0; hits < this.hitTimes; hits++) {
+                int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
+                Unit enemy = (Unit) enemiesInRange.get(enemyIndex);
+                this.attack(enemy, this.spellPower);
+            }
         }
     }
 

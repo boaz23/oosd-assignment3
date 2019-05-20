@@ -1,4 +1,4 @@
-package dnd.logic;
+package dnd;
 
 import java.util.Set;
 
