@@ -5,6 +5,7 @@ import dnd.logic.LogicException;
 import dnd.logic.Unit;
 import dnd.logic.UnitType;
 import dnd.logic.UnitsInRangeFinder;
+import dnd.logic.enemies.Enemy;
 
 public abstract class Player extends Unit {
     private static final int LEVEL_EXP_DIFF = 50;
@@ -52,6 +53,17 @@ public abstract class Player extends Unit {
     }
 
     public abstract void useSpecialAbility() throws LogicException;
+
+    @Override
+    protected boolean attack(Unit unit, int damage) {
+        boolean hasUnitDied = super.attack(unit, damage);
+        if (hasUnitDied & unit.getUnitType() == UnitType.Enemy) {
+            Enemy enemy = (Enemy)unit;
+            this.gainExp(enemy.getExperienceValue());
+        }
+
+        return hasUnitDied;
+    }
 
     @Override
     public final UnitType getUnitType() {

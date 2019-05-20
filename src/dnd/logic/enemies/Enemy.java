@@ -27,6 +27,10 @@ public abstract class Enemy extends Unit {
         this.tile = tile;
     }
 
+    public int getExperienceValue() {
+        return experienceValue;
+    }
+
     @Override
     public final UnitType getUnitType() {
         return UnitType.Enemy;

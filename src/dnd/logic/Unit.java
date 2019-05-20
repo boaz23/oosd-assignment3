@@ -53,7 +53,31 @@ public abstract class Unit extends BoardSquare implements TickObserver {
 
     public abstract UnitType getUnitType();
 
-    public abstract void takeDamage(int damage);
+    public boolean attack(Unit unit) {
+        if (unit == null) {
+            throw new IllegalArgumentException("unit is null.");
+        }
+
+        int damage = this.randomGenerator.nextInt(this.attack);
+        return this.attack(unit, damage);
+    }
+
+    protected boolean attack(Unit unit, int damage) {
+        return unit.defend(damage);
+    }
+
+    /**
+     * Defends from taking 'damage' amount of damage and lowers
+     * the current health according to the actual damage dealth
+     * (it might have been lowered by rolling a number between 0 and defense)
+     * @param damage The amount of damage to defend from
+     * @return Whether the unit died
+     */
+    public boolean defend(int damage) {
+        int reduction = this.randomGenerator.nextInt(this.defense);
+        this.currentHealth = Math.max(this.currentHealth - reduction, 0);
+        return this.currentHealth == 0;
+    }
 
     @Override
     public BoardSqaureType getSquareType() {

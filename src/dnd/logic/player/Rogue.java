@@ -46,8 +46,7 @@ public class Rogue extends Player {
         this.currentEnergy -= this.cost;
         List<Unit> enemiesInRange = this.unitsInRangeFinder.findUnitsInRange(this.position, ABILITY_RANGE, UnitType.Enemy);
         for (Unit enemy : enemiesInRange) {
-            // TODO: figure out what 'an enemy can defend itself' mean
-            enemy.takeDamage(this.attack);
+            this.attack(enemy, this.attack);
         }
     }
 

@@ -73,9 +73,9 @@ public class Mage extends Player {
         this.currentMana -= this.cost;
         List<Unit> enemiesInRange = this.unitsInRangeFinder.findUnitsInRange(this.position, this.range, UnitType.Enemy);
         for (int hits = 0; hits < this.hitTimes; hits++) {
-            // TODO: figure out what 'an enemy can defend itself' mean
             int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
-            enemiesInRange.get(enemyIndex).takeDamage(this.spellPower);
+            Unit enemy = enemiesInRange.get(enemyIndex);
+            this.attack(enemy, this.spellPower);
         }
     }
 

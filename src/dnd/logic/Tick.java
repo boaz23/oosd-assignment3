@@ -66,7 +66,7 @@ public class Tick {
             return false;
         }
 
-        return this.equals((Tick)obj);
+        return this.isEqual((Tick)obj);
     }
 
     @Override
