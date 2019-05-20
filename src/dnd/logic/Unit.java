@@ -1,7 +1,6 @@
 package dnd.logic;
 
 import dnd.RandomGenerator;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class Unit extends TileOccupierImpl implements TickObserver {
     protected final String name;
@@ -11,15 +10,12 @@ public abstract class Unit extends TileOccupierImpl implements TickObserver {
     protected int defense;
     protected Point position;
 
+    protected Board board;
     protected final RandomGenerator randomGenerator;
 
     public Unit(String name,
                 int healthPool, int attack, int defense,
-                UnitsInRangeFinder unitsInRangeFinder,
                 RandomGenerator randomGenerator) {
-        if (unitsInRangeFinder == null) {
-            throw new IllegalArgumentException("unitsInRangeFinder is null.");
-        }
         if (randomGenerator == null) {
             throw new IllegalArgumentException("randomGenerator is null.");
         }
@@ -42,10 +38,21 @@ public abstract class Unit extends TileOccupierImpl implements TickObserver {
         this.attack = attack;
         this.defense = defense;
 
-        this.unitsInRangeFinder = unitsInRangeFinder;
         this.randomGenerator = randomGenerator;
 
         this.addProperty(TileProperty.Unit);
+    }
+
+    protected Unit(String name,
+                   int healthPool, int attack, int defense,
+                   RandomGenerator randomGenerator,
+                   Board board) {
+        this(name, healthPool, attack, defense, randomGenerator);
+        if (board == null) {
+            throw new IllegalArgumentException("unitsInRangeFinder is null.");
+        }
+
+        this.board = board;
     }
 
     public Point getPosition() {

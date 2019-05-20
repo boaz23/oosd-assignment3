@@ -9,20 +9,33 @@ import java.util.List;
 public class Trap extends Enemy {
     private static final int ATTACK_RANGE = 1;
 
-    private final int relocationRange;
-    private final Tick relocationTime;
-    private final Tick visibilityTime;
+    private int relocationRange;
+    private Tick relocationTime;
+    private Tick visibilityTime;
+
     private Tick ticksCount;
     private boolean visible;
 
     public Trap(String name,
                 int healthPool, int attack, int defense,
-                UnitsInRangeFinder unitsInRangeFinder,
                 RandomGenerator randomGenerator,
                 int experienceValue, char tile,
                 int relocationRange, Tick relocationTime, Tick visibilityTime) {
-        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator, experienceValue, tile);
+        super(name, healthPool, attack, defense, randomGenerator, experienceValue, tile);
+        this.init(relocationRange, relocationTime, visibilityTime);
+    }
 
+    protected Trap(String name,
+                   int healthPool, int attack, int defense,
+                   RandomGenerator randomGenerator,
+                   Board board,
+                   int experienceValue, char tile,
+                   int relocationRange, Tick relocationTime, Tick visibilityTime) {
+        super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
+        this.init(relocationRange, relocationTime, visibilityTime);
+    }
+
+    private void init(int relocationRange, Tick relocationTime, Tick visibilityTime) {
         if (relocationRange <= 0) {
             throw new IllegalArgumentException("monster vision range must be a positive number.");
         }
@@ -56,9 +69,9 @@ public class Trap extends Enemy {
     }
 
     private void checkEngagePlayer() {
-        List<Unit> playersInRange = this.unitsInRangeFinder.findUnitsInRange(this.position, ATTACK_RANGE, UnitType.Player);
+        List<TileOccupier> playersInRange = this.board.findTileOccupiers(this.position, ATTACK_RANGE, PlayerPropertySet);
         if (playersInRange.size() > 0) {
-            this.engagePlayer((Player) playersInRange.get(0));
+            this.engagePlayer((Player)playersInRange.get(0));
         }
     }
 

@@ -2,7 +2,6 @@ package dnd.logic.player;
 
 import dnd.RandomGenerator;
 import dnd.logic.*;
-import dnd.logic.enemies.Enemy;
 
 import java.util.List;
 
@@ -12,23 +11,34 @@ public class Mage extends Player {
     private static final int MANA_REGEN = 1;
     private static final int MANA_ADDITION_DIV = 4;
 
-    private final RandomGenerator randomGenerator;
-
     int spellPower;
     int manaPool;
     int currentMana;
-    final int cost;
-    final int hitTimes;
-    final int range;
+
+    int cost;
+    int hitTimes;
+    int range;
 
     public Mage(String name,
                 int healthPool, int attack, int defense,
-                UnitsInRangeFinder unitsInRangeFinder,
                 RandomGenerator randomGenerator,
                 int spellPower, int manaPool, int cost,
                 int hitTimes, int range) {
-        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
+        super(name, healthPool, attack, defense, randomGenerator);
+        this.init(spellPower, manaPool, cost, hitTimes, range);
+    }
 
+    protected Mage(String name,
+                   int healthPool, int attack, int defense,
+                   RandomGenerator randomGenerator,
+                   Board board,
+                   int spellPower, int manaPool, int cost,
+                   int hitTimes, int range) {
+        super(name, healthPool, attack, defense, randomGenerator, board);
+        this.init(spellPower, manaPool, cost, hitTimes, range);
+    }
+
+    private void init(int spellPower, int manaPool, int cost, int hitTimes, int range) {
         if (spellPower <= 0) {
             throw new IllegalArgumentException("spell power must be a positive number.");
         }
@@ -52,8 +62,6 @@ public class Mage extends Player {
         this.cost = cost;
         this.hitTimes = hitTimes;
         this.range = range;
-
-        this.randomGenerator = randomGenerator;
     }
 
     @Override
@@ -71,10 +79,10 @@ public class Mage extends Player {
         }
 
         this.currentMana -= this.cost;
-        List<Unit> enemiesInRange = this.unitsInRangeFinder.findUnitsInRange(this.position, this.range, UnitType.Enemy);
+        List<TileOccupier> enemiesInRange = this.board.findTileOccupiers(this.position, this.range, EnemyPropertySet);
         for (int hits = 0; hits < this.hitTimes; hits++) {
             int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
-            Unit enemy = enemiesInRange.get(enemyIndex);
+            Unit enemy = (Unit)enemiesInRange.get(enemyIndex);
             this.attack(enemy, this.spellPower);
         }
     }

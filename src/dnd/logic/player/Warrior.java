@@ -1,6 +1,7 @@
 package dnd.logic.player;
 
 import dnd.RandomGenerator;
+import dnd.logic.Board;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
 
@@ -10,16 +11,27 @@ public class Warrior extends Player {
 
     private static final int ABILITY_HEAL_POWER = 2;
 
-    final Tick coolDown;
+    Tick coolDown;
     Tick remaining;
 
     public Warrior(String name,
                    int healthPool, int attack, int defense,
-                   UnitsInRangeFinder unitsInRangeFinder,
                    RandomGenerator randomGenerator,
                    Tick cooldown) {
-        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
+        super(name, healthPool, attack, defense, randomGenerator);
+        this.init(cooldown);
+    }
 
+    protected Warrior(String name,
+                      int healthPool, int attack, int defense,
+                      RandomGenerator randomGenerator,
+                      Board board,
+                      Tick cooldown) {
+        super(name, healthPool, attack, defense, randomGenerator, board);
+        this.init(cooldown);
+    }
+
+    private void init(Tick cooldown) {
         if (cooldown == null) {
            throw new IllegalArgumentException("cooldown cannot be null.");
         }

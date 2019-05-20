@@ -1,20 +1,39 @@
 package dnd.logic.enemies;
 
 import dnd.RandomGenerator;
+import dnd.logic.Board;
 import dnd.logic.TileProperty;
 import dnd.logic.Unit;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class Enemy extends Unit {
-    final int experienceValue;
-    final char tile;
+    protected static final Set<TileProperty> PlayerPropertySet = new HashSet<TileProperty>() {{
+        add(TileProperty.Player);
+    }};
+
+    int experienceValue;
+    char tile;
 
     public Enemy(String name,
                  int healthPool, int attack, int defense,
-                 UnitsInRangeFinder unitsInRangeFinder,
                  RandomGenerator randomGenerator,
                  int experienceValue, char tile) {
-        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
+        super(name, healthPool, attack, defense, randomGenerator);
+        this.init(experienceValue, tile);
+    }
 
+    protected Enemy(String name,
+                    int healthPool, int attack, int defense,
+                    RandomGenerator randomGenerator,
+                    Board board,
+                    int experienceValue, char tile) {
+        super(name, healthPool, attack, defense, randomGenerator, board);
+        this.init(experienceValue, tile);
+    }
+
+    private void init(int experienceValue, char tile) {
         if (experienceValue < 0) {
             throw new IllegalArgumentException("experienceValue must be a non-negative number.");
         }
@@ -30,10 +49,5 @@ public abstract class Enemy extends Unit {
 
     public int getExperienceValue() {
         return experienceValue;
-    }
-
-    @Override
-    public final UnitType getUnitType() {
-        return UnitType.Enemy;
     }
 }

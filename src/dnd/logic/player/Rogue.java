@@ -2,7 +2,6 @@ package dnd.logic.player;
 
 import dnd.RandomGenerator;
 import dnd.logic.*;
-import dnd.logic.enemies.Enemy;
 
 import java.util.List;
 
@@ -12,16 +11,27 @@ public class Rogue extends Player {
     private static final int ENERGY_REGEN = 10;
     private static final int ABILITY_RANGE = 2;
 
-    final int cost;
+    int cost;
     int currentEnergy;
 
     public Rogue(String name,
                  int healthPool, int attack, int defense,
-                 UnitsInRangeFinder unitsInRangeFinder,
                  RandomGenerator randomGenerator,
                  int cost) {
-        super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
+        super(name, healthPool, attack, defense, randomGenerator);
+        this.init(cost);
+    }
 
+    protected Rogue(String name,
+                    int healthPool, int attack, int defense,
+                    RandomGenerator randomGenerator,
+                    Board board,
+                    int cost) {
+        super(name, healthPool, attack, defense, randomGenerator, board);
+        this.init(cost);
+    }
+
+    private void init(int cost) {
         if (cost < 0) {
             throw new IllegalArgumentException("cost must be a non-negative number.");
         }
@@ -44,8 +54,9 @@ public class Rogue extends Player {
         }
 
         this.currentEnergy -= this.cost;
-        List<Unit> enemiesInRange = this.unitsInRangeFinder.findUnitsInRange(this.position, ABILITY_RANGE, UnitType.Enemy);
-        for (Unit enemy : enemiesInRange) {
+        List<TileOccupier> enemiesInRange = this.board.findTileOccupiers(this.position, ABILITY_RANGE, EnemyPropertySet);
+        for (TileOccupier tileOccupier : enemiesInRange) {
+            Unit enemy = (Unit)tileOccupier;
             this.attack(enemy, this.attack);
         }
     }
