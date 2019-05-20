@@ -3,7 +3,7 @@ package dnd.logic;
 import dnd.RandomGenerator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public abstract class Unit extends BoardSquare implements TickObserver {
+public abstract class Unit extends TileOccupierImpl implements TickObserver {
     protected final String name;
     protected int healthPool;
     protected int currentHealth;
@@ -11,7 +11,6 @@ public abstract class Unit extends BoardSquare implements TickObserver {
     protected int defense;
     protected Point position;
 
-    protected final UnitsInRangeFinder unitsInRangeFinder;
     protected final RandomGenerator randomGenerator;
 
     public Unit(String name,
@@ -45,13 +44,13 @@ public abstract class Unit extends BoardSquare implements TickObserver {
 
         this.unitsInRangeFinder = unitsInRangeFinder;
         this.randomGenerator = randomGenerator;
+
+        this.addProperty(TileProperty.Unit);
     }
 
     public Point getPosition() {
         return this.position;
     }
-
-    public abstract UnitType getUnitType();
 
     public boolean attack(Unit unit) {
         if (unit == null) {
@@ -80,7 +79,7 @@ public abstract class Unit extends BoardSquare implements TickObserver {
     }
 
     @Override
-    public BoardSqaureType getSquareType() {
-        return BoardSqaureType.Unit;
+    public ReadOnlySet<TileProperty> getProperties() {
+        return null;
     }
 }

@@ -1,9 +1,8 @@
 package dnd.logic.enemies;
 
 import dnd.RandomGenerator;
+import dnd.logic.TileProperty;
 import dnd.logic.Unit;
-import dnd.logic.UnitType;
-import dnd.logic.UnitsInRangeFinder;
 
 public abstract class Enemy extends Unit {
     final int experienceValue;
@@ -25,6 +24,8 @@ public abstract class Enemy extends Unit {
 
         this.experienceValue = experienceValue;
         this.tile = tile;
+
+        this.addProperty(TileProperty.Enemy);
     }
 
     public int getExperienceValue() {

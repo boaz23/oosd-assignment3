@@ -41,6 +41,8 @@ public class Trap extends Enemy {
         this.visibilityTime = visibilityTime;
         this.ticksCount = Tick.Zero;
         this.visible = true;
+
+        this.addProperty(TileProperty.Trap);
     }
 
     @Override

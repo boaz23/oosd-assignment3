@@ -2,9 +2,8 @@ package dnd.logic.player;
 
 import dnd.RandomGenerator;
 import dnd.logic.LogicException;
+import dnd.logic.TileProperty;
 import dnd.logic.Unit;
-import dnd.logic.UnitType;
-import dnd.logic.UnitsInRangeFinder;
 import dnd.logic.enemies.Enemy;
 
 public abstract class Player extends Unit {
@@ -21,6 +20,7 @@ public abstract class Player extends Unit {
                   UnitsInRangeFinder unitsInRangeFinder,
                   RandomGenerator randomGenerator) {
         super(name, healthPool, attack, defense, unitsInRangeFinder, randomGenerator);
+        this.addProperty(TileProperty.Player);
     }
 
     protected void levelUp() {
@@ -63,10 +63,5 @@ public abstract class Player extends Unit {
         }
 
         return hasUnitDied;
-    }
-
-    @Override
-    public final UnitType getUnitType() {
-        return UnitType.Player;
     }
 }
