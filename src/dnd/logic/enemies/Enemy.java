@@ -55,17 +55,17 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public MoveResult accept(Unit unit) throws LogicException {
-        return unit.attack(this);
+    public MoveResult accept(Unit unit, Object state) throws LogicException {
+        return unit.attack(this, state);
     }
 
     @Override
-    public MoveResult attack(Enemy enemy) throws LogicException {
+    public MoveResult attack(Enemy enemy, Object state) throws LogicException {
         return MoveResult.Invalid;
     }
 
     @Override
-    public MoveResult attack(Player player) throws LogicException {
+    public MoveResult attack(Player player, Object state) throws LogicException {
         return this.attackMove(player);
     }
 

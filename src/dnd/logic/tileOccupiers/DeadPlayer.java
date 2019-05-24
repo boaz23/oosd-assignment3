@@ -10,7 +10,7 @@ public class DeadPlayer implements TileOccupier {
     }
 
     @Override
-    public MoveResult accept(Unit unit) throws LogicException {
+    public MoveResult accept(Unit unit, Object state) throws LogicException {
         throw new LogicException("Player is dead, cannot accept unit.");
     }
 }

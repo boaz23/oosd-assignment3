@@ -5,5 +5,5 @@ import dnd.logic.MoveResult;
 
 public interface TileOccupier {
     char getTileChar();
-    MoveResult accept(Unit unit) throws LogicException;
+    MoveResult accept(Unit unit, Object state) throws LogicException;
 }

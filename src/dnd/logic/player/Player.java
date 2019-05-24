@@ -66,21 +66,21 @@ public abstract class Player extends Unit {
     public abstract void useSpecialAbility() throws LogicException;
 
     @Override
-    public MoveResult accept(Unit unit) throws LogicException {
-        return unit.attack(this);
+    public MoveResult accept(Unit unit, Object state) throws LogicException {
+        return unit.attack(this, state);
     }
 
     @Override
-    public MoveResult attack(Enemy enemy) throws LogicException {
+    public MoveResult attack(Enemy enemy, Object state) throws LogicException {
         return this.attackMove(enemy);
     }
 
     @Override
-    public MoveResult attack(Player player) throws LogicException {
+    public MoveResult attack(Player player, Object state) throws LogicException {
         throw new LogicException("player fights another player");
     }
 
-    private MoveResult attackMove(Enemy enemy) {
+    protected MoveResult attackMove(Enemy enemy) {
         return this.attackCore(enemy) ? MoveResult.Dead : MoveResult.Engaged;
     }
 
@@ -102,5 +102,12 @@ public abstract class Player extends Unit {
         }
 
         return died;
+    }
+
+    protected class MoveAttackState implements AttackState {
+        @Override
+        public Object visit(Enemy enemy) {
+            return Player.this.attackMove(enemy);
+        }
     }
 }

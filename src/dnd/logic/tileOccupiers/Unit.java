@@ -69,7 +69,7 @@ public abstract class Unit implements TickObserver, TileOccupier {
         MoveResult moveResult;
         try {
             TileOccupier targetTileOccupier = this.board.getTileOccupier(newPosition);
-            moveResult = targetTileOccupier.accept(this);
+            moveResult = targetTileOccupier.accept(this, this.getMoveState());
             if (moveResult == MoveResult.Allowed) {
                 this.moveActual(newPosition);
             }
@@ -86,14 +86,14 @@ public abstract class Unit implements TickObserver, TileOccupier {
         this.position = newPosition;
     }
 
-    public void visit(FreeTile freeTile) {
+    public void visit(FreeTile freeTile, Object state) {
         if (freeTile == null) {
             throw new IllegalArgumentException("freeTile is null.");
         }
 
         // Do nothing
     }
-    public void visit(Wall wall) {
+    public void visit(Wall wall, Object state) {
         if (wall == null) {
             throw new IllegalArgumentException("wall is null.");
         }
@@ -101,8 +101,8 @@ public abstract class Unit implements TickObserver, TileOccupier {
         // Do nothing
     }
 
-    public abstract MoveResult attack(Enemy enemy) throws LogicException;
-    public abstract MoveResult attack(Player player) throws LogicException;
+    public abstract MoveResult attack(Enemy enemy, Object state) throws LogicException;
+    public abstract MoveResult attack(Player player, Object state) throws LogicException;
 
     protected boolean attackCore(Enemy enemy) {
         return attackCore((Unit)enemy);
@@ -132,5 +132,9 @@ public abstract class Unit implements TickObserver, TileOccupier {
         int reduction = this.randomGenerator.nextInt(this.defense);
         this.currentHealth = Math.max(this.currentHealth - reduction, 0);
         return this.currentHealth == 0;
+    }
+
+    protected Object getMoveState() {
+        return null;
     }
 }

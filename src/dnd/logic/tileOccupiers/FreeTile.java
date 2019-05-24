@@ -10,8 +10,8 @@ public class FreeTile implements TileOccupier {
     }
 
     @Override
-    public MoveResult accept(Unit unit) {
-        unit.visit(this);
+    public MoveResult accept(Unit unit, Object state) {
+        unit.visit(this, state);
         return MoveResult.Allowed;
     }
 }
