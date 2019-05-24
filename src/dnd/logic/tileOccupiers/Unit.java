@@ -1,9 +1,12 @@
-package dnd.logic;
+package dnd.logic.tileOccupiers;
 
 import dnd.RandomGenerator;
-import dnd.ReadOnlySet;
+import dnd.logic.*;
+import dnd.logic.board.Board;
+import dnd.logic.enemies.Enemy;
+import dnd.logic.player.Player;
 
-public abstract class Unit extends TileOccupierImpl implements TickObserver {
+public abstract class Unit implements TickObserver, TileOccupier {
     protected final String name;
     protected int healthPool;
     protected int currentHealth;
@@ -27,7 +30,7 @@ public abstract class Unit extends TileOccupierImpl implements TickObserver {
             throw new IllegalArgumentException("a unit's health pool must be a positive number");
         }
         if (attack <= 0) {
-            throw new IllegalArgumentException("a unit's attack must be a positive number");
+            throw new IllegalArgumentException("a unit's visit must be a positive number");
         }
         if (defense <= 0) {
             throw new IllegalArgumentException("a unit's defense must be a positive number");
@@ -40,8 +43,6 @@ public abstract class Unit extends TileOccupierImpl implements TickObserver {
         this.defense = defense;
 
         this.randomGenerator = randomGenerator;
-
-        this.addProperty(TileProperty.Unit);
     }
 
     protected Unit(String name,
@@ -60,16 +61,63 @@ public abstract class Unit extends TileOccupierImpl implements TickObserver {
         return this.position;
     }
 
-    public boolean attack(Unit unit) {
+    public MoveResult move(Point newPosition) {
+        if (newPosition == null) {
+            throw new IllegalArgumentException("newPosition is null.");
+        }
+
+        MoveResult moveResult;
+        try {
+            TileOccupier targetTileOccupier = this.board.getTileOccupier(newPosition);
+            moveResult = targetTileOccupier.accept(this);
+            if (moveResult == MoveResult.Allowed) {
+                this.moveActual(newPosition);
+            }
+        }
+        catch (PositionOutOfBoundsException | LogicException e) {
+            moveResult = MoveResult.Invalid;
+        }
+
+        return moveResult;
+    }
+
+    private void moveActual(Point newPosition) {
+        this.board.move(this, newPosition);
+        this.position = newPosition;
+    }
+
+    public void visit(FreeTile freeTile) {
+        if (freeTile == null) {
+            throw new IllegalArgumentException("freeTile is null.");
+        }
+
+        // Do nothing
+    }
+    public void visit(Wall wall) {
+        if (wall == null) {
+            throw new IllegalArgumentException("wall is null.");
+        }
+
+        // Do nothing
+    }
+
+    public abstract MoveResult attack(Enemy enemy) throws LogicException;
+    public abstract MoveResult attack(Player player) throws LogicException;
+
+    protected boolean attackCore(Enemy enemy) {
+        return attackCore((Unit)enemy);
+    }
+
+    protected boolean attackCore(Unit unit) {
         if (unit == null) {
             throw new IllegalArgumentException("unit is null.");
         }
 
         int damage = this.randomGenerator.nextInt(this.attack);
-        return this.attack(unit, damage);
+        return this.attackCore(unit, damage);
     }
 
-    protected boolean attack(Unit unit, int damage) {
+    protected boolean attackCore(Unit unit, int damage) {
         return unit.defend(damage);
     }
 
@@ -77,17 +125,12 @@ public abstract class Unit extends TileOccupierImpl implements TickObserver {
      * Defends from taking 'damage' amount of damage and lowers
      * the current health according to the actual damage dealth
      * (it might have been lowered by rolling a number between 0 and defense)
-     * @param damage The amount of damage to defend from
+     * @param damage The amount of damage to visit from
      * @return Whether the unit died
      */
     public boolean defend(int damage) {
         int reduction = this.randomGenerator.nextInt(this.defense);
         this.currentHealth = Math.max(this.currentHealth - reduction, 0);
         return this.currentHealth == 0;
-    }
-
-    @Override
-    public ReadOnlySet<TileProperty> getProperties() {
-        return null;
     }
 }

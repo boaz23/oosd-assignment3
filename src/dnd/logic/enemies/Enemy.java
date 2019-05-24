@@ -1,18 +1,13 @@
 package dnd.logic.enemies;
 
 import dnd.RandomGenerator;
-import dnd.logic.Board;
-import dnd.logic.TileProperty;
-import dnd.logic.Unit;
-
-import java.util.HashSet;
-import java.util.Set;
+import dnd.logic.LogicException;
+import dnd.logic.MoveResult;
+import dnd.logic.board.Board;
+import dnd.logic.player.Player;
+import dnd.logic.tileOccupiers.Unit;
 
 public abstract class Enemy extends Unit {
-    protected static final Set<TileProperty> PlayerPropertySet = new HashSet<TileProperty>() {{
-        add(TileProperty.Player);
-    }};
-
     int experienceValue;
     char tile;
 
@@ -43,11 +38,38 @@ public abstract class Enemy extends Unit {
 
         this.experienceValue = experienceValue;
         this.tile = tile;
-
-        this.addProperty(TileProperty.Enemy);
     }
 
     public int getExperienceValue() {
         return experienceValue;
+    }
+
+    @Override
+    public boolean defend(int damage) {
+        boolean died = super.defend(damage);
+        if (died) {
+            this.board.reportDeath(this);
+        }
+
+        return died;
+    }
+
+    @Override
+    public MoveResult accept(Unit unit) throws LogicException {
+        return unit.attack(this);
+    }
+
+    @Override
+    public MoveResult attack(Enemy enemy) throws LogicException {
+        return MoveResult.Invalid;
+    }
+
+    @Override
+    public MoveResult attack(Player player) throws LogicException {
+        return this.attackMove(player);
+    }
+
+    private MoveResult attackMove(Player player) {
+        return this.attackCore(player) ? MoveResult.Dead : MoveResult.Engaged;
     }
 }

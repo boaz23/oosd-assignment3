@@ -1,4 +1,6 @@
-package dnd.logic;
+package dnd.logic.board;
+
+import dnd.logic.tileOccupiers.TileOccupier;
 
 public abstract class BoardSquare {
     private TileOccupier tileOccupier;

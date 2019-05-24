@@ -1,8 +1,10 @@
 package dnd.logic.enemies;
 
 import dnd.RandomGenerator;
-import dnd.logic.*;
+import dnd.logic.Tick;
+import dnd.logic.board.Board;
 import dnd.logic.player.Player;
+import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -34,8 +36,6 @@ public class Monster extends Enemy {
         }
 
         this.range = range;
-
-        this.addProperty(TileProperty.Monster);
     }
 
     @Override

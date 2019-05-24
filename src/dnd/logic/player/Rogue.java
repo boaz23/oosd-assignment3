@@ -1,7 +1,11 @@
 package dnd.logic.player;
 
 import dnd.RandomGenerator;
-import dnd.logic.*;
+import dnd.logic.LogicException;
+import dnd.logic.Tick;
+import dnd.logic.board.Board;
+import dnd.logic.tileOccupiers.TileOccupier;
+import dnd.logic.tileOccupiers.Unit;
 
 import java.util.List;
 
@@ -57,7 +61,7 @@ public class Rogue extends Player {
         List<TileOccupier> enemiesInRange = this.board.findTileOccupiers(this.position, ABILITY_RANGE, EnemyPropertySet);
         for (TileOccupier tileOccupier : enemiesInRange) {
             Unit enemy = (Unit)tileOccupier;
-            this.attack(enemy, this.attack);
+            this.attackCore(enemy, this.attack);
         }
     }
 

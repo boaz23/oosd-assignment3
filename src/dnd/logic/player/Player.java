@@ -1,24 +1,17 @@
 package dnd.logic.player;
 
 import dnd.RandomGenerator;
-import dnd.logic.Board;
 import dnd.logic.LogicException;
-import dnd.logic.TileProperty;
-import dnd.logic.Unit;
+import dnd.logic.MoveResult;
+import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
-
-import java.util.HashSet;
-import java.util.Set;
+import dnd.logic.tileOccupiers.Unit;
 
 public abstract class Player extends Unit {
     private static final int LEVEL_EXP_DIFF = 50;
     private static final int LEVEL_HEALTH_DIFF = 10;
     private static final int LEVEL_ATTACK_DIFF = 5;
     private static final int LEVEL_DEFENSE_DIFF = 2;
-
-    protected static final Set<TileProperty> EnemyPropertySet = new HashSet<TileProperty>() {{
-        add(TileProperty.Enemy);
-    }};
 
     protected int experience;
     protected int level;
@@ -27,7 +20,6 @@ public abstract class Player extends Unit {
                   int healthPool, int attack, int defense,
                   RandomGenerator randomGenerator) {
         super(name, healthPool, attack, defense, randomGenerator);
-        this.init();
     }
 
     protected Player(String name,
@@ -35,11 +27,11 @@ public abstract class Player extends Unit {
                      RandomGenerator randomGenerator,
                      Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
-        this.init();
     }
 
-    private void init() {
-        this.addProperty(TileProperty.Player);
+    @Override
+    public char getTileChar() {
+        return '@';
     }
 
     protected void levelUp() {
@@ -74,13 +66,41 @@ public abstract class Player extends Unit {
     public abstract void useSpecialAbility() throws LogicException;
 
     @Override
-    protected boolean attack(Unit unit, int damage) {
-        boolean hasUnitDied = super.attack(unit, damage);
-        if (hasUnitDied & unit.getProperties().contains(TileProperty.Enemy)) {
-            Enemy enemy = (Enemy)unit;
+    public MoveResult accept(Unit unit) throws LogicException {
+        return unit.attack(this);
+    }
+
+    @Override
+    public MoveResult attack(Enemy enemy) throws LogicException {
+        return this.attackMove(enemy);
+    }
+
+    @Override
+    public MoveResult attack(Player player) throws LogicException {
+        throw new LogicException("player fights another player");
+    }
+
+    private MoveResult attackMove(Enemy enemy) {
+        return this.attackCore(enemy) ? MoveResult.Dead : MoveResult.Engaged;
+    }
+
+    @Override
+    protected boolean attackCore(Enemy enemy) {
+        boolean died = super.attackCore(enemy);
+        if (died) {
             this.gainExp(enemy.getExperienceValue());
         }
 
-        return hasUnitDied;
+        return died;
+    }
+
+    @Override
+    public boolean defend(int damage) {
+        boolean died = super.defend(damage);
+        if (died) {
+            this.board.reportDeath(this);
+        }
+
+        return died;
     }
 }

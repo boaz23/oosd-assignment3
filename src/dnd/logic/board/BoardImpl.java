@@ -1,4 +1,8 @@
-package dnd.logic;
+package dnd.logic.board;
+
+import dnd.logic.Point;
+import dnd.logic.tileOccupiers.TileOccupier;
+import dnd.logic.tileOccupiers.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +36,13 @@ public class BoardImpl implements Board {
                 Point point = new Point(x, y);
 
                 // ignore points which are too far away and the given position
-                if (point.equals(position) | Point.distance(point, position) > range) {
+                if (point.equals(position) | Point.distance(point, position) >= range) {
                     continue;
                 }
 
                 BoardSquare square = board[x][y];
                 TileOccupier tileOccupier = square.getTileOccupier();
-                if (tileOccupier.getProperties().containsAll(properties)) {
-                    tilesInRange.add(tileOccupier);
-                }
+                tilesInRange.add(tileOccupier);
             }
         }
 

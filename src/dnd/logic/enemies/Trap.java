@@ -1,8 +1,11 @@
 package dnd.logic.enemies;
 
 import dnd.RandomGenerator;
-import dnd.logic.*;
+import dnd.logic.Tick;
+import dnd.logic.board.Board;
+import dnd.logic.board.BoardSquare;
 import dnd.logic.player.Player;
+import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -54,8 +57,6 @@ public class Trap extends Enemy {
         this.visibilityTime = visibilityTime;
         this.ticksCount = Tick.Zero;
         this.visible = true;
-
-        this.addProperty(TileProperty.Trap);
     }
 
     @Override

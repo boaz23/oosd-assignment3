@@ -1,7 +1,11 @@
 package dnd.logic.player;
 
 import dnd.RandomGenerator;
-import dnd.logic.*;
+import dnd.logic.LogicException;
+import dnd.logic.Tick;
+import dnd.logic.board.Board;
+import dnd.logic.tileOccupiers.TileOccupier;
+import dnd.logic.tileOccupiers.Unit;
 
 import java.util.List;
 
@@ -72,6 +76,10 @@ public class Mage extends Player {
         this.spellPower += this.level * LEVEL_SPELL_POWER_DIFF;
     }
 
+    private int getManaAddition() {
+        return this.manaPool / MANA_ADDITION_DIV;
+    }
+
     @Override
     public void useSpecialAbility() throws LogicException {
         if (this.currentMana < cost) {
@@ -84,7 +92,7 @@ public class Mage extends Player {
             for (int hits = 0; hits < this.hitTimes; hits++) {
                 int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
                 Unit enemy = (Unit) enemiesInRange.get(enemyIndex);
-                this.attack(enemy, this.spellPower);
+                this.attackCore(enemy, this.spellPower);
             }
         }
     }
@@ -92,9 +100,5 @@ public class Mage extends Player {
     @Override
     public void onTick(Tick current) {
         this.currentMana = Math.min(this.manaPool, this.currentMana + MANA_REGEN);
-    }
-
-    private int getManaAddition() {
-        return this.manaPool / MANA_ADDITION_DIV;
     }
 }

@@ -1,9 +1,9 @@
 package dnd.logic.player;
 
 import dnd.RandomGenerator;
-import dnd.logic.Board;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
+import dnd.logic.board.Board;
 
 public class Warrior extends Player {
     private static final int LEVEL_HEALTH_DIFF = 5;
