@@ -1,7 +1,6 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.logic.LogicException;
-import dnd.logic.MoveResult;
 
 public class DeadPlayer implements TileOccupier {
     @Override
@@ -10,7 +9,7 @@ public class DeadPlayer implements TileOccupier {
     }
 
     @Override
-    public MoveResult accept(Unit unit) throws LogicException {
+    public Object accept(TileVisitor visitor, Object state) throws LogicException {
         throw new LogicException("Player is dead, cannot accept unit.");
     }
 

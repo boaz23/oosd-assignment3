@@ -1,86 +1,101 @@
 package dnd.logic.board;
 
 import dnd.logic.Point;
+import dnd.logic.PositionOutOfBoundsException;
+import dnd.logic.enemies.Enemy;
+import dnd.logic.player.Player;
+import dnd.logic.tileOccupiers.TileFactory;
 import dnd.logic.tileOccupiers.TileOccupier;
 import dnd.logic.tileOccupiers.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class BoardImpl implements Board {
+    private final TileFactory tileFactory;
     BoardSquare[][] board;
+    List<Enemy> enemies;
+    Player player;
 
-
-    @Override
-    public List<TileOccupier> findTileOccupiers(Point position, int range, Set<TileProperty> properties) {
-        if (position == null) {
-            throw new IllegalArgumentException("position is null.");
-        }
-        if (range <= 0) {
-            throw new IllegalArgumentException("range must be a positive number.");
-        }
-        if (properties == null) {
-            throw new IllegalArgumentException("properties is null.");
+    public BoardImpl(TileFactory tileFactory) {
+        if (tileFactory == null) {
+            throw new IllegalArgumentException("tile factory is null.");
         }
 
-
-        int xStart = Math.max(position.getX() - range, 0);
-        int xEnd = Math.min(position.getX() + range, board.length);
-
-        int yStart = Math.max(position.getY() - range, 0);
-        int yEnd = Math.min(position.getY() + range, board[position.getX()].length);
-
-        List<TileOccupier> tilesInRange = new ArrayList<>();
-        for (int x = xStart; x < xEnd; x++) {
-            for (int y = yStart; y < yEnd; y++) {
-                Point point = new Point(x, y);
-
-                // ignore points which are too far away and the given position
-                if (point.equals(position) | Point.distance(point, position) >= range) {
-                    continue;
-                }
-
-                BoardSquare square = board[x][y];
-                TileOccupier tileOccupier = square.getTileOccupier();
-                tilesInRange.add(tileOccupier);
-            }
-        }
-
-        return tilesInRange;
+        this.tileFactory = tileFactory;
     }
 
     @Override
-    public boolean move(Unit unit, Point targetPosition) {
+    public void move(Unit unit, Point targetPosition) throws PositionOutOfBoundsException {
         if (unit == null) {
             throw new IllegalArgumentException("unit is null.");
         }
-        if (targetPosition == null) {
+        validatePosition(targetPosition);
+
+        TileOccupier temp =  board[targetPosition.getX()][targetPosition.getX()].getTileOccupier();
+        board[targetPosition.getX()][targetPosition.getX()].setTileOccupier(unit);
+        board[unit.getPosition().getX()][unit.getPosition().getY()].setTileOccupier(temp);
+    }
+
+    @Override
+    public TileOccupier getTileOccupier(Point position) throws PositionOutOfBoundsException {
+        validatePosition(position);
+
+        return board[position.getX()][position.getY()].getTileOccupier();
+    }
+
+    @Override
+    public List<Point> getFreeTilesPositionsInRange(Point position, int range) throws PositionOutOfBoundsException {
+        validatePosition(position);
+
+        List<Point> freeTilesInRange = new ArrayList<Point>();
+        for (int i = Math.max(0, position.getX() - range); i <= Math.min(position.getX() + range, board.length - 1); i++) {
+            for(int j = Math.max(0, position.getY() - range); j <= Math.min(position.getY() + range, board[i].length - 1); j++) {
+                Point point = new Point(i, j);
+                if (Point.distance(position, point) < range) {
+                    if (board[i][j].getTileOccupier().isFree())
+                        freeTilesInRange.add(point);
+                }
+            }
+        }
+        return freeTilesInRange;
+    }
+
+    @Override
+    public List<Enemy> getEnemiesInRange(Point position, int range) throws PositionOutOfBoundsException {
+        validatePosition(position);
+        List<Enemy> enemiesInRange = new ArrayList<Enemy>();
+        for (Enemy e : enemies) {
+            if (Point.distance(position, e.getPosition()) < range)
+               enemiesInRange.add(e);
+        }
+        return enemiesInRange;
+    }
+
+    @Override
+    public Player getPlayerInRange(Point position, int range) throws PositionOutOfBoundsException {
+        validatePosition(position);
+        Player player = null;
+        if (Point.distance(position, this.player.getPosition()) < range)
+            player = this.player;
+        return player;
+    }
+
+    @Override
+    public void reportDeath(Player player) {
+        board[player.getPosition().getX()][player.getPosition().getY()].setTileOccupier(tileFactory.createDeadPlayer());
+    }
+
+    @Override
+    public void reportDeath(Enemy enemy) {
+        board[enemy.getPosition().getX()][enemy.getPosition().getY()].setTileOccupier(tileFactory.createFreeTile());
+    }
+
+    private void validatePosition(Point position) throws PositionOutOfBoundsException {
+        if (position == null)
             throw new IllegalArgumentException("position is null.");
-        }
-
-        if (targetPosition.getX() >= board.length ||
-            targetPosition.getY() >= board[targetPosition.getX()].length) {
-            return false;
-        }
-
-        BoardSquare square = board[targetPosition.getX()][targetPosition.getY()];
-        TileOccupier targetTileOccupier = square.getTileOccupier();
-
-
-        if (targetTileOccupier.getProperties().contains(TileProperty.Free)) {
-            // switch between the units
-            Point currentPosition = unit.getPosition();
-            board[currentPosition.getX()][currentPosition.getY()].setTileOccupier(targetTileOccupier);
-            board[targetPosition.getX()][targetPosition.getY()].setTileOccupier(unit);
-        }
-        else if ((unit.getProperties().contains(TileProperty.Player) & targetTileOccupier.getProperties().contains(TileProperty.Enemy)) |
-                (unit.getProperties().contains(TileProperty.Monster) & targetTileOccupier.getProperties().contains(TileProperty.Player))) {
-            // combat
-            // what happens when a player engages a monster
-        }
-        else {
-            return false;
-        }
+        if (position.getX() > board.length | position.getY() > board[0].length
+                | position.getX() < 0 | position.getY() < 0)
+            throw new PositionOutOfBoundsException();
     }
 }

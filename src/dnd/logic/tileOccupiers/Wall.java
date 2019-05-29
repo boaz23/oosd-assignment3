@@ -1,6 +1,6 @@
 package dnd.logic.tileOccupiers;
 
-import dnd.logic.MoveResult;
+import dnd.logic.LogicException;
 
 public class Wall implements TileOccupier {
     @Override
@@ -9,8 +9,8 @@ public class Wall implements TileOccupier {
     }
 
     @Override
-    public MoveResult accept(Unit unit) {
-        return unit.visit(this);
+    public Object accept(TileVisitor visitor, Object state) throws LogicException {
+        return visitor.visit(this, state);
     }
 
     @Override

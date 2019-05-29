@@ -5,6 +5,7 @@ import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
+import dnd.logic.tileOccupiers.TileVisitor;
 import dnd.logic.tileOccupiers.Unit;
 
 public abstract class Enemy extends Unit {
@@ -55,17 +56,17 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public MoveResult accept(Unit unit) throws LogicException {
-        return unit.visit(this);
+    public Object accept(TileVisitor visitor, Object state) throws LogicException {
+        return visitor.visit(this, state);
     }
 
     @Override
-    public MoveResult visit(Enemy enemy) throws LogicException {
+    public MoveResult visit(Enemy enemy, Object state) {
         return MoveResult.Invalid;
     }
 
     @Override
-    public MoveResult visit(Player player) throws LogicException {
+    public MoveResult visit(Player player, Object state) {
         return this.meeleAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
     }
 

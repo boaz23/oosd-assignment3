@@ -6,7 +6,7 @@ import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 
-public abstract class Unit implements TickObserver, TileOccupier {
+public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     protected final String name;
     protected int healthPool;
     protected int currentHealth;
@@ -69,9 +69,12 @@ public abstract class Unit implements TickObserver, TileOccupier {
         MoveResult moveResult;
         try {
             TileOccupier targetTileOccupier = this.board.getTileOccupier(newPosition);
-            moveResult = targetTileOccupier.accept(this);
+            moveResult = (MoveResult)targetTileOccupier.accept(this, null);
             if (moveResult == MoveResult.Allowed) {
-                this.moveActual(newPosition);
+                boolean moved = this.moveActual(newPosition);
+                if (!moved) {
+                    moveResult = MoveResult.Invalid;
+                }
             }
         }
         catch (PositionOutOfBoundsException | LogicException e) {
@@ -81,19 +84,24 @@ public abstract class Unit implements TickObserver, TileOccupier {
         return moveResult;
     }
 
-    private void moveActual(Point newPosition) {
-        this.board.move(this, newPosition);
-        this.position = newPosition;
+    private boolean moveActual(Point newPosition) {
+        try {
+            this.board.move(this, newPosition);
+            this.position = newPosition;
+            return true;
+        } catch (PositionOutOfBoundsException e) {
+            return false;
+        }
     }
 
-    public MoveResult visit(FreeTile freeTile) {
+    public MoveResult visit(FreeTile freeTile, Object state) {
         if (freeTile == null) {
             throw new IllegalArgumentException("freeTile is null.");
         }
 
         return MoveResult.Allowed;
     }
-    public MoveResult visit(Wall wall) {
+    public MoveResult visit(Wall wall, Object state) {
         if (wall == null) {
             throw new IllegalArgumentException("wall is null.");
         }
@@ -101,8 +109,8 @@ public abstract class Unit implements TickObserver, TileOccupier {
         return MoveResult.Invalid;
     }
 
-    public abstract MoveResult visit(Enemy enemy) throws LogicException;
-    public abstract MoveResult visit(Player player) throws LogicException;
+    public abstract MoveResult visit(Enemy enemy, Object state) throws LogicException;
+    public abstract MoveResult visit(Player player, Object state) throws LogicException;
 
     protected boolean meeleAttack(Unit unit) {
         if (unit == null) {

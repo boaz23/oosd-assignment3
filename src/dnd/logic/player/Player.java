@@ -5,6 +5,7 @@ import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
+import dnd.logic.tileOccupiers.TileVisitor;
 import dnd.logic.tileOccupiers.Unit;
 
 public abstract class Player extends Unit {
@@ -66,17 +67,17 @@ public abstract class Player extends Unit {
     public abstract void useSpecialAbility() throws LogicException;
 
     @Override
-    public MoveResult accept(Unit unit) throws LogicException {
-        return unit.visit(this);
+    public Object accept(TileVisitor visitor, Object state) throws LogicException {
+        return visitor.visit(this, state);
     }
 
     @Override
-    public MoveResult visit(Player player) throws LogicException {
+    public MoveResult visit(Player player, Object state) throws LogicException {
         throw new LogicException("player fights another player");
     }
 
     @Override
-    public MoveResult visit(Enemy enemy) throws LogicException {
+    public MoveResult visit(Enemy enemy, Object state) throws LogicException {
         return this.moveMeeleAttack(enemy);
     }
 
