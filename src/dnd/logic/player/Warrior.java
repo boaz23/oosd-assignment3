@@ -1,6 +1,6 @@
 package dnd.logic.player;
 
-import dnd.RandomGenerator;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;

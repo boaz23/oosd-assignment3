@@ -1,6 +1,6 @@
 package dnd.logic.enemies;
 
-import dnd.RandomGenerator;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
@@ -84,22 +84,6 @@ public class Monster extends Enemy {
 
         int move = this.randomGenerator.nextInt(3);
         MoveDirections[move].move(this);
-    }
-
-    private void moveLeft() {
-        this.move(new Point(this.position.getX() - 1, this.position.getY()));
-    }
-
-    private void moveRight() {
-        this.move(new Point(this.position.getX() + 1, this.position.getY()));
-    }
-
-    private void moveUp() {
-        this.move(new Point(this.position.getX(), this.position.getY() - 1));
-    }
-
-    private void moveDown() {
-        this.move(new Point(this.position.getX(), this.position.getY() + 1));
     }
 
     private interface MoveInDirectionAction {

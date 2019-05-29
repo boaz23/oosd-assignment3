@@ -91,6 +91,11 @@ public class BoardImpl implements Board {
         board[enemy.getPosition().getX()][enemy.getPosition().getY()].setTileOccupier(tileFactory.createFreeTile());
     }
 
+    @Override
+    public BoardSquare[][] getBoard() {
+        return board;
+    }
+
     private void validatePosition(Point position) throws PositionOutOfBoundsException {
         if (position == null)
             throw new IllegalArgumentException("position is null.");

@@ -1,6 +1,6 @@
 package dnd.logic.tileOccupiers;
 
-import dnd.RandomGenerator;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.*;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
@@ -141,5 +141,21 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     @Override
     public boolean isFree() {
         return false;
+    }
+
+    public void moveLeft() {
+        this.move(new Point(this.position.getX() - 1, this.position.getY()));
+    }
+
+    public void moveRight() {
+        this.move(new Point(this.position.getX() + 1, this.position.getY()));
+    }
+
+    public void moveUp() {
+        this.move(new Point(this.position.getX(), this.position.getY() - 1));
+    }
+
+    public void moveDown() {
+        this.move(new Point(this.position.getX(), this.position.getY() + 1));
     }
 }

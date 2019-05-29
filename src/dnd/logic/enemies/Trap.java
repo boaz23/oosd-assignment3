@@ -1,6 +1,6 @@
 package dnd.logic.enemies;
 
-import dnd.RandomGenerator;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
