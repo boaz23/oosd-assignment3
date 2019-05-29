@@ -9,8 +9,12 @@ public class Wall implements TileOccupier {
     }
 
     @Override
-    public MoveResult accept(Unit unit, Object state) {
-        unit.visit(this, state);
-        return MoveResult.Invalid;
+    public MoveResult accept(Unit unit) {
+        return unit.visit(this);
+    }
+
+    @Override
+    public boolean isFree() {
+        return false;
     }
 }

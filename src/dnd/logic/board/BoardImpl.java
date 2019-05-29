@@ -11,6 +11,7 @@ import java.util.Set;
 public class BoardImpl implements Board {
     BoardSquare[][] board;
 
+
     @Override
     public List<TileOccupier> findTileOccupiers(Point position, int range, Set<TileProperty> properties) {
         if (position == null) {

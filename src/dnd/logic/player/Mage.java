@@ -2,15 +2,10 @@ package dnd.logic.player;
 
 import dnd.RandomGenerator;
 import dnd.logic.LogicException;
-import dnd.logic.MoveResult;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
-import dnd.logic.player.Player;
-import dnd.logic.tileOccupiers.TileOccupier;
-import dnd.logic.tileOccupiers.Unit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Mage extends Player {
@@ -91,18 +86,15 @@ public class Mage extends Player {
         }
 
         this.currentMana -= this.cost;
-        List<TileOccupier> tileOccupiersInRange = this.board.findTileOccupiers(this.position, this.range);
-        MageSpecialAbilityAttackState
-        for ( : ) {
-
-        }
-
-        List<TileOccupier> enemiesInRange = this.board.findTileOccupiers(this.position, this.range, EnemyPropertySet);
+        List<Enemy> enemiesInRange = this.board.getEnemiesInRange(this.position, this.range);
         if (enemiesInRange.size() > 0) {
             for (int hits = 0; hits < this.hitTimes; hits++) {
                 int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
-                Unit enemy = (Unit) enemiesInRange.get(enemyIndex);
-                this.attackCore(enemy, this.spellPower);
+                Enemy enemy = enemiesInRange.get(enemyIndex);
+                boolean died = this.attack(enemy, this.spellPower);
+                if (died) {
+                    enemiesInRange.remove(enemyIndex);
+                }
             }
         }
     }
@@ -110,34 +102,5 @@ public class Mage extends Player {
     @Override
     public void onTick(Tick current) {
         this.currentMana = Math.min(this.manaPool, this.currentMana + MANA_REGEN);
-    }
-
-    @Override
-    protected Object getMoveState() {
-        return this.new MoveAttackState();
-    }
-
-    @Override
-    public MoveResult attack(Enemy enemy, Object state) throws LogicException {
-        AttackState attackState = (AttackState)state;
-        return attackState.visit(enemy);
-    }
-
-    private static class MageSpecialAbilityAttackState implements AttackState {
-        private List<Enemy> enemiesInRange;
-
-        public MageSpecialAbilityAttackState() {
-            this.enemiesInRange = new ArrayList<>();
-        }
-
-        @Override
-        public Object visit(Enemy enemy) {
-            this.enemiesInRange.add(enemy);
-            return null;
-        }
-
-        public List<Enemy> getEnemiesInRange() {
-            return enemiesInRange;
-        }
     }
 }

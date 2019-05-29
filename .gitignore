@@ -1,6 +1,9 @@
 # IntelliJ files
 .idea/workspace.xml
 
+# Build output
+out/
+
 # Compiled class file
 *.class
 

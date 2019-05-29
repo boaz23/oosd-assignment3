@@ -1,14 +1,19 @@
 package dnd.logic.enemies;
 
 import dnd.RandomGenerator;
+import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
-import dnd.logic.tileOccupiers.TileOccupier;
-
-import java.util.List;
 
 public class Monster extends Enemy {
+    private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[] {
+        monster -> monster.moveLeft(),
+        monster -> monster.moveRight(),
+        monster -> monster.moveUp(),
+        monster -> monster.moveDown()
+    };
+
     private int range;
 
     public Monster(String name,
@@ -40,9 +45,9 @@ public class Monster extends Enemy {
 
     @Override
     public void onTick(Tick current) {
-        List<TileOccupier> playersInRange = this.board.findTileOccupiers(this.position, this.range, PlayerPropertySet);
-        if (playersInRange.size() > 0) {
-            this.chasePlayer((Player)playersInRange.get(0));
+        Player player = this.board.getPlayerInRange(this.position, this.range);
+        if (player != null) {
+            this.chasePlayer(player);
         }
         else {
             this.actRandomly();
@@ -53,27 +58,51 @@ public class Monster extends Enemy {
         int dx = this.position.getX() - player.getPosition().getX();
         int dy = this.position.getY() - player.getPosition().getY();
 
-        // TODO: account for walls, not being able to move to the desired direction
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0) {
-                // TODO: move left
+                moveLeft();
             }
             else {
-                // TODO: move right
+                moveRight();
             }
         }
         else {
             if (dy > 0) {
-                // TODO: move up
+                moveUp();
             }
             else {
-                // TODO: move down
+                moveDown();
             }
         }
     }
 
     private void actRandomly() {
+        // 0 - move left
+        // 1 - move right
+        // 2 - move up
+        // 3 - move down
+
         int move = this.randomGenerator.nextInt(3);
-        // TODO: Perform a random move
+        MoveDirections[move].move(this);
+    }
+
+    private void moveLeft() {
+        this.move(new Point(this.position.getX() - 1, this.position.getY()));
+    }
+
+    private void moveRight() {
+        this.move(new Point(this.position.getX() + 1, this.position.getY()));
+    }
+
+    private void moveUp() {
+        this.move(new Point(this.position.getX(), this.position.getY() - 1));
+    }
+
+    private void moveDown() {
+        this.move(new Point(this.position.getX(), this.position.getY() + 1));
+    }
+
+    private interface MoveInDirectionAction {
+        void move(Monster monster);
     }
 }

@@ -1,11 +1,10 @@
 package dnd.logic.enemies;
 
 import dnd.RandomGenerator;
+import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
-import dnd.logic.board.BoardSquare;
 import dnd.logic.player.Player;
-import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -70,9 +69,9 @@ public class Trap extends Enemy {
     }
 
     private void checkEngagePlayer() {
-        List<TileOccupier> playersInRange = this.board.findTileOccupiers(this.position, ATTACK_RANGE, PlayerPropertySet);
-        if (playersInRange.size() > 0) {
-            this.engagePlayer((Player)playersInRange.get(0));
+        Player player = this.board.getPlayerInRange(this.position, ATTACK_RANGE);
+        if (player != null) {
+            this.engagePlayer(player);
         }
     }
 
@@ -92,14 +91,13 @@ public class Trap extends Enemy {
 
     private void relocate() {
         this.ticksCount = Tick.Zero;
-        // TODO: find all free tiles
-        List<BoardSquare> freeTiles = null;
+        List<Point> freeTiles = this.board.getFreeTilesPositionsInRange(this.position, this.relocationRange);
         int tileIndex = this.randomGenerator.nextInt(freeTiles.size());
-        // TODO: move to free tile
+        this.move(freeTiles.get(tileIndex));
     }
 
     private void engagePlayer(Player player) {
-        // TODO: engage player
+        this.meeleAttack(player);
     }
 
     private void updateVisibility() {
@@ -109,5 +107,9 @@ public class Trap extends Enemy {
         else {
             this.visible = false;
         }
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 }

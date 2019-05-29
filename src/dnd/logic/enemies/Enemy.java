@@ -55,21 +55,22 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public MoveResult accept(Unit unit, Object state) throws LogicException {
-        return unit.attack(this, state);
+    public MoveResult accept(Unit unit) throws LogicException {
+        return unit.visit(this);
     }
 
     @Override
-    public MoveResult attack(Enemy enemy, Object state) throws LogicException {
+    public MoveResult visit(Enemy enemy) throws LogicException {
         return MoveResult.Invalid;
     }
 
     @Override
-    public MoveResult attack(Player player, Object state) throws LogicException {
-        return this.attackMove(player);
+    public MoveResult visit(Player player) throws LogicException {
+        return this.meeleAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
     }
 
-    private MoveResult attackMove(Player player) {
-        return this.attackCore(player) ? MoveResult.Dead : MoveResult.Engaged;
+    @Override
+    public char getTileChar() {
+        return this.tile;
     }
 }

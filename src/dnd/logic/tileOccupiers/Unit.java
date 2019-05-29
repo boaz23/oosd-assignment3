@@ -69,7 +69,7 @@ public abstract class Unit implements TickObserver, TileOccupier {
         MoveResult moveResult;
         try {
             TileOccupier targetTileOccupier = this.board.getTileOccupier(newPosition);
-            moveResult = targetTileOccupier.accept(this, this.getMoveState());
+            moveResult = targetTileOccupier.accept(this);
             if (moveResult == MoveResult.Allowed) {
                 this.moveActual(newPosition);
             }
@@ -86,29 +86,25 @@ public abstract class Unit implements TickObserver, TileOccupier {
         this.position = newPosition;
     }
 
-    public void visit(FreeTile freeTile, Object state) {
+    public MoveResult visit(FreeTile freeTile) {
         if (freeTile == null) {
             throw new IllegalArgumentException("freeTile is null.");
         }
 
-        // Do nothing
+        return MoveResult.Allowed;
     }
-    public void visit(Wall wall, Object state) {
+    public MoveResult visit(Wall wall) {
         if (wall == null) {
             throw new IllegalArgumentException("wall is null.");
         }
 
-        // Do nothing
+        return MoveResult.Invalid;
     }
 
-    public abstract MoveResult attack(Enemy enemy, Object state) throws LogicException;
-    public abstract MoveResult attack(Player player, Object state) throws LogicException;
+    public abstract MoveResult visit(Enemy enemy) throws LogicException;
+    public abstract MoveResult visit(Player player) throws LogicException;
 
-    protected boolean attackCore(Enemy enemy) {
-        return attackCore((Unit)enemy);
-    }
-
-    protected boolean attackCore(Unit unit) {
+    protected boolean meeleAttack(Unit unit) {
         if (unit == null) {
             throw new IllegalArgumentException("unit is null.");
         }
@@ -134,7 +130,8 @@ public abstract class Unit implements TickObserver, TileOccupier {
         return this.currentHealth == 0;
     }
 
-    protected Object getMoveState() {
-        return null;
+    @Override
+    public boolean isFree() {
+        return false;
     }
 }
