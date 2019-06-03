@@ -9,6 +9,7 @@ import dnd.logic.tileOccupiers.Unit;
 
 import java.util.List;
 
+// TODO: think about throwing matching exceptions from the methods
 public interface Board {
     /**
      * Requests to move the specified unit to the specified location
