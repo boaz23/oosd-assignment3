@@ -1,5 +1,6 @@
 package dnd.logic.tileOccupiers;
 
+import dnd.dto.units.UnitDTO;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.*;
 import dnd.logic.board.Board;
@@ -30,7 +31,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
             throw new IllegalArgumentException("a unit's health pool must be a positive number");
         }
         if (attack <= 0) {
-            throw new IllegalArgumentException("a unit's visit must be a positive number");
+            throw new IllegalArgumentException("a unit's formatString must be a positive number");
         }
         if (defense <= 0) {
             throw new IllegalArgumentException("a unit's defense must be a positive number");
@@ -129,7 +130,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
      * Defends from taking 'damage' amount of damage and lowers
      * the current health according to the actual damage dealth
      * (it might have been lowered by rolling a number between 0 and defense)
-     * @param damage The amount of damage to visit from
+     * @param damage The amount of damage to formatString from
      * @return Whether the unit died
      */
     public boolean defend(int damage) {
@@ -143,19 +144,21 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         return false;
     }
 
-    public void moveLeft() {
-        this.move(new Point(this.position.getX() - 1, this.position.getY()));
+    public MoveResult moveLeft() {
+        return this.move(new Point(this.position.getX() - 1, this.position.getY()));
     }
 
-    public void moveRight() {
-        this.move(new Point(this.position.getX() + 1, this.position.getY()));
+    public MoveResult moveRight() {
+        return this.move(new Point(this.position.getX() + 1, this.position.getY()));
     }
 
-    public void moveUp() {
-        this.move(new Point(this.position.getX(), this.position.getY() - 1));
+    public MoveResult moveUp() {
+        return this.move(new Point(this.position.getX(), this.position.getY() - 1));
     }
 
-    public void moveDown() {
-        this.move(new Point(this.position.getX(), this.position.getY() + 1));
+    public MoveResult moveDown() {
+        return this.move(new Point(this.position.getX(), this.position.getY() + 1));
     }
+
+    public abstract UnitDTO createDTO();
 }

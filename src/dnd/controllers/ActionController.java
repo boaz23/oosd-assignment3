@@ -2,6 +2,7 @@ package dnd.controllers;
 
 import dnd.logic.GameFlow;
 import dnd.logic.LogicException;
+import dnd.logic.MoveResult;
 import dnd.logic.player.Player;
 
 public class ActionController {
@@ -13,33 +14,46 @@ public class ActionController {
         this.player = player;
     }
 
-    public void moveUp() {
-        player.moveUp();
-        gameFlow.onTick();
+    public boolean moveUp() {
+        return move(() -> player.moveUp());
     }
 
-    public void moveDown() {
-        player.moveDown();
-        gameFlow.onTick();
+    public boolean moveDown() {
+        return move(() -> player.moveDown());
     }
 
-    public void moveLeft() {
-        player.moveLeft();
-        gameFlow.onTick();
+    public boolean moveLeft() {
+        return move(() -> player.moveLeft());
     }
 
-    public void moveRight() {
-        player.moveRight();
-        gameFlow.onTick();
+    public boolean moveRight() {
+        return move(() -> player.moveRight());
     }
 
-    public void castSpecialAbility() {
-        player.useSpecialAbility();
-        gameFlow.onTick();
+    public boolean castSpecialAbility() {
+        try {
+            player.useSpecialAbility();
+            gameFlow.onTick();
+            return true;
+        } catch (LogicException e) {
+            return false;
+        }
     }
 
     public void doNothing() {
         gameFlow.onTick();
     }
 
+    private boolean move(MoveAction moveAction) {
+        boolean validMove = moveAction.move() != MoveResult.Invalid;
+        if (validMove) {
+            gameFlow.onTick();
+        }
+
+        return validMove;
+    }
+
+    private interface MoveAction {
+        MoveResult move();
+    }
 }

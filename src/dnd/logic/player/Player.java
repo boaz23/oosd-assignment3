@@ -108,4 +108,6 @@ public abstract class Player extends Unit {
 
         return died;
     }
+
+    protected abstract String getSpecialAbilityName();
 }

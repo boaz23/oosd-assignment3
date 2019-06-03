@@ -45,8 +45,8 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public List<Point> getFreeTilesPositionsInRange(Point position, int range) throws PositionOutOfBoundsException {
-        validatePosition(position);
+    public List<Point> getFreeTilesPositionsInRange(Point position, int range) {
+//        validatePosition(position);
 
         List<Point> freeTilesInRange = new ArrayList<Point>();
         for (int i = Math.max(0, position.getX() - range); i <= Math.min(position.getX() + range, board.length - 1); i++) {
@@ -62,8 +62,8 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public List<Enemy> getEnemiesInRange(Point position, int range) throws PositionOutOfBoundsException {
-        validatePosition(position);
+    public List<Enemy> getEnemiesInRange(Point position, int range) {
+//        validatePosition(position);
         List<Enemy> enemiesInRange = new ArrayList<Enemy>();
         for (Enemy e : enemies) {
             if (Point.distance(position, e.getPosition()) < range)
@@ -73,8 +73,8 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public Player getPlayerInRange(Point position, int range) throws PositionOutOfBoundsException {
-        validatePosition(position);
+    public Player getPlayerInRange(Point position, int range) {
+//        validatePosition(position);
         Player player = null;
         if (Point.distance(position, this.player.getPosition()) < range)
             player = this.player;

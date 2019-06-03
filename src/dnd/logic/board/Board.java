@@ -17,11 +17,11 @@ public interface Board {
 
     TileOccupier getTileOccupier(Point position) throws PositionOutOfBoundsException;
 
-    List<Point> getFreeTilesPositionsInRange(Point position, int range) throws PositionOutOfBoundsException;
+    List<Point> getFreeTilesPositionsInRange(Point position, int range);
 
-    List<Enemy> getEnemiesInRange(Point position, int range) throws PositionOutOfBoundsException;
+    List<Enemy> getEnemiesInRange(Point position, int range);
 
-    Player getPlayerInRange(Point position, int range) throws PositionOutOfBoundsException;
+    Player getPlayerInRange(Point position, int range);
 
     void reportDeath(Player player);
 

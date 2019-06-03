@@ -1,13 +1,15 @@
 package dnd.controllers;
 
+import dnd.View;
+import dnd.dto.units.PlayerDTO;
 import dnd.logic.board.Board;
 import dnd.logic.board.BoardSquare;
 import dnd.logic.player.Player;
 
+// TODO: implement methods
 public class LevelController {
     private Player player;
     private Board board;
-    private View view;
 
     public ActionController loadLevel(int level) {
     }
@@ -24,6 +26,5 @@ public class LevelController {
     }
 
     public PlayerDTO getPlayer() {
-        
     }
 }
