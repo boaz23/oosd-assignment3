@@ -1,5 +1,8 @@
 package dnd.logic.player;
 
+import dnd.dto.levelup.MageLevelUpDTO;
+import dnd.dto.units.MageDTO;
+import dnd.dto.units.UnitDTO;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
@@ -69,10 +72,28 @@ public class Mage extends Player {
 
     @Override
     protected void levelUp() {
+        MageLevelUpDTO mageLevelUpDTO = this.initLevelUpDto();
+
         super.levelUp();
         this.manaPool += this.level * LEVEL_MANA_DIFF;
         this.currentMana = Math.min(this.currentMana + this.getManaAddition(), this.manaPool);
         this.spellPower += this.level * LEVEL_SPELL_POWER_DIFF;
+
+        this.calculateLevelUpStatsDiffs(mageLevelUpDTO);
+        this.callLevelUpObservers(mageLevelUpDTO);
+    }
+
+    private MageLevelUpDTO initLevelUpDto() {
+        MageLevelUpDTO mageLevelUpDTO = this.initLevelUpDto(new MageLevelUpDTO());
+        mageLevelUpDTO.manaPoolBonus = this.manaPool;
+        mageLevelUpDTO.spellPowerBonus = this.spellPower;
+        return mageLevelUpDTO;
+    }
+
+    private void calculateLevelUpStatsDiffs(MageLevelUpDTO mageLevelUpDTO) {
+        super.calculateLevelUpStatsDiffs(mageLevelUpDTO);
+        mageLevelUpDTO.manaPoolBonus = this.manaPool - mageLevelUpDTO.manaPoolBonus;
+        mageLevelUpDTO.spellPowerBonus = this.spellPower - mageLevelUpDTO.spellPowerBonus;
     }
 
     private int getManaAddition() {
@@ -80,7 +101,7 @@ public class Mage extends Player {
     }
 
     @Override
-    public void useSpecialAbility() throws LogicException {
+    public void useSpecialAbilityCore() throws LogicException {
         if (this.currentMana < cost) {
             throw new LogicException("Cannot use special ability due insufficient mana.");
         }
@@ -100,7 +121,22 @@ public class Mage extends Player {
     }
 
     @Override
+    protected String getSpecialAbilityName() {
+        return "Blizzard";
+    }
+
+    @Override
     public void onTick(Tick current) {
         this.currentMana = Math.min(this.manaPool, this.currentMana + MANA_REGEN);
+    }
+
+    @Override
+    public UnitDTO createDTO() {
+        MageDTO mageDTO = new MageDTO();
+        this.fillPlayerDtoFields(mageDTO);
+        mageDTO.currentMana = this.currentMana;
+        mageDTO.manaPool = this.manaPool;
+        mageDTO.spellPower = this.spellPower;
+        return  mageDTO;
     }
 }

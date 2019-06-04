@@ -97,7 +97,7 @@ public class Trap extends Enemy {
     }
 
     private void engagePlayer(Player player) {
-        this.meeleAttack(player);
+        this.meleeAttack(player);
     }
 
     private void updateVisibility() {

@@ -1,6 +1,5 @@
 package dnd.dto.units;
 
-import dnd.View;
 import dnd.dto.DTO;
 
 public abstract class UnitDTO implements DTO {

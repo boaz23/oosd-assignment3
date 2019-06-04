@@ -1,5 +1,6 @@
 package dnd.logic.board;
 
+import dnd.logic.LevelEndObserver;
 import dnd.logic.Point;
 import dnd.logic.PositionOutOfBoundsException;
 import dnd.logic.enemies.Enemy;
@@ -11,11 +12,15 @@ import dnd.logic.tileOccupiers.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: how to set the player and add enemies to the list
+// TODO: maybe throw PositionOutOfBoundsException in methods
 public class BoardImpl implements Board {
     private final TileFactory tileFactory;
-    BoardSquare[][] board;
-    List<Enemy> enemies;
-    Player player;
+    private BoardSquare[][] board;
+    private List<Enemy> enemies;
+    private Player player;
+
+    private List<LevelEndObserver> levelEndObservers;
 
     public BoardImpl(TileFactory tileFactory) {
         if (tileFactory == null) {
@@ -23,6 +28,7 @@ public class BoardImpl implements Board {
         }
 
         this.tileFactory = tileFactory;
+        this.levelEndObservers = new ArrayList<>();
     }
 
     @Override
@@ -48,7 +54,7 @@ public class BoardImpl implements Board {
     public List<Point> getFreeTilesPositionsInRange(Point position, int range) {
 //        validatePosition(position);
 
-        List<Point> freeTilesInRange = new ArrayList<Point>();
+        List<Point> freeTilesInRange = new ArrayList<>();
         for (int i = Math.max(0, position.getX() - range); i <= Math.min(position.getX() + range, board.length - 1); i++) {
             for(int j = Math.max(0, position.getY() - range); j <= Math.min(position.getY() + range, board[i].length - 1); j++) {
                 Point point = new Point(i, j);
@@ -82,18 +88,46 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public void reportDeath(Player player) {
+    public void onDeath(Player player) {
         board[player.getPosition().getX()][player.getPosition().getY()].setTileOccupier(tileFactory.createDeadPlayer());
+        this.callPlayerDeathObservers();
+
     }
 
     @Override
-    public void reportDeath(Enemy enemy) {
+    public void onDeath(Enemy enemy) {
         board[enemy.getPosition().getX()][enemy.getPosition().getY()].setTileOccupier(tileFactory.createFreeTile());
+        enemies.remove(enemy);
+
+        if (enemies.size() == 0) {
+            this.callLevelCompleteObservers();
+        }
     }
 
     @Override
     public BoardSquare[][] getBoard() {
         return board;
+    }
+
+    @Override
+    public void addLevelEndObserver(LevelEndObserver observer) {
+        if (observer == null) {
+            throw new IllegalArgumentException("observer is null.");
+        }
+
+        this.levelEndObservers.add(observer);
+    }
+
+    private void callPlayerDeathObservers() {
+        for (LevelEndObserver observer : this.levelEndObservers) {
+            observer.onDeath(player);
+        }
+    }
+
+    private void callLevelCompleteObservers() {
+        for (LevelEndObserver observer : this.levelEndObservers) {
+            observer.onLevelComplete();
+        }
     }
 
     private void validatePosition(Point position) throws PositionOutOfBoundsException {

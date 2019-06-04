@@ -1,5 +1,10 @@
 package dnd.logic.player;
 
+import dnd.GameEventObserver;
+import dnd.dto.levelup.LevelUpDTO;
+import dnd.dto.units.EnemyDTO;
+import dnd.dto.units.PlayerDTO;
+import dnd.logic.DeathObserver;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
@@ -35,9 +40,16 @@ public abstract class Player extends Unit {
         return '@';
     }
 
+    protected void callLevelUpObservers(LevelUpDTO levelUpDTO) {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onLevelUp(levelUpDTO.clone());
+        }
+    }
+
     protected void levelUp() {
-        this.experience -= this.level * LEVEL_EXP_DIFF;
+        this.experience -= getExperienceRequiredForLevel();
         this.level++;
+
         this.healthPool += this.level * LEVEL_HEALTH_DIFF;
         this.currentHealth = this.healthPool;
         this.attack += this.level * LEVEL_ATTACK_DIFF;
@@ -48,6 +60,8 @@ public abstract class Player extends Unit {
         if (exp < 0) {
             throw new IllegalArgumentException("exp gained must be a non-negative number.");
         }
+
+        this.callOnExpGainObservers(exp);
 
         int expLeftToNextLevel = getExpLeftToNextLevel();
         while (exp > expLeftToNextLevel) {
@@ -60,11 +74,33 @@ public abstract class Player extends Unit {
         this.experience += exp;
     }
 
-    private int getExpLeftToNextLevel() {
-        return (this.level * LEVEL_EXP_DIFF) - this.experience;
+    private void callOnExpGainObservers(int exp) {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onExpGain((PlayerDTO)this.createDTO(), exp);
+        }
     }
 
-    public abstract void useSpecialAbility() throws LogicException;
+    private int getExpLeftToNextLevel() {
+        return this.getExperienceRequiredForLevel() - this.experience;
+    }
+
+    private int getExperienceRequiredForLevel() {
+        return this.level * LEVEL_EXP_DIFF;
+    }
+
+    public void useSpecialAbility() throws LogicException {
+        this.callSpecialAbilityUseObservers();
+
+        this.useSpecialAbilityCore();
+    }
+
+    private void callSpecialAbilityUseObservers() {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onCastingSpecialAbility((PlayerDTO)this.createDTO());
+        }
+    }
+
+    protected abstract void useSpecialAbilityCore() throws LogicException;
 
     @Override
     public Object accept(TileVisitor visitor, Object state) throws LogicException {
@@ -78,11 +114,11 @@ public abstract class Player extends Unit {
 
     @Override
     public MoveResult visit(Enemy enemy, Object state) throws LogicException {
-        return this.moveMeeleAttack(enemy);
+        return this.moveMeleeAttack(enemy);
     }
 
     protected boolean attack(Enemy enemy, int damage) {
-        boolean died = super.meeleAttack(enemy);
+        boolean died = super.attackCore(enemy, damage);
         if (died) {
             this.gainExp(enemy.getExperienceValue());
         }
@@ -90,8 +126,10 @@ public abstract class Player extends Unit {
         return died;
     }
 
-    protected MoveResult moveMeeleAttack(Enemy enemy) {
-        boolean died = super.meeleAttack(enemy);
+    protected MoveResult moveMeleeAttack(Enemy enemy) {
+        this.callOnPlayerEngageObservers(enemy);
+
+        boolean died = super.meleeAttack(enemy);
         if (died) {
             this.gainExp(enemy.getExperienceValue());
         }
@@ -99,15 +137,56 @@ public abstract class Player extends Unit {
         return died ? MoveResult.Dead : MoveResult.Engaged;
     }
 
+    private void callOnPlayerEngageObservers(Enemy enemy) {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onPlayerEngage((PlayerDTO)this.createDTO(), (EnemyDTO)enemy.createDTO());
+        }
+    }
+
     @Override
-    public boolean defend(int damage) {
-        boolean died = super.defend(damage);
+    protected void callDeathObservers() {
+        for (DeathObserver observer : this.deathObservers) {
+            observer.onDeath(this);
+        }
+    }
+
+    @Override
+    public boolean defend(Unit attacker, int damage) {
+        boolean died = super.defend(attacker, damage);
         if (died) {
-            this.board.reportDeath(this);
+            this.callDeathObservers();
+            this.callPlayerDeathObservers();
         }
 
         return died;
     }
 
+    private void callPlayerDeathObservers() {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onPlayerDeath((PlayerDTO)this.createDTO());
+        }
+    }
+
     protected abstract String getSpecialAbilityName();
+
+    protected void fillPlayerDtoFields(PlayerDTO playerDTO) {
+        this.fillUnitDtoFields(playerDTO);
+        playerDTO.level = this.level;
+        playerDTO.experience = this.experience;
+        playerDTO.totalExperienceToNextLevel = this.getExperienceRequiredForLevel();
+        playerDTO.specialAbilityName = this.getSpecialAbilityName();
+    }
+
+    protected  <T extends LevelUpDTO> T initLevelUpDto(T levelUpDTO) {
+        levelUpDTO.healthBonus = this.healthPool;
+        levelUpDTO.attackBonus = this.attack;
+        levelUpDTO.defenseBonus = this.defense;
+        return levelUpDTO;
+    }
+
+    protected void calculateLevelUpStatsDiffs(LevelUpDTO levelUpDTO) {
+        levelUpDTO.healthBonus = this.healthPool - levelUpDTO.healthBonus;
+        levelUpDTO.attackBonus = this.attack - levelUpDTO.attackBonus;
+        levelUpDTO.defenseBonus = this.defense - levelUpDTO.defenseBonus;
+    }
 }

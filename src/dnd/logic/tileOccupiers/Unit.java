@@ -1,11 +1,16 @@
 package dnd.logic.tileOccupiers;
 
+import dnd.GameEventObserver;
+import dnd.logic.DeathObserver;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.*;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     protected final String name;
@@ -17,6 +22,9 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
 
     protected Board board;
     protected final RandomGenerator randomGenerator;
+
+    protected List<DeathObserver> deathObservers;
+    protected List<GameEventObserver> gameEventObservers;
 
     public Unit(String name,
                 int healthPool, int attack, int defense,
@@ -44,6 +52,8 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         this.defense = defense;
 
         this.randomGenerator = randomGenerator;
+        this.deathObservers = new ArrayList<>();
+        this.gameEventObservers = new ArrayList<>();
     }
 
     protected Unit(String name,
@@ -113,17 +123,30 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     public abstract MoveResult visit(Enemy enemy, Object state) throws LogicException;
     public abstract MoveResult visit(Player player, Object state) throws LogicException;
 
-    protected boolean meeleAttack(Unit unit) {
+    protected boolean meleeAttack(Unit unit) {
         if (unit == null) {
             throw new IllegalArgumentException("unit is null.");
         }
 
         int damage = this.randomGenerator.nextInt(this.attack);
+        this.callAttackPointsRollObservers(damage);
         return this.attackCore(unit, damage);
     }
 
+    private void callAttackPointsRollObservers(int attackPointsRoll) {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onAttackPointsRoll(this.createDTO(), attackPointsRoll);
+        }
+    }
+
+    private void callDefensePointsRollObservers(int defensePointsRoll) {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onDefensePointsRoll(this.createDTO(), defensePointsRoll);
+        }
+    }
+
     protected boolean attackCore(Unit unit, int damage) {
-        return unit.defend(damage);
+        return unit.defend(this, damage);
     }
 
     /**
@@ -133,11 +156,38 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
      * @param damage The amount of damage to formatString from
      * @return Whether the unit died
      */
-    public boolean defend(int damage) {
+    public boolean defend(Unit attacker, int damage) {
         int reduction = this.randomGenerator.nextInt(this.defense);
-        this.currentHealth = Math.max(this.currentHealth - reduction, 0);
+        this.callDefensePointsRollObservers(reduction);
+        damage -= reduction;
+        this.callOnHitObservers(attacker, damage);
+        this.currentHealth = Math.max(this.currentHealth - damage, 0);
         return this.currentHealth == 0;
     }
+
+    private void callOnHitObservers(Unit attacker, int damage) {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onHit(attacker.createDTO(), this.createDTO(), damage);
+        }
+    }
+
+    public void addDeathObserver(DeathObserver observer) {
+        if (observer == null) {
+            throw new IllegalArgumentException("observer is null.");
+        }
+
+        this.deathObservers.add(observer);
+    }
+
+    public void addGameEventObserver(GameEventObserver observer) {
+        if (observer == null) {
+            throw new IllegalArgumentException("observer is null.");
+        }
+
+        this.gameEventObservers.add(observer);
+    }
+
+    protected abstract void callDeathObservers();
 
     @Override
     public boolean isFree() {
@@ -161,4 +211,12 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     }
 
     public abstract UnitDTO createDTO();
+
+    protected void fillUnitDtoFields(UnitDTO unitDTO) {
+        unitDTO.name = this.name;
+        unitDTO.healthPool = this.healthPool;
+        unitDTO.currentHealth = this.currentHealth;
+        unitDTO.attack = this.attack;
+        unitDTO.defense = this.defense;
+    }
 }

@@ -1,6 +1,6 @@
 package dnd.dto.units;
 
-import dnd.View;
+import dnd.cli.view.View;
 
 public class RougeDTO extends PlayerDTO {
     public int currentEnergy;

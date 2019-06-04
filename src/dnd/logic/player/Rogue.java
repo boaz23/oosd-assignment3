@@ -1,5 +1,10 @@
 package dnd.logic.player;
 
+import dnd.dto.levelup.MageLevelUpDTO;
+import dnd.dto.levelup.RougeLevelUpDTO;
+import dnd.dto.units.MageDTO;
+import dnd.dto.units.RougeDTO;
+import dnd.dto.units.UnitDTO;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
@@ -45,13 +50,18 @@ public class Rogue extends Player {
 
     @Override
     protected void levelUp() {
+        RougeLevelUpDTO rougeLevelUpDTO = this.initLevelUpDto(new RougeLevelUpDTO());
+
         super.levelUp();
         this.currentEnergy = MAX_ENERGY;
         this.attack += this.level * LEVEL_ATTACK_DIFF;
+
+        this.calculateLevelUpStatsDiffs(rougeLevelUpDTO);
+        this.callLevelUpObservers(rougeLevelUpDTO);
     }
 
     @Override
-    public void useSpecialAbility() throws LogicException {
+    public void useSpecialAbilityCore() throws LogicException {
         if (this.currentEnergy < this.cost) {
             throw new LogicException("Cannot use special ability due insufficient energy.");
         }
@@ -64,7 +74,21 @@ public class Rogue extends Player {
     }
 
     @Override
+    protected String getSpecialAbilityName() {
+        return "Fan of Knives";
+    }
+
+    @Override
     public void onTick(Tick current) {
         this.currentEnergy = Math.min(this.currentEnergy + ENERGY_REGEN, MAX_ENERGY);
+    }
+
+    @Override
+    public UnitDTO createDTO() {
+        RougeDTO rougeDTO = new RougeDTO();
+        this.fillPlayerDtoFields(rougeDTO);
+        rougeDTO.currentEnergy = this.currentEnergy;
+        rougeDTO.maxEnergy = MAX_ENERGY;
+        return  rougeDTO;
     }
 }

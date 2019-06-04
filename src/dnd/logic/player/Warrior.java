@@ -1,5 +1,10 @@
 package dnd.logic.player;
 
+import dnd.dto.levelup.RougeLevelUpDTO;
+import dnd.dto.levelup.WarriorLevelUpDTO;
+import dnd.dto.units.RougeDTO;
+import dnd.dto.units.UnitDTO;
+import dnd.dto.units.WarriorDTO;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
@@ -46,14 +51,19 @@ public class Warrior extends Player {
 
     @Override
     protected void levelUp() {
+        WarriorLevelUpDTO rougeLevelUpDTO = this.initLevelUpDto(new WarriorLevelUpDTO());
+
         super.levelUp();
         this.resetCooldown();
         this.healthPool = this.level * LEVEL_HEALTH_DIFF;
         this.defense += this.level * LEVEL_DEFENSE_DIFF;
+
+        this.calculateLevelUpStatsDiffs(rougeLevelUpDTO);
+        this.callLevelUpObservers(rougeLevelUpDTO);
     }
 
     @Override
-    public void useSpecialAbility() throws LogicException {
+    public void useSpecialAbilityCore() throws LogicException {
         if (this.remaining.isGreaterThan(Tick.Zero)) {
             throw new LogicException("Cannot use the special ability because the cooldown isn't ready.");
         }
@@ -63,7 +73,21 @@ public class Warrior extends Player {
     }
 
     @Override
+    protected String getSpecialAbilityName() {
+        return "Heal";
+    }
+
+    @Override
     public void onTick(Tick current) {
         this.remaining = this.remaining.decrement();
+    }
+
+    @Override
+    public UnitDTO createDTO() {
+        WarriorDTO warriorDTO = new WarriorDTO();
+        this.fillPlayerDtoFields(warriorDTO);
+        warriorDTO.abilityCooldown = this.coolDown.getValue();
+        warriorDTO.remaining = this.remaining.getValue();
+        return  warriorDTO;
     }
 }

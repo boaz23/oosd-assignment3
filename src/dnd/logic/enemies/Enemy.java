@@ -1,5 +1,10 @@
 package dnd.logic.enemies;
 
+import dnd.GameEventObserver;
+import dnd.dto.units.EnemyDTO;
+import dnd.dto.units.PlayerDTO;
+import dnd.dto.units.UnitDTO;
+import dnd.logic.DeathObserver;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
@@ -46,13 +51,20 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public boolean defend(int damage) {
-        boolean died = super.defend(damage);
+    public boolean defend(Unit attacker, int damage) {
+        boolean died = super.defend(attacker, damage);
         if (died) {
-            this.board.reportDeath(this);
+            this.callDeathObservers();
+            this.callOnEnemyDeathObservers();
         }
 
         return died;
+    }
+
+    private void callOnEnemyDeathObservers() {
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onEnemyDeath((EnemyDTO)this.createDTO());
+        }
     }
 
     @Override
@@ -67,11 +79,29 @@ public abstract class Enemy extends Unit {
 
     @Override
     public MoveResult visit(Player player, Object state) {
-        return this.meeleAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
+        for (GameEventObserver observer : this.gameEventObservers) {
+            observer.onEnemyEngage((EnemyDTO)this.createDTO(), (PlayerDTO)player.createDTO());
+        }
+
+        return this.meleeAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
+    }
+
+    @Override
+    protected void callDeathObservers() {
+        for (DeathObserver observer : this.deathObservers) {
+            observer.onDeath(this);
+        }
     }
 
     @Override
     public char getTileChar() {
         return this.tile;
+    }
+
+    @Override
+    public UnitDTO createDTO() {
+        EnemyDTO enemyDTO = new EnemyDTO();
+        this.fillUnitDtoFields(enemyDTO);
+        return enemyDTO;
     }
 }

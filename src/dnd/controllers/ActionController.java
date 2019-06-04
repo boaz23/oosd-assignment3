@@ -1,16 +1,16 @@
 package dnd.controllers;
 
-import dnd.logic.GameFlow;
+import dnd.logic.LevelFlow;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.player.Player;
 
 public class ActionController {
     private Player player;
-    private GameFlow gameFlow;
+    private LevelFlow levelFlow;
 
-    public ActionController(Player player, GameFlow gameFlow) {
-        this.gameFlow = gameFlow;
+    public ActionController(Player player, LevelFlow levelFlow) {
+        this.levelFlow = levelFlow;
         this.player = player;
     }
 
@@ -33,7 +33,7 @@ public class ActionController {
     public boolean castSpecialAbility() {
         try {
             player.useSpecialAbility();
-            gameFlow.onTick();
+            levelFlow.onTick();
             return true;
         } catch (LogicException e) {
             return false;
@@ -41,13 +41,13 @@ public class ActionController {
     }
 
     public void doNothing() {
-        gameFlow.onTick();
+        levelFlow.onTick();
     }
 
     private boolean move(MoveAction moveAction) {
         boolean validMove = moveAction.move() != MoveResult.Invalid;
         if (validMove) {
-            gameFlow.onTick();
+            levelFlow.onTick();
         }
 
         return validMove;
