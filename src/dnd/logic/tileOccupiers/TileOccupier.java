@@ -11,5 +11,5 @@ public interface TileOccupier {
 
     boolean isFree();
 
-    TileOccupier clone(Point poisiton, RandomGenerator randomGenerator, Board board);
+    TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board);
 }

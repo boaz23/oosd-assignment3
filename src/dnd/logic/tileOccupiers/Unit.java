@@ -153,7 +153,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
 
     /**
      * Defends from taking 'damage' amount of damage and lowers
-     * the current health according to the actual damage dealth
+     * the current health according to the actual damage dealt
      * (it might have been lowered by rolling a number between 0 and defense)
      *
      * @param damage The amount of damage to formatString from

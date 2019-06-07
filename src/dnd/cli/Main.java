@@ -49,7 +49,7 @@ public class Main {
             view.startGame();
         }
         catch (GameException e) {
-            System.out.println("game error occured: " + e.getMessage());
+            System.out.println("game error occurred: " + e.getMessage());
             e.printStackTrace();
         }
     }

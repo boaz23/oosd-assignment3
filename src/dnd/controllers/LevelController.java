@@ -62,8 +62,8 @@ public class LevelController implements LevelEndObserver {
 
     private void addInanimateFactories(TileOccupier[] inanimates) {
         for (int i = 0; i < inanimates.length; i++) {
-            TileOccupier inanimte = inanimates[i];
-            tilesFactory.put(inanimte.toTileChar(), new InanimateFactory(inanimte));
+            TileOccupier inanimate = inanimates[i];
+            tilesFactory.put(inanimate.toTileChar(), new InanimateFactory(inanimate));
         }
     }
 
@@ -103,22 +103,22 @@ public class LevelController implements LevelEndObserver {
         return tiles;
     }
 
-    public PlayerDTO[] getPlayerChoises() {
-        Player[] avaiablePlayers = AvailablePlayers.Players;
-        PlayerDTO[] playerChoises = new PlayerDTO[avaiablePlayers.length];
-        for (int i = 0; i < avaiablePlayers.length; i++) {
-            playerChoises[i] = (PlayerDTO)avaiablePlayers[i].createDTO();
+    public PlayerDTO[] getPlayerChoices() {
+        Player[] availablePlayers = AvailablePlayers.Players;
+        PlayerDTO[] playerChoices = new PlayerDTO[availablePlayers.length];
+        for (int i = 0; i < availablePlayers.length; i++) {
+            playerChoices[i] = (PlayerDTO)availablePlayers[i].createDTO();
         }
 
-        return playerChoises;
+        return playerChoices;
     }
 
-    public PlayerDTO choosePlayer(int choise) {
-        if (0 >= choise | choise > AvailablePlayers.Players.length) {
+    public PlayerDTO choosePlayer(int choice) {
+        if (0 >= choice | choice > AvailablePlayers.Players.length) {
             return null;
         }
 
-        Player player = AvailablePlayers.Players[choise - 1];
+        Player player = AvailablePlayers.Players[choice - 1];
         this.player = player;
         this.tilesFactory.put(player.toTileChar(), this.new PlayerFactory());
         return (PlayerDTO)player.createDTO();

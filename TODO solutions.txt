@@ -1,7 +1,0 @@
-- prototype pattern for cloning units instead of creating instances directly when loading a level
-- builder pattern to pass dependencies to units
-- 'Level' dependency that allows querying free tiles, moving a unit and units with specific properties within a given range and position
-- dnd.logic.tileOccupiers.TileOccupier interface with method Set<TileProperty>
-- BoardSqaure holds dnd.logic.tileOccupiers.TileOccupier
-- Unit does not inherit from Square
-- Unit.defend(dmg) returns whether the unit died

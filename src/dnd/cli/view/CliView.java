@@ -58,35 +58,35 @@ public class CliView extends PrintEventsView {
 
     private void selectPlayerAndShowControls() {
         this.showPlayerSelectMenu();
-        PlayerDTO playerChoise = this.choosePlayer();
-        this.printPlayerChoise(playerChoise);
+        PlayerDTO playerChoice = this.choosePlayer();
+        this.printPlayerChoice(playerChoice);
         this.printControls();
     }
 
     private void showPlayerSelectMenu() {
         this.printer.printLine("Select player:");
-        PlayerDTO[] playerChoises = this.levelController.getPlayerChoises();
-        for (int i = 0; i < playerChoises.length; i++) {
-            PlayerDTO playerChoise = playerChoises[i];
+        PlayerDTO[] playerChoices = this.levelController.getPlayerChoices();
+        for (int i = 0; i < playerChoices.length; i++) {
+            PlayerDTO playerChoice = playerChoices[i];
             this.printer.print((i + 1) + ". ");
-            this.printer.printLine(this.resolveFormatString(playerChoise));
+            this.printer.printLine(this.resolveFormatString(playerChoice));
         }
     }
 
     private PlayerDTO choosePlayer() {
-        PlayerDTO playerChoise = this.choosePlayerCore();
-        while (playerChoise == null) {
+        PlayerDTO playerChoice = this.choosePlayerCore();
+        while (playerChoice == null) {
             this.printer.printLine("Select Player:");
-            playerChoise = this.choosePlayerCore();
+            playerChoice = this.choosePlayerCore();
         }
 
-        return playerChoise;
+        return playerChoice;
     }
 
     private PlayerDTO choosePlayerCore() {
         try {
-            int choise = Integer.parseInt(this.actionReader.nextAction());
-            return this.levelController.choosePlayer(choise);
+            int choice = Integer.parseInt(this.actionReader.nextAction());
+            return this.levelController.choosePlayer(choice);
         }
         catch (NumberFormatException ignored) {
         }
@@ -94,9 +94,9 @@ public class CliView extends PrintEventsView {
         return null;
     }
 
-    private void printPlayerChoise(PlayerDTO playerChoise) {
+    private void printPlayerChoice(PlayerDTO playerChoice) {
         this.printer.printLine("You have selected:");
-        this.printer.printLine(this.resolveFormatString(playerChoise));
+        this.printer.printLine(this.resolveFormatString(playerChoice));
     }
 
     private void printControls() {
