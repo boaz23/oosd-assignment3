@@ -17,11 +17,11 @@ public class InanimateFactory implements TileOccupierFactory {
 
     @Override
     public TileOccupier createTileOccupier(
-            Point position,
-            RandomGenerator randomGenerator,
-            BoardImpl board,
-            LevelFlow levelFlow,
-            GameEventObserver gameEventObserver) {
+        Point position,
+        RandomGenerator randomGenerator,
+        BoardImpl board,
+        LevelFlow levelFlow,
+        GameEventObserver gameEventObserver) {
         return inanimate.clone(position, randomGenerator, board);
     }
 }

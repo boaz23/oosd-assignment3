@@ -9,9 +9,9 @@ import dnd.logic.tileOccupiers.TileOccupier;
 
 public interface TileOccupierFactory {
     TileOccupier createTileOccupier(
-            Point position,
-            RandomGenerator randomGenerator,
-            BoardImpl board,
-            LevelFlow levelFlow,
-            GameEventObserver gameEventObserver);
+        Point position,
+        RandomGenerator randomGenerator,
+        BoardImpl board,
+        LevelFlow levelFlow,
+        GameEventObserver gameEventObserver);
 }

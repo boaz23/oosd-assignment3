@@ -99,7 +99,8 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
             this.board.move(this, newPosition);
             this.position = newPosition;
             return true;
-        } catch (PositionOutOfBoundsException e) {
+        }
+        catch (PositionOutOfBoundsException e) {
             return false;
         }
     }
@@ -111,6 +112,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
 
         return MoveResult.Allowed;
     }
+
     public MoveResult visit(Wall wall, Object state) {
         if (wall == null) {
             throw new IllegalArgumentException("wall is null.");
@@ -120,6 +122,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     }
 
     public abstract MoveResult visit(Enemy enemy, Object state) throws GameException;
+
     public abstract MoveResult visit(Player player, Object state) throws GameException;
 
     protected boolean meleeAttack(Unit unit) throws GameException {
@@ -152,6 +155,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
      * Defends from taking 'damage' amount of damage and lowers
      * the current health according to the actual damage dealth
      * (it might have been lowered by rolling a number between 0 and defense)
+     *
      * @param damage The amount of damage to formatString from
      * @return Whether the unit died
      */

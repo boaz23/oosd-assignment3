@@ -27,6 +27,6 @@ public class PositionMatrixBuilder {
     }
 
     public PositionsMatrix build() {
-        return new PositionsMatrix(boardSquares.toArray(new BoardSquare[][] {}));
+        return new PositionsMatrix(boardSquares.toArray(new BoardSquare[][]{}));
     }
 }

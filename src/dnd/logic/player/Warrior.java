@@ -40,7 +40,7 @@ public class Warrior extends Player {
 
     private void init(Tick cooldown) {
         if (cooldown == null) {
-           throw new IllegalArgumentException("cooldown cannot be null.");
+            throw new IllegalArgumentException("cooldown cannot be null.");
         }
 
         this.coolDown = cooldown;
@@ -90,18 +90,18 @@ public class Warrior extends Player {
         this.fillPlayerDtoFields(warriorDTO);
         warriorDTO.abilityCooldown = this.coolDown.getValue();
         warriorDTO.remaining = this.remaining.getValue();
-        return  warriorDTO;
+        return warriorDTO;
     }
 
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Warrior(
-                this.name,
-                this.healthPool, this.attack, this.defense,
-                this.experience, this.level,
-                this.coolDown,
-                position,
-                randomGenerator, board
+            this.name,
+            this.healthPool, this.attack, this.defense,
+            this.experience, this.level,
+            this.coolDown,
+            position,
+            randomGenerator, board
         );
     }
 }

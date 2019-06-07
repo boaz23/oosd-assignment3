@@ -12,15 +12,15 @@ import java.util.HashMap;
 
 public class CliView extends PrintEventsView {
     private static final HashMap<String, PlayerAction> actions = new HashMap<String, PlayerAction>() {{
-       put("w", actionController -> actionController.moveUp());
-       put("s", actionController -> actionController.moveDown());
-       put("a", actionController -> actionController.moveLeft());
-       put("d", actionController -> actionController.moveRight());
-       put("e", actionController -> actionController.castSpecialAbility());
-       put("q", actionController -> {
-           actionController.doNothing();
-           return true;
-       });
+        put("w", actionController -> actionController.moveUp());
+        put("s", actionController -> actionController.moveDown());
+        put("a", actionController -> actionController.moveLeft());
+        put("d", actionController -> actionController.moveRight());
+        put("e", actionController -> actionController.castSpecialAbility());
+        put("q", actionController -> {
+            actionController.doNothing();
+            return true;
+        });
     }};
 
     private final Printer printer;

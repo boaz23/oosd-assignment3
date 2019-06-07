@@ -20,9 +20,9 @@ public class PositionOutOfBoundsException extends GameException {
     }
 
     protected PositionOutOfBoundsException(String message,
-                             Throwable cause,
-                             boolean enableSuppression,
-                             boolean writableStackTrace) {
+                                           Throwable cause,
+                                           boolean enableSuppression,
+                                           boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

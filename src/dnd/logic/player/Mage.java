@@ -140,20 +140,20 @@ public class Mage extends Player {
         mageDTO.currentMana = this.currentMana;
         mageDTO.manaPool = this.manaPool;
         mageDTO.spellPower = this.spellPower;
-        return  mageDTO;
+        return mageDTO;
     }
 
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Mage(
-                this.name,
-                this.healthPool, this.attack, this.defense,
-                this.experience, this.level,
-                this.spellPower, this.manaPool, this.cost,
-                this.hitTimes, this.range,
-                position,
-                randomGenerator,
-                board
+            this.name,
+            this.healthPool, this.attack, this.defense,
+            this.experience, this.level,
+            this.spellPower, this.manaPool, this.cost,
+            this.hitTimes, this.range,
+            position,
+            randomGenerator,
+            board
         );
     }
 }

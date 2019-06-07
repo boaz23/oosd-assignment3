@@ -106,12 +106,7 @@ public class Trap extends Enemy {
     }
 
     private void updateVisibility() {
-        if (this.visibilityTime.isGreaterThan(this.ticksCount)) {
-            this.visible = true;
-        }
-        else {
-            this.visible = false;
-        }
+        this.visible = this.visibilityTime.isGreaterThan(this.ticksCount);
     }
 
     public boolean isVisible() {
@@ -130,13 +125,13 @@ public class Trap extends Enemy {
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Trap(
-                this.name,
-                this.healthPool, this.attack, this.defense,
-                this.experienceValue, this.tile,
-                this.relocationRange, this.relocationTime,
-                this.visibilityTime,
-                position,
-                randomGenerator, board
+            this.name,
+            this.healthPool, this.attack, this.defense,
+            this.experienceValue, this.tile,
+            this.relocationRange, this.relocationTime,
+            this.visibilityTime,
+            position,
+            randomGenerator, board
         );
     }
 }

@@ -36,7 +36,8 @@ public class ActionController {
             player.useSpecialAbility();
             levelFlow.onTick();
             return true;
-        } catch (LogicException e) {
+        }
+        catch (LogicException e) {
             return false;
         }
     }

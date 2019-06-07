@@ -30,7 +30,7 @@ public class LevelFlow implements DeathObserver, LevelEndObserver {
     public void onTick() throws GameException {
         tick = tick.increment();
 
-        TickObserver[] tickObservers = this.tickObservers.toArray(new TickObserver[] {});
+        TickObserver[] tickObservers = this.tickObservers.toArray(new TickObserver[]{});
         for (int i = 0; i < tickObservers.length & !this.stopTurns; i++) {
             TickObserver observer = tickObservers[i];
 

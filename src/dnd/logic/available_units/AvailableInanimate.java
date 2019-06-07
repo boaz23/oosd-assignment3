@@ -10,9 +10,9 @@ public class AvailableInanimate {
     public static final Wall Wall = new Wall();
     public static final DeadPlayer DeadPlayer = new DeadPlayer();
 
-    public static final TileOccupier[] Inanimates = new TileOccupier[] {
-            FreeTile,
-            Wall,
-            DeadPlayer
+    public static final TileOccupier[] Inanimates = new TileOccupier[]{
+        FreeTile,
+        Wall,
+        DeadPlayer
     };
 }

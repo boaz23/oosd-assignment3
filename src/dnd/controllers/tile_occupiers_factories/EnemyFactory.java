@@ -17,11 +17,11 @@ public class EnemyFactory extends UnitFactory {
     }
 
     public TileOccupier createTileOccupier(
-            Point position,
-            RandomGenerator randomGenerator,
-            BoardImpl board,
-            LevelFlow levelFlow,
-            GameEventObserver gameEventObserver) {
+        Point position,
+        RandomGenerator randomGenerator,
+        BoardImpl board,
+        LevelFlow levelFlow,
+        GameEventObserver gameEventObserver) {
         Enemy enemy = (Enemy)this.enemy.clone(position, randomGenerator, board);
         board.addEnemy(enemy);
         levelFlow.addTickObserver(enemy);

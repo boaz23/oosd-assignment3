@@ -30,7 +30,8 @@ public class Main {
             try {
                 actionReader = new FileActionReader(filesDirPath + "user_actions.txt", printer);
                 randomGenerator = new FileRandomGenerator(filesDirPath + "random_numbers.txt");
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e) {
                 System.out.println("file not found.");
                 e.printStackTrace();
                 System.exit(2);
@@ -43,10 +44,11 @@ public class Main {
         }
 
         LevelController levelController = new LevelController(filesDirPath, randomGenerator);
-        CliView view  = new CliView(printer, actionReader, levelController);
+        CliView view = new CliView(printer, actionReader, levelController);
         try {
             view.startGame();
-        } catch (GameException e) {
+        }
+        catch (GameException e) {
             System.out.println("game error occured: " + e.getMessage());
             e.printStackTrace();
         }

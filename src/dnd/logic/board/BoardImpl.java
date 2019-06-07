@@ -53,11 +53,12 @@ public class BoardImpl implements Board {
         int lastX = board.lastX();
         int lastY = board.lastY();
         for (int i = Math.max(position.getX() - range, 0); i <= Math.min(position.getX() + range, lastX); i++) {
-            for(int j = Math.max(position.getY() - range, 0); j <= Math.min(position.getY() + range, lastY); j++) {
+            for (int j = Math.max(position.getY() - range, 0); j <= Math.min(position.getY() + range, lastY); j++) {
                 Point point = new Point(i, j);
                 if (Point.distance(position, point) < range) {
-                    if (board.get(point).isFree())
+                    if (board.get(point).isFree()) {
                         freeTilesInRange.add(point);
+                    }
                 }
             }
         }
@@ -68,8 +69,9 @@ public class BoardImpl implements Board {
     public List<Enemy> getEnemiesInRange(Point position, int range) {
         List<Enemy> enemiesInRange = new ArrayList<Enemy>();
         for (Enemy e : enemies) {
-            if (Point.distance(position, e.getPosition()) < range)
-               enemiesInRange.add(e);
+            if (Point.distance(position, e.getPosition()) < range) {
+                enemiesInRange.add(e);
+            }
         }
         return enemiesInRange;
     }
@@ -77,8 +79,9 @@ public class BoardImpl implements Board {
     @Override
     public Player getPlayerInRange(Point position, int range) {
         Player player = null;
-        if (Point.distance(position, this.player.getPosition()) < range)
+        if (Point.distance(position, this.player.getPosition()) < range) {
             player = this.player;
+        }
         return player;
     }
 

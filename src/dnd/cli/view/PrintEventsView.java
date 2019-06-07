@@ -50,16 +50,16 @@ abstract class PrintEventsView implements View {
     @Override
     public void onPlayerEngage(PlayerDTO player, EnemyDTO enemy) {
         String output = player.name + " engaged in battle with " + enemy.name + ":\n"
-                        + resolveFormatString(player) + "\n"
-                        + formatString(enemy);
+            + resolveFormatString(player) + "\n"
+            + formatString(enemy);
         printer.printLine(output);
     }
 
     @Override
     public void onEnemyEngage(EnemyDTO enemy, PlayerDTO player) {
         String output = enemy.name + " engaged in battle with " + player.name + ":\n"
-                + formatString(enemy) + "\n"
-                + resolveFormatString(player);
+            + formatString(enemy) + "\n"
+            + resolveFormatString(player);
         printer.printLine(output);
     }
 
@@ -81,7 +81,10 @@ abstract class PrintEventsView implements View {
         printer.printLine(output);
     }
 
-    protected String resolveFormatString(PlayerDTO playerDTO) { return playerDTO.accept(this); }
+    protected String resolveFormatString(PlayerDTO playerDTO) {
+        return playerDTO.accept(this);
+    }
+
     protected String resolveFormatString(LevelUpDTO levelUp) {
         return levelUp.accept(this);
     }
@@ -131,8 +134,8 @@ abstract class PrintEventsView implements View {
     @Override
     public String formatString(MageLevelUpDTO mageLevelUp) {
         String mageLevelUpInfo = formatString((LevelUpDTO)mageLevelUp) +
-                                "\n\t\t+" + mageLevelUp.manaPoolBonus + " maximum mana, +"
-                                 + mageLevelUp.spellPowerBonus + " spell power";
+            "\n\t\t+" + mageLevelUp.manaPoolBonus + " maximum mana, +"
+            + mageLevelUp.spellPowerBonus + " spell power";
         return mageLevelUpInfo;
     }
 

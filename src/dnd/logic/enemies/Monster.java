@@ -9,7 +9,7 @@ import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Monster extends Enemy {
-    private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[] {
+    private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[]{
         monster -> monster.moveDown(),
         monster -> monster.moveUp(),
         monster -> monster.moveRight(),
@@ -91,17 +91,18 @@ public class Monster extends Enemy {
         MoveDirections[move].move(this);
     }
 
-    private void doNothing() { }
+    private void doNothing() {
+    }
 
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Monster(
-                this.name,
-                this.healthPool, this.attack, this.defense,
-                this.experienceValue, this.tile,
-                this.range,
-                position,
-                randomGenerator, board);
+            this.name,
+            this.healthPool, this.attack, this.defense,
+            this.experienceValue, this.tile,
+            this.range,
+            position,
+            randomGenerator, board);
     }
 
     private interface MoveInDirectionAction {

@@ -1,6 +1,6 @@
 package dnd.cli;
 
-public enum  GameFinishedResult {
+public enum GameFinishedResult {
     Lose,
     Win
 }

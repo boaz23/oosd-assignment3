@@ -159,11 +159,13 @@ public class LevelController implements LevelEndObserver {
         catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("unexpected IO exception when loading level file", e);
-        } finally {
+        }
+        finally {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -222,11 +224,11 @@ public class LevelController implements LevelEndObserver {
             }
 
             TileOccupier tileOccupier = tilesFactory.get(tileChar).createTileOccupier(
-                    positionMatrixBuilder.getPosition(lineNum, i),
-                    this.randomGenerator,
-                    board,
-                    levelFlow,
-                    this.view);
+                positionMatrixBuilder.getPosition(lineNum, i),
+                this.randomGenerator,
+                board,
+                levelFlow,
+                this.view);
             positionMatrixBuilder.set(lineNum, i, tileOccupier);
         }
     }
@@ -234,11 +236,11 @@ public class LevelController implements LevelEndObserver {
     private class PlayerFactory extends UnitFactory {
         @Override
         public TileOccupier createTileOccupier(
-                Point position,
-                RandomGenerator randomGenerator,
-                BoardImpl board,
-                LevelFlow levelFlow,
-                GameEventObserver gameEventObserver) {
+            Point position,
+            RandomGenerator randomGenerator,
+            BoardImpl board,
+            LevelFlow levelFlow,
+            GameEventObserver gameEventObserver) {
             Player player = (Player)LevelController.this.player.clone(position, randomGenerator, board);
             LevelController.this.player = player;
             board.setPlayer(player);

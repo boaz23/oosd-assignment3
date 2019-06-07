@@ -8,6 +8,7 @@ public class Tick {
     private Tick() {
         this.value = 0;
     }
+
     public Tick(int value) {
         if (value < Zero.value) {
             throw new IllegalArgumentException("tick value must be a non-negative number.");
@@ -35,6 +36,7 @@ public class Tick {
     public Tick decrement() {
         return fromValueOrZero(this.value - 1);
     }
+
     public Tick increment() {
         return new Tick(this.value + 1);
     }

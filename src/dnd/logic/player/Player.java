@@ -41,6 +41,7 @@ public abstract class Player extends Unit {
     private void init() {
         this.level = 1;
     }
+
     private void init(int experience, int level) {
         this.experience = experience;
         this.level = level;

@@ -98,12 +98,12 @@ public class Rogue extends Player {
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Rogue(
-                this.name,
-                this.healthPool, this.attack, this.defense,
-                this.experience, this.level,
-                this.cost,
-                position,
-                randomGenerator, board
+            this.name,
+            this.healthPool, this.attack, this.defense,
+            this.experience, this.level,
+            this.cost,
+            position,
+            randomGenerator, board
         );
     }
 }
