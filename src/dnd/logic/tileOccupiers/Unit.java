@@ -21,17 +21,13 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     protected Point position;
 
     protected Board board;
-    protected final RandomGenerator randomGenerator;
+    protected RandomGenerator randomGenerator;
 
     protected List<DeathObserver> deathObservers;
     protected List<GameEventObserver> gameEventObservers;
 
     public Unit(String name,
-                int healthPool, int attack, int defense,
-                RandomGenerator randomGenerator) {
-        if (randomGenerator == null) {
-            throw new IllegalArgumentException("randomGenerator is null.");
-        }
+                int healthPool, int attack, int defense) {
         if (name == null || name.equals("")) {
             throw new IllegalArgumentException("a unit's name cannot be null or empty.");
         }
@@ -51,7 +47,6 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         this.attack = attack;
         this.defense = defense;
 
-        this.randomGenerator = randomGenerator;
         this.deathObservers = new ArrayList<>();
         this.gameEventObservers = new ArrayList<>();
     }
@@ -60,11 +55,15 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
                    int healthPool, int attack, int defense,
                    RandomGenerator randomGenerator,
                    Board board) {
-        this(name, healthPool, attack, defense, randomGenerator);
+        this(name, healthPool, attack, defense);
+        if (randomGenerator == null) {
+            throw new IllegalArgumentException("randomGenerator is null.");
+        }
         if (board == null) {
             throw new IllegalArgumentException("unitsInRangeFinder is null.");
         }
 
+        this.randomGenerator = randomGenerator;
         this.board = board;
     }
 

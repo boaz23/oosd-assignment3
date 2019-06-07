@@ -9,6 +9,7 @@ import dnd.controllers.LevelController;
 import java.util.HashMap;
 
 // TODO: print character select menu, the selection and the actions on game start
+// TODO: print player stats each turn
 public class CliView extends PrintEventsView {
     private static final HashMap<String, PlayerAction> actions = new HashMap<String, PlayerAction>() {{
        put("w", actionController -> actionController.moveUp());

@@ -19,9 +19,8 @@ public abstract class Enemy extends Unit {
 
     public Enemy(String name,
                  int healthPool, int attack, int defense,
-                 RandomGenerator randomGenerator,
                  int experienceValue, char tile) {
-        super(name, healthPool, attack, defense, randomGenerator);
+        super(name, healthPool, attack, defense);
         this.init(experienceValue, tile);
     }
 
@@ -94,7 +93,7 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public char getTileChar() {
+    public char toTileChar() {
         return this.tile;
     }
 
@@ -103,5 +102,9 @@ public abstract class Enemy extends Unit {
         EnemyDTO enemyDTO = new EnemyDTO();
         this.fillUnitDtoFields(enemyDTO);
         return enemyDTO;
+    }
+
+    public char getTileChar() {
+        return tile;
     }
 }

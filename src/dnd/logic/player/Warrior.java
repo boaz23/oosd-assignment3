@@ -1,14 +1,13 @@
 package dnd.logic.player;
 
-import dnd.dto.levelup.RougeLevelUpDTO;
 import dnd.dto.levelup.WarriorLevelUpDTO;
-import dnd.dto.units.RougeDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.dto.units.WarriorDTO;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
+import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Warrior extends Player {
     private static final int LEVEL_HEALTH_DIFF = 5;
@@ -21,17 +20,16 @@ public class Warrior extends Player {
 
     public Warrior(String name,
                    int healthPool, int attack, int defense,
-                   RandomGenerator randomGenerator,
                    Tick cooldown) {
-        super(name, healthPool, attack, defense, randomGenerator);
+        super(name, healthPool, attack, defense);
         this.init(cooldown);
     }
 
     protected Warrior(String name,
                       int healthPool, int attack, int defense,
+                      Tick cooldown,
                       RandomGenerator randomGenerator,
-                      Board board,
-                      Tick cooldown) {
+                      Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
         this.init(cooldown);
     }
@@ -89,5 +87,15 @@ public class Warrior extends Player {
         warriorDTO.abilityCooldown = this.coolDown.getValue();
         warriorDTO.remaining = this.remaining.getValue();
         return  warriorDTO;
+    }
+
+    @Override
+    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+        return new Warrior(
+                this.name,
+                this.healthPool, this.attack, this.defense,
+                this.coolDown,
+                randomGenerator, board
+        );
     }
 }

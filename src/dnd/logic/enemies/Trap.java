@@ -5,6 +5,8 @@ import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
+import dnd.logic.tileOccupiers.FreeTile;
+import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -20,19 +22,18 @@ public class Trap extends Enemy {
 
     public Trap(String name,
                 int healthPool, int attack, int defense,
-                RandomGenerator randomGenerator,
                 int experienceValue, char tile,
                 int relocationRange, Tick relocationTime, Tick visibilityTime) {
-        super(name, healthPool, attack, defense, randomGenerator, experienceValue, tile);
+        super(name, healthPool, attack, defense, experienceValue, tile);
         this.init(relocationRange, relocationTime, visibilityTime);
     }
 
     protected Trap(String name,
                    int healthPool, int attack, int defense,
-                   RandomGenerator randomGenerator,
-                   Board board,
                    int experienceValue, char tile,
-                   int relocationRange, Tick relocationTime, Tick visibilityTime) {
+                   int relocationRange, Tick relocationTime, Tick visibilityTime,
+                   RandomGenerator randomGenerator,
+                   Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
         this.init(relocationRange, relocationTime, visibilityTime);
     }
@@ -111,5 +112,26 @@ public class Trap extends Enemy {
 
     public boolean isVisible() {
         return visible;
+    }
+
+    @Override
+    public char toTileChar() {
+        if (isVisible()) {
+            return super.toTileChar();
+        }
+
+        return FreeTile.TileChar;
+    }
+
+    @Override
+    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+        return new Trap(
+                this.name,
+                this.healthPool, this.attack, this.defense,
+                this.experienceValue, this.tile,
+                this.relocationRange, this.relocationTime,
+                this.visibilityTime,
+                randomGenerator, board
+        );
     }
 }

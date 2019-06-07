@@ -8,6 +8,7 @@ import dnd.logic.LogicException;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
+import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -27,19 +28,18 @@ public class Mage extends Player {
 
     public Mage(String name,
                 int healthPool, int attack, int defense,
-                RandomGenerator randomGenerator,
                 int spellPower, int manaPool, int cost,
                 int hitTimes, int range) {
-        super(name, healthPool, attack, defense, randomGenerator);
+        super(name, healthPool, attack, defense);
         this.init(spellPower, manaPool, cost, hitTimes, range);
     }
 
     protected Mage(String name,
                    int healthPool, int attack, int defense,
-                   RandomGenerator randomGenerator,
-                   Board board,
                    int spellPower, int manaPool, int cost,
-                   int hitTimes, int range) {
+                   int hitTimes, int range,
+                   RandomGenerator randomGenerator,
+                   Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
         this.init(spellPower, manaPool, cost, hitTimes, range);
     }
@@ -138,5 +138,17 @@ public class Mage extends Player {
         mageDTO.manaPool = this.manaPool;
         mageDTO.spellPower = this.spellPower;
         return  mageDTO;
+    }
+
+    @Override
+    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+        return new Mage(
+                this.name,
+                this.healthPool, this.attack, this.defense,
+                this.spellPower, this.manaPool, this.cost,
+                this.hitTimes, this.range,
+                randomGenerator,
+                board
+        );
     }
 }

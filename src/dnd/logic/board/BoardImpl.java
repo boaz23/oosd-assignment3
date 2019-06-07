@@ -12,7 +12,6 @@ import dnd.logic.tileOccupiers.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: how to set the player and add enemies to the list
 // TODO: maybe throw PositionOutOfBoundsException in methods
 public class BoardImpl implements Board {
     private final TileFactory tileFactory;
@@ -29,6 +28,7 @@ public class BoardImpl implements Board {
 
         this.tileFactory = tileFactory;
         this.levelEndObservers = new ArrayList<>();
+        this.enemies = new ArrayList<>();
     }
 
     @Override
@@ -116,6 +116,22 @@ public class BoardImpl implements Board {
         }
 
         this.levelEndObservers.add(observer);
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void addEnemy(Enemy enemy) {
+        this.enemies.add(enemy);
+    }
+
+    public void setBoard(BoardSquare[][] board) {
+        this.board = board;
     }
 
     private void callPlayerDeathObservers() {

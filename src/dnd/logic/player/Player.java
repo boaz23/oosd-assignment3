@@ -23,9 +23,8 @@ public abstract class Player extends Unit {
     protected int level;
 
     public Player(String name,
-                  int healthPool, int attack, int defense,
-                  RandomGenerator randomGenerator) {
-        super(name, healthPool, attack, defense, randomGenerator);
+                  int healthPool, int attack, int defense) {
+        super(name, healthPool, attack, defense);
     }
 
     protected Player(String name,
@@ -36,7 +35,7 @@ public abstract class Player extends Unit {
     }
 
     @Override
-    public char getTileChar() {
+    public char toTileChar() {
         return '@';
     }
 

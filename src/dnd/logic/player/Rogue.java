@@ -1,15 +1,14 @@
 package dnd.logic.player;
 
-import dnd.dto.levelup.MageLevelUpDTO;
 import dnd.dto.levelup.RougeLevelUpDTO;
-import dnd.dto.units.MageDTO;
-import dnd.dto.units.RougeDTO;
+import dnd.dto.units.RogueDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
+import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -24,17 +23,16 @@ public class Rogue extends Player {
 
     public Rogue(String name,
                  int healthPool, int attack, int defense,
-                 RandomGenerator randomGenerator,
                  int cost) {
-        super(name, healthPool, attack, defense, randomGenerator);
+        super(name, healthPool, attack, defense);
         this.init(cost);
     }
 
     protected Rogue(String name,
                     int healthPool, int attack, int defense,
+                    int cost,
                     RandomGenerator randomGenerator,
-                    Board board,
-                    int cost) {
+                    Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
         this.init(cost);
     }
@@ -85,10 +83,20 @@ public class Rogue extends Player {
 
     @Override
     public UnitDTO createDTO() {
-        RougeDTO rougeDTO = new RougeDTO();
-        this.fillPlayerDtoFields(rougeDTO);
-        rougeDTO.currentEnergy = this.currentEnergy;
-        rougeDTO.maxEnergy = MAX_ENERGY;
-        return  rougeDTO;
+        RogueDTO rogueDTO = new RogueDTO();
+        this.fillPlayerDtoFields(rogueDTO);
+        rogueDTO.currentEnergy = this.currentEnergy;
+        rogueDTO.maxEnergy = MAX_ENERGY;
+        return rogueDTO;
+    }
+
+    @Override
+    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+        return new Rogue(
+                this.name,
+                this.healthPool, this.attack, this.defense,
+                this.cost,
+                randomGenerator, board
+        );
     }
 }

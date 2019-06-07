@@ -2,7 +2,7 @@ package dnd.dto.units;
 
 import dnd.cli.view.View;
 
-public class RougeDTO extends PlayerDTO {
+public class RogueDTO extends PlayerDTO {
     public int currentEnergy;
     public int maxEnergy;
 

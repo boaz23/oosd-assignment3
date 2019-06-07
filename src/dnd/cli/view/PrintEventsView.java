@@ -112,7 +112,7 @@ abstract class PrintEventsView implements View {
     }
 
     @Override
-    public String formatString(RougeDTO rouge) {
+    public String formatString(RogueDTO rouge) {
         String rougeInfo = formatString((PlayerDTO)rouge);
         rougeInfo += "\t\tEnergy: " + rouge.currentEnergy + "/" + rouge.maxEnergy + "\n";
         return rougeInfo;

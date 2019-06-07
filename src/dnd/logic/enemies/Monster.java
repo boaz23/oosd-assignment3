@@ -1,10 +1,10 @@
 package dnd.logic.enemies;
 
 import dnd.logic.random_generator.RandomGenerator;
-import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
+import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Monster extends Enemy {
     private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[] {
@@ -18,19 +18,18 @@ public class Monster extends Enemy {
 
     public Monster(String name,
                    int healthPool, int attack, int defense,
-                   RandomGenerator randomGenerator,
                    int experienceValue, char tile,
                    int range) {
-        super(name, healthPool, attack, defense, randomGenerator, experienceValue, tile);
+        super(name, healthPool, attack, defense, experienceValue, tile);
         this.init(range);
     }
 
     protected Monster(String name,
                       int healthPool, int attack, int defense,
-                      RandomGenerator randomGenerator,
-                      Board board,
                       int experienceValue, char tile,
-                      int range) {
+                      int range,
+                      RandomGenerator randomGenerator,
+                      Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
         this.init(range);
     }
@@ -84,6 +83,16 @@ public class Monster extends Enemy {
 
         int move = this.randomGenerator.nextInt(3);
         MoveDirections[move].move(this);
+    }
+
+    @Override
+    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+        return new Monster(
+                this.name,
+                this.healthPool, this.attack, this.defense,
+                this.experienceValue, this.tile,
+                this.range,
+                randomGenerator, board);
     }
 
     private interface MoveInDirectionAction {

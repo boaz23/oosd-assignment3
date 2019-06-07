@@ -1,10 +1,12 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.logic.LogicException;
+import dnd.logic.board.Board;
+import dnd.logic.random_generator.RandomGenerator;
 
 public class DeadPlayer implements TileOccupier {
     @Override
-    public char getTileChar() {
+    public char toTileChar() {
         return 'X';
     }
 
@@ -16,5 +18,10 @@ public class DeadPlayer implements TileOccupier {
     @Override
     public boolean isFree() {
         return false;
+    }
+
+    @Override
+    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+        return new DeadPlayer();
     }
 }
