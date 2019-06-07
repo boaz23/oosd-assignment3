@@ -15,12 +15,13 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
-    public static int main(String[] args) {
+    public static void main(String[] args) {
         ActionReader actionReader;
         RandomGenerator randomGenerator;
         Printer printer = new ConsolePrinter();
         if (args == null || args.length == 0) {
-            return 1;
+            System.exit(1);
+            return;
         }
 
         String filesDirPath = getFilesDirPath(args[0]);
@@ -31,7 +32,8 @@ public class Main {
             } catch (FileNotFoundException e) {
                 System.out.println("file not found.");
                 e.printStackTrace();
-                return 2;
+                System.exit(2);
+                return;
             }
         }
         else {
@@ -42,7 +44,6 @@ public class Main {
         LevelController levelController = new LevelController(filesDirPath, randomGenerator);
         CliView view  = new CliView(printer, actionReader, levelController);
         view.startGame();
-        return 0;
     }
 
     private static String getFilesDirPath(String arg) {
