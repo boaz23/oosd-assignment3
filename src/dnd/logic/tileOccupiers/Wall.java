@@ -25,4 +25,9 @@ public class Wall implements TileOccupier {
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Wall();
     }
+
+    @Override
+    public String toString() {
+        return toTileChar() + "";
+    }
 }

@@ -1,6 +1,7 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.GameEventObserver;
+import dnd.GameException;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.*;
 import dnd.logic.board.Board;
@@ -70,7 +71,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         return this.position;
     }
 
-    public MoveResult move(Point newPosition) {
+    public MoveResult move(Point newPosition) throws GameException {
         if (newPosition == null) {
             throw new IllegalArgumentException("newPosition is null.");
         }
@@ -118,10 +119,10 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         return MoveResult.Invalid;
     }
 
-    public abstract MoveResult visit(Enemy enemy, Object state) throws LogicException;
-    public abstract MoveResult visit(Player player, Object state) throws LogicException;
+    public abstract MoveResult visit(Enemy enemy, Object state) throws GameException;
+    public abstract MoveResult visit(Player player, Object state) throws GameException;
 
-    protected boolean meleeAttack(Unit unit) {
+    protected boolean meleeAttack(Unit unit) throws GameException {
         if (unit == null) {
             throw new IllegalArgumentException("unit is null.");
         }
@@ -143,7 +144,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         }
     }
 
-    protected boolean attackCore(Unit unit, int damage) {
+    protected boolean attackCore(Unit unit, int damage) throws GameException {
         return unit.defend(this, damage);
     }
 
@@ -154,7 +155,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
      * @param damage The amount of damage to formatString from
      * @return Whether the unit died
      */
-    public boolean defend(Unit attacker, int damage) {
+    public boolean defend(Unit attacker, int damage) throws GameException {
         int reduction = this.randomGenerator.nextInt(this.defense);
         this.callDefensePointsRollObservers(reduction);
         damage -= reduction;
@@ -185,26 +186,26 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         this.gameEventObservers.add(observer);
     }
 
-    protected abstract void callDeathObservers();
+    protected abstract void callDeathObservers() throws GameException;
 
     @Override
     public boolean isFree() {
         return false;
     }
 
-    public MoveResult moveLeft() {
+    public MoveResult moveLeft() throws GameException {
         return this.move(new Point(this.position.getX() - 1, this.position.getY()));
     }
 
-    public MoveResult moveRight() {
+    public MoveResult moveRight() throws GameException {
         return this.move(new Point(this.position.getX() + 1, this.position.getY()));
     }
 
-    public MoveResult moveUp() {
+    public MoveResult moveUp() throws GameException {
         return this.move(new Point(this.position.getX(), this.position.getY() - 1));
     }
 
-    public MoveResult moveDown() {
+    public MoveResult moveDown() throws GameException {
         return this.move(new Point(this.position.getX(), this.position.getY() + 1));
     }
 
@@ -216,5 +217,10 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         unitDTO.currentHealth = this.currentHealth;
         unitDTO.attack = this.attack;
         unitDTO.defense = this.defense;
+    }
+
+    @Override
+    public String toString() {
+        return toTileChar() + ", " + name;
     }
 }

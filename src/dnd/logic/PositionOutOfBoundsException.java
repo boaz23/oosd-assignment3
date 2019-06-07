@@ -1,6 +1,8 @@
 package dnd.logic;
 
-public class PositionOutOfBoundsException extends Exception {
+import dnd.GameException;
+
+public class PositionOutOfBoundsException extends GameException {
     public PositionOutOfBoundsException() {
         super();
     }

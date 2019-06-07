@@ -1,5 +1,6 @@
 package dnd.logic.enemies;
 
+import dnd.GameException;
 import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
@@ -62,7 +63,7 @@ public class Trap extends Enemy {
     }
 
     @Override
-    public void onTick(Tick current) {
+    public void onTick(Tick current) throws GameException {
         boolean relocated = this.checkRelocation();
         if (!relocated) {
             this.checkEngagePlayer();
@@ -71,14 +72,14 @@ public class Trap extends Enemy {
         this.updateVisibility();
     }
 
-    private void checkEngagePlayer() {
+    private void checkEngagePlayer() throws GameException {
         Player player = this.board.getPlayerInRange(this.position, ATTACK_RANGE);
         if (player != null) {
             this.engagePlayer(player);
         }
     }
 
-    private boolean checkRelocation() {
+    private boolean checkRelocation() throws GameException {
         boolean relocated;
         if (this.ticksCount.equals(this.relocationTime)) {
             this.relocate();
@@ -92,14 +93,14 @@ public class Trap extends Enemy {
         return relocated;
     }
 
-    private void relocate() {
+    private void relocate() throws GameException {
         this.ticksCount = Tick.Zero;
         List<Point> freeTiles = this.board.getFreeTilesPositionsInRange(this.position, this.relocationRange);
         int tileIndex = this.randomGenerator.nextInt(freeTiles.size());
         this.move(freeTiles.get(tileIndex));
     }
 
-    private void engagePlayer(Player player) {
+    private void engagePlayer(Player player) throws GameException {
         this.meleeAttack(player);
     }
 

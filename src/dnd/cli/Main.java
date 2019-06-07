@@ -1,5 +1,6 @@
 package dnd.cli;
 
+import dnd.GameException;
 import dnd.cli.action_reader.ActionReader;
 import dnd.cli.action_reader.ConsoleActionReader;
 import dnd.cli.action_reader.FileActionReader;
@@ -43,7 +44,12 @@ public class Main {
 
         LevelController levelController = new LevelController(filesDirPath, randomGenerator);
         CliView view  = new CliView(printer, actionReader, levelController);
-        view.startGame();
+        try {
+            view.startGame();
+        } catch (GameException e) {
+            System.out.println("game error occured: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private static String getFilesDirPath(String arg) {

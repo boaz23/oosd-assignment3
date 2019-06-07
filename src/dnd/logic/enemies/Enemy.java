@@ -1,11 +1,11 @@
 package dnd.logic.enemies;
 
 import dnd.GameEventObserver;
+import dnd.GameException;
 import dnd.dto.units.EnemyDTO;
 import dnd.dto.units.PlayerDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.DeathObserver;
-import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
@@ -50,7 +50,7 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public boolean defend(Unit attacker, int damage) {
+    public boolean defend(Unit attacker, int damage) throws GameException {
         boolean died = super.defend(attacker, damage);
         if (died) {
             this.callDeathObservers();
@@ -67,7 +67,7 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public Object accept(TileVisitor visitor, Object state) throws LogicException {
+    public Object accept(TileVisitor visitor, Object state) throws GameException {
         return visitor.visit(this, state);
     }
 
@@ -77,7 +77,7 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public MoveResult visit(Player player, Object state) {
+    public MoveResult visit(Player player, Object state) throws GameException {
         for (GameEventObserver observer : this.gameEventObservers) {
             observer.onEnemyEngage((EnemyDTO)this.createDTO(), (PlayerDTO)player.createDTO());
         }
@@ -86,7 +86,7 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    protected void callDeathObservers() {
+    protected void callDeathObservers() throws GameException {
         for (DeathObserver observer : this.deathObservers) {
             observer.onDeath(this);
         }
@@ -106,5 +106,10 @@ public abstract class Enemy extends Unit {
 
     public char getTileChar() {
         return tile;
+    }
+
+    @Override
+    public String toString() {
+        return getTileChar() + ", " + name;
     }
 }

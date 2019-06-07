@@ -1,25 +1,23 @@
-package dnd.logic;
+package dnd;
 
-import dnd.GameException;
-
-public class LogicException extends GameException {
-    public LogicException() {
+public class GameException extends Exception {
+    public GameException() {
         super();
     }
 
-    public LogicException(String message) {
+    public GameException(String message) {
         super(message);
     }
 
-    public LogicException(String message, Throwable cause) {
+    public GameException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public LogicException(Throwable cause) {
+    public GameException(Throwable cause) {
         super(cause);
     }
 
-    protected LogicException(String message,
+    protected GameException(String message,
                              Throwable cause,
                              boolean enableSuppression,
                              boolean writableStackTrace) {

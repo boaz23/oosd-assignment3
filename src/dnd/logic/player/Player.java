@@ -1,6 +1,7 @@
 package dnd.logic.player;
 
 import dnd.GameEventObserver;
+import dnd.GameException;
 import dnd.dto.levelup.LevelUpDTO;
 import dnd.dto.units.EnemyDTO;
 import dnd.dto.units.PlayerDTO;
@@ -93,7 +94,7 @@ public abstract class Player extends Unit {
         return this.level * LEVEL_EXP_DIFF;
     }
 
-    public void useSpecialAbility() throws LogicException {
+    public void useSpecialAbility() throws GameException {
         this.callSpecialAbilityUseObservers();
 
         this.useSpecialAbilityCore();
@@ -105,10 +106,10 @@ public abstract class Player extends Unit {
         }
     }
 
-    protected abstract void useSpecialAbilityCore() throws LogicException;
+    protected abstract void useSpecialAbilityCore() throws GameException;
 
     @Override
-    public Object accept(TileVisitor visitor, Object state) throws LogicException {
+    public Object accept(TileVisitor visitor, Object state) throws GameException {
         return visitor.visit(this, state);
     }
 
@@ -118,11 +119,11 @@ public abstract class Player extends Unit {
     }
 
     @Override
-    public MoveResult visit(Enemy enemy, Object state) throws LogicException {
+    public MoveResult visit(Enemy enemy, Object state) throws GameException {
         return this.moveMeleeAttack(enemy);
     }
 
-    protected boolean attack(Enemy enemy, int damage) {
+    protected boolean attack(Enemy enemy, int damage) throws GameException {
         boolean died = super.attackCore(enemy, damage);
         if (died) {
             this.gainExp(enemy.getExperienceValue());
@@ -131,7 +132,7 @@ public abstract class Player extends Unit {
         return died;
     }
 
-    protected MoveResult moveMeleeAttack(Enemy enemy) {
+    protected MoveResult moveMeleeAttack(Enemy enemy) throws GameException {
         this.callOnPlayerEngageObservers(enemy);
 
         boolean died = super.meleeAttack(enemy);
@@ -149,14 +150,14 @@ public abstract class Player extends Unit {
     }
 
     @Override
-    protected void callDeathObservers() {
+    protected void callDeathObservers() throws GameException {
         for (DeathObserver observer : this.deathObservers) {
             observer.onDeath(this);
         }
     }
 
     @Override
-    public boolean defend(Unit attacker, int damage) {
+    public boolean defend(Unit attacker, int damage) throws GameException {
         boolean died = super.defend(attacker, damage);
         if (died) {
             this.callDeathObservers();

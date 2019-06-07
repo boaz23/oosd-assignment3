@@ -1,5 +1,6 @@
 package dnd.logic.player;
 
+import dnd.GameException;
 import dnd.dto.levelup.RougeLevelUpDTO;
 import dnd.dto.units.RogueDTO;
 import dnd.dto.units.UnitDTO;
@@ -62,7 +63,7 @@ public class Rogue extends Player {
     }
 
     @Override
-    public void useSpecialAbilityCore() throws LogicException {
+    public void useSpecialAbilityCore() throws GameException {
         if (this.currentEnergy < this.cost) {
             throw new LogicException("Cannot use special ability due insufficient energy.");
         }

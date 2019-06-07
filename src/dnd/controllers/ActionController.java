@@ -1,5 +1,6 @@
 package dnd.controllers;
 
+import dnd.GameException;
 import dnd.logic.LevelFlow;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
@@ -14,23 +15,23 @@ public class ActionController {
         this.player = player;
     }
 
-    public boolean moveUp() {
+    public boolean moveUp() throws GameException {
         return move(() -> player.moveUp());
     }
 
-    public boolean moveDown() {
+    public boolean moveDown() throws GameException {
         return move(() -> player.moveDown());
     }
 
-    public boolean moveLeft() {
+    public boolean moveLeft() throws GameException {
         return move(() -> player.moveLeft());
     }
 
-    public boolean moveRight() {
+    public boolean moveRight() throws GameException {
         return move(() -> player.moveRight());
     }
 
-    public boolean castSpecialAbility() {
+    public boolean castSpecialAbility() throws GameException {
         try {
             player.useSpecialAbility();
             levelFlow.onTick();
@@ -40,11 +41,11 @@ public class ActionController {
         }
     }
 
-    public void doNothing() {
+    public void doNothing() throws GameException {
         levelFlow.onTick();
     }
 
-    private boolean move(MoveAction moveAction) {
+    private boolean move(MoveAction moveAction) throws GameException {
         boolean validMove = moveAction.move() != MoveResult.Invalid;
         if (validMove) {
             levelFlow.onTick();
@@ -54,6 +55,6 @@ public class ActionController {
     }
 
     private interface MoveAction {
-        MoveResult move();
+        MoveResult move() throws GameException;
     }
 }

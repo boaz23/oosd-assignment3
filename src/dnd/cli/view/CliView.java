@@ -1,5 +1,6 @@
 package dnd.cli.view;
 
+import dnd.GameException;
 import dnd.cli.GameFinishedResult;
 import dnd.cli.action_reader.ActionReader;
 import dnd.cli.printer.Printer;
@@ -52,7 +53,7 @@ public class CliView extends PrintEventsView {
         this.levelComplete = false;
     }
 
-    public void startGame() {
+    public void startGame() throws GameException {
         this.selectPlayerAndShowControls();
         this.startLevelsPlay();
     }
@@ -105,7 +106,7 @@ public class CliView extends PrintEventsView {
         this.printer.printLine("Use e for special ability or q to pass.");
     }
 
-    private void startLevelsPlay() {
+    private void startLevelsPlay() throws GameException {
         this.loadNextLevel();
         if (noLevelsExist()) {
             this.printer.printLine("No levels are present. exiting...");
@@ -124,7 +125,7 @@ public class CliView extends PrintEventsView {
         return this.actionController == null;
     }
 
-    private void doGameLoop() {
+    private void doGameLoop() throws GameException {
         boolean gameFinished = false;
         while (!gameFinished) {
             while (!this.levelComplete) {
@@ -163,12 +164,13 @@ public class CliView extends PrintEventsView {
         this.printer.printLine(this.resolveFormatString(this.levelController.getPlayer()));
     }
 
-    private void act() {
+    private void act() throws GameException {
         String nextAction = this.actionReader.nextAction();
         if (!actions.containsKey(nextAction)) {
             this.printer.printLine("Action '" + nextAction + "' is not defined");
         }
         else {
+            this.printer.printLine(nextAction);
             boolean result = actions.get(nextAction).doAction(this.actionController);
             if (!result) {
                 this.printer.printLine("Illegal move or action.");
@@ -201,6 +203,6 @@ public class CliView extends PrintEventsView {
     }
 
     private interface PlayerAction {
-        boolean doAction(ActionController actionController);
+        boolean doAction(ActionController actionController) throws GameException;
     }
 }

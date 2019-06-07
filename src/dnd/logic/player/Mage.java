@@ -1,5 +1,6 @@
 package dnd.logic.player;
 
+import dnd.GameException;
 import dnd.dto.levelup.MageLevelUpDTO;
 import dnd.dto.units.MageDTO;
 import dnd.dto.units.UnitDTO;
@@ -104,7 +105,7 @@ public class Mage extends Player {
     }
 
     @Override
-    public void useSpecialAbilityCore() throws LogicException {
+    public void useSpecialAbilityCore() throws GameException {
         if (this.currentMana < cost) {
             throw new LogicException("Cannot use special ability due insufficient mana.");
         }

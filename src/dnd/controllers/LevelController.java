@@ -15,7 +15,8 @@ import dnd.logic.available_units.AvailablePlayers;
 import dnd.logic.available_units.AvailableTraps;
 import dnd.logic.board.Board;
 import dnd.logic.board.BoardImpl;
-import dnd.logic.board.BoardSquare;
+import dnd.logic.board.PositionMatrixBuilder;
+import dnd.logic.board.PositionsMatrix;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 import dnd.logic.random_generator.RandomGenerator;
@@ -23,9 +24,7 @@ import dnd.logic.tileOccupiers.TileFactoryImpl;
 import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LevelController implements LevelEndObserver {
@@ -92,11 +91,13 @@ public class LevelController implements LevelEndObserver {
     }
 
     public char[][] getBoard() {
-        BoardSquare[][] boardSquares = board.getBoard();
-        char[][] tiles = new char[boardSquares.length][boardSquares[0].length];
-        for (int i = 0; i < boardSquares.length; i++) {
-            for (int j = 0; j < boardSquares[i].length; j++) {
-                tiles[i][j] = boardSquares[i][j].getTileOccupier().toTileChar();
+        PositionsMatrix boardSquares = board.getBoard();
+        int rows = boardSquares.rows();
+        int columns = boardSquares.columns();
+        char[][] tiles = new char[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                tiles[i][j] = boardSquares.get(i, j).toTileChar();
             }
         }
         return tiles;
@@ -177,9 +178,9 @@ public class LevelController implements LevelEndObserver {
         this.player.addDeathObserver(board);
         this.player.addDeathObserver(levelFlow);
 
-        List<BoardSquare[]> boardSquares = parseFile(board, levelFlow, reader);
+        PositionsMatrix positionsMatrix = parseFile(board, levelFlow, reader);
+        board.setBoard(positionsMatrix);
 
-        board.setBoard(boardSquares.toArray(new BoardSquare[][] {}));
         board.addLevelEndObserver(this);
         board.addLevelEndObserver(levelFlow);
         levelFlow.addTickObserver(this.player);
@@ -187,14 +188,15 @@ public class LevelController implements LevelEndObserver {
         return new ActionController(board.getPlayer(), levelFlow);
     }
 
-    private List<BoardSquare[]> parseFile(BoardImpl board, LevelFlow levelFlow, BufferedReader reader) throws IOException {
-        ArrayList<BoardSquare[]> boardSquares = new ArrayList<>();
+    private PositionsMatrix parseFile(BoardImpl board, LevelFlow levelFlow, BufferedReader reader) throws IOException {
+        PositionsMatrix positionsMatrix = null;
 
         String line = reader.readLine();
         if (line != null) {
             int lineNum = 0;
             int boardWidth = line.length();
-            boardSquares.add(parseFileLine(line, lineNum, board, levelFlow));
+            PositionMatrixBuilder positionMatrixBuilder = new PositionMatrixBuilder(boardWidth);
+            parseFileLine(line, lineNum, positionMatrixBuilder, board, levelFlow);
 
             while ((line = reader.readLine()) != null) {
                 if (line.length() != boardWidth) {
@@ -202,30 +204,31 @@ public class LevelController implements LevelEndObserver {
                 }
 
                 lineNum++;
-                boardSquares.add(parseFileLine(line, lineNum, board, levelFlow));
+                parseFileLine(line, lineNum, positionMatrixBuilder, board, levelFlow);
             }
+
+            positionsMatrix = positionMatrixBuilder.build();
         }
 
-        return boardSquares;
+        return positionsMatrix;
     }
 
-    private BoardSquare[] parseFileLine(String line, int lineNum, BoardImpl board, LevelFlow levelFlow) {
-        BoardSquare[] squares = new BoardSquare[line.length()];
+    private void parseFileLine(String line, int lineNum, PositionMatrixBuilder positionMatrixBuilder, BoardImpl board, LevelFlow levelFlow) {
+        positionMatrixBuilder.addRow();
         for (int i = 0; i < line.length(); i++) {
             char tileChar = line.charAt(i);
             if (!tilesFactory.containsKey(tileChar)) {
                 throw new RuntimeException("invalid tile character");
             }
 
-            squares[i] = new BoardSquare(tilesFactory.get(tileChar).createTileOccupier(
-                    new Point(lineNum, i),
+            TileOccupier tileOccupier = tilesFactory.get(tileChar).createTileOccupier(
+                    positionMatrixBuilder.getPosition(lineNum, i),
                     this.randomGenerator,
                     board,
                     levelFlow,
-                    this.view));
+                    this.view);
+            positionMatrixBuilder.set(lineNum, i, tileOccupier);
         }
-
-        return squares;
     }
 
     private class PlayerFactory extends UnitFactory {

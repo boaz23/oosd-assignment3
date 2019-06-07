@@ -1,5 +1,6 @@
 package dnd.logic.enemies;
 
+import dnd.GameException;
 import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
@@ -9,10 +10,11 @@ import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Monster extends Enemy {
     private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[] {
-        monster -> monster.moveLeft(),
-        monster -> monster.moveRight(),
+        monster -> monster.moveDown(),
         monster -> monster.moveUp(),
-        monster -> monster.moveDown()
+        monster -> monster.moveRight(),
+        monster -> monster.moveLeft(),
+        monster -> monster.doNothing(),
     };
 
     private int range;
@@ -46,7 +48,7 @@ public class Monster extends Enemy {
     }
 
     @Override
-    public void onTick(Tick current) {
+    public void onTick(Tick current) throws GameException {
         Player player = this.board.getPlayerInRange(this.position, this.range);
         if (player != null) {
             this.chasePlayer(player);
@@ -56,7 +58,7 @@ public class Monster extends Enemy {
         }
     }
 
-    private void chasePlayer(Player player) {
+    private void chasePlayer(Player player) throws GameException {
         int dx = this.position.getX() - player.getPosition().getX();
         int dy = this.position.getY() - player.getPosition().getY();
 
@@ -78,7 +80,7 @@ public class Monster extends Enemy {
         }
     }
 
-    private void actRandomly() {
+    private void actRandomly() throws GameException {
         // 0 - move left
         // 1 - move right
         // 2 - move up
@@ -87,6 +89,8 @@ public class Monster extends Enemy {
         int move = this.randomGenerator.nextInt(3);
         MoveDirections[move].move(this);
     }
+
+    private void doNothing() { }
 
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
@@ -100,6 +104,6 @@ public class Monster extends Enemy {
     }
 
     private interface MoveInDirectionAction {
-        void move(Monster monster);
+        void move(Monster monster) throws GameException;
     }
 }

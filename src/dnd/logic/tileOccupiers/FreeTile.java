@@ -27,4 +27,9 @@ public class FreeTile implements TileOccupier {
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new FreeTile();
     }
+
+    @Override
+    public String toString() {
+        return toTileChar() + "";
+    }
 }

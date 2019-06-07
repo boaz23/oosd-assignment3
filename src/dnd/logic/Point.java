@@ -39,4 +39,14 @@ public class Point {
         Point other = (Point)obj;
         return this.x == other.x & this.y == other.y;
     }
+
+    @Override
+    public int hashCode() {
+        return x ^ y;
+    }
+
+    @Override
+    public String toString() {
+        return x + ", " + y;
+    }
 }

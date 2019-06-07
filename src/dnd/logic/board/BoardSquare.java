@@ -20,4 +20,9 @@ public class BoardSquare {
 
         this.tileOccupier = tileOccupier;
     }
+
+    @Override
+    public String toString() {
+        return getTileOccupier().toString();
+    }
 }

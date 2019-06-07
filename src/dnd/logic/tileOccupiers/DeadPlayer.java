@@ -25,4 +25,9 @@ public class DeadPlayer implements TileOccupier {
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new DeadPlayer();
     }
+
+    @Override
+    public String toString() {
+        return toTileChar() + "";
+    }
 }

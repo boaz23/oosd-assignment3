@@ -1,5 +1,6 @@
 package dnd.logic;
 
+import dnd.GameException;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 
@@ -22,7 +23,7 @@ public class LevelFlow implements DeathObserver, LevelEndObserver {
         this.tickObservers.add(observer);
     }
 
-    public void onTick() {
+    public void onTick() throws GameException {
         tick = tick.increment();
 
         TickObserver[] tickObservers = this.tickObservers.toArray(new TickObserver[] {});
