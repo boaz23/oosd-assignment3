@@ -10,8 +10,6 @@ import dnd.dto.units.PlayerDTO;
 
 import java.util.HashMap;
 
-// TODO: print character select menu, the selection and the actions on game start
-// TODO: print player stats each turn
 public class CliView extends PrintEventsView {
     private static final HashMap<String, PlayerAction> actions = new HashMap<String, PlayerAction>() {{
        put("w", actionController -> actionController.moveUp());
@@ -170,7 +168,6 @@ public class CliView extends PrintEventsView {
             this.printer.printLine("Action '" + nextAction + "' is not defined");
         }
         else {
-            this.printer.printLine(nextAction);
             boolean result = actions.get(nextAction).doAction(this.actionController);
             if (!result) {
                 this.printer.printLine("Illegal move or action.");

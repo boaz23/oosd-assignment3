@@ -19,6 +19,10 @@ public class LevelFlow implements DeathObserver, LevelEndObserver {
         this.stopTurns = false;
     }
 
+    public void insertTickObserverAsFirst(TickObserver observer) {
+        this.tickObservers.add(0, observer);
+    }
+
     public void addTickObserver(TickObserver observer) {
         this.tickObservers.add(observer);
     }

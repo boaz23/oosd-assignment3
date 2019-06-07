@@ -13,7 +13,6 @@ import dnd.logic.tileOccupiers.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: maybe throw PositionOutOfBoundsException in methods
 public class BoardImpl implements Board {
     private final TileFactory tileFactory;
     private PositionsMatrix board;

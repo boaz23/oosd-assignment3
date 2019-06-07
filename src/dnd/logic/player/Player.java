@@ -31,14 +31,19 @@ public abstract class Player extends Unit {
 
     protected Player(String name,
                      int healthPool, int attack, int defense,
+                     int experience, int level,
                      RandomGenerator randomGenerator,
                      Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
-        this.init();
+        this.init(experience, level);
     }
 
     private void init() {
         this.level = 1;
+    }
+    private void init(int experience, int level) {
+        this.experience = experience;
+        this.level = level;
     }
 
     @Override
@@ -70,7 +75,7 @@ public abstract class Player extends Unit {
         this.callOnExpGainObservers(exp);
 
         int expLeftToNextLevel = getExpLeftToNextLevel();
-        while (exp > expLeftToNextLevel) {
+        while (exp >= expLeftToNextLevel) {
             exp -= expLeftToNextLevel;
             this.experience += expLeftToNextLevel;
             this.levelUp();
@@ -183,7 +188,7 @@ public abstract class Player extends Unit {
         playerDTO.specialAbilityName = this.getSpecialAbilityName();
     }
 
-    protected  <T extends LevelUpDTO> T initLevelUpDto(T levelUpDTO) {
+    protected <T extends LevelUpDTO> T initLevelUpDto(T levelUpDTO) {
         levelUpDTO.healthBonus = this.healthPool;
         levelUpDTO.attackBonus = this.attack;
         levelUpDTO.defenseBonus = this.defense;

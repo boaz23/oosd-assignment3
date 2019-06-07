@@ -1,17 +1,23 @@
 package dnd.cli.action_reader;
+import dnd.cli.printer.Printer;
+
 import java.io.*;
 
 public class FileActionReader implements ActionReader, Closeable {
     private BufferedReader reader;
+    private final Printer printer;
 
-    public FileActionReader(String path) throws FileNotFoundException {
+    public FileActionReader(String path, Printer printer) throws FileNotFoundException {
         reader = new BufferedReader(new FileReader(path));
+        this.printer = printer;
     }
 
     @Override
     public String nextAction() {
         try {
-            return reader.readLine();
+            String action = reader.readLine();
+            this.printer.printLine(action);
+            return action;
         }
         catch (IOException e) {
             throw new RuntimeException("io exception", e);
@@ -22,6 +28,7 @@ public class FileActionReader implements ActionReader, Closeable {
     public void close() throws IOException {
         if (reader != null) {
             reader.close();
+            reader = null;
         }
     }
 }

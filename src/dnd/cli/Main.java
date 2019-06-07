@@ -28,7 +28,7 @@ public class Main {
         String filesDirPath = getFilesDirPath(args[0]);
         if (args.length >= 2 && args[1].equals("-D")) {
             try {
-                actionReader = new FileActionReader(filesDirPath + "user_actions.txt");
+                actionReader = new FileActionReader(filesDirPath + "user_actions.txt", printer);
                 randomGenerator = new FileRandomGenerator(filesDirPath + "random_numbers.txt");
             } catch (FileNotFoundException e) {
                 System.out.println("file not found.");

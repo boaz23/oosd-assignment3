@@ -32,11 +32,12 @@ public class Rogue extends Player {
 
     protected Rogue(String name,
                     int healthPool, int attack, int defense,
+                    int experience, int level,
                     int cost,
                     Point position,
                     RandomGenerator randomGenerator,
                     Board board) {
-        super(name, healthPool, attack, defense, randomGenerator, board);
+        super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
         this.init(cost);
         this.position = position;
     }
@@ -99,6 +100,7 @@ public class Rogue extends Player {
         return new Rogue(
                 this.name,
                 this.healthPool, this.attack, this.defense,
+                this.experience, this.level,
                 this.cost,
                 position,
                 randomGenerator, board

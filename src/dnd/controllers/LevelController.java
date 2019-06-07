@@ -120,7 +120,7 @@ public class LevelController implements LevelEndObserver {
 
         Player player = AvailablePlayers.Players[choise - 1];
         this.player = player;
-        this.tilesFactory.put(player.toTileChar(), this.new PlayerFactory(player));
+        this.tilesFactory.put(player.toTileChar(), this.new PlayerFactory());
         return (PlayerDTO)player.createDTO();
     }
 
@@ -183,7 +183,7 @@ public class LevelController implements LevelEndObserver {
 
         board.addLevelEndObserver(this);
         board.addLevelEndObserver(levelFlow);
-        levelFlow.addTickObserver(this.player);
+        levelFlow.insertTickObserverAsFirst(this.player);
 
         return new ActionController(board.getPlayer(), levelFlow);
     }
@@ -232,12 +232,6 @@ public class LevelController implements LevelEndObserver {
     }
 
     private class PlayerFactory extends UnitFactory {
-        private final Player player;
-
-        PlayerFactory(Player player) {
-            this.player = player;
-        }
-
         @Override
         public TileOccupier createTileOccupier(
                 Point position,
@@ -245,7 +239,7 @@ public class LevelController implements LevelEndObserver {
                 BoardImpl board,
                 LevelFlow levelFlow,
                 GameEventObserver gameEventObserver) {
-            Player player = (Player)this.player.clone(position, randomGenerator, board);
+            Player player = (Player)LevelController.this.player.clone(position, randomGenerator, board);
             LevelController.this.player = player;
             board.setPlayer(player);
             super.registerEventObservers(player, board, levelFlow, gameEventObserver);

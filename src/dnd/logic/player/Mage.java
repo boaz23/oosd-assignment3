@@ -38,12 +38,13 @@ public class Mage extends Player {
 
     protected Mage(String name,
                    int healthPool, int attack, int defense,
+                   int experience, int level,
                    int spellPower, int manaPool, int cost,
                    int hitTimes, int range,
                    Point position,
                    RandomGenerator randomGenerator,
                    Board board) {
-        super(name, healthPool, attack, defense, randomGenerator, board);
+        super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
         this.init(spellPower, manaPool, cost, hitTimes, range);
         this.position = position;
     }
@@ -112,14 +113,12 @@ public class Mage extends Player {
 
         this.currentMana -= this.cost;
         List<Enemy> enemiesInRange = this.board.getEnemiesInRange(this.position, this.range);
-        if (enemiesInRange.size() > 0) {
-            for (int hits = 0; hits < this.hitTimes; hits++) {
-                int enemyIndex = randomGenerator.nextInt(enemiesInRange.size());
-                Enemy enemy = enemiesInRange.get(enemyIndex);
-                boolean died = this.attack(enemy, this.spellPower);
-                if (died) {
-                    enemiesInRange.remove(enemyIndex);
-                }
+        for (int hits = 0; hits < this.hitTimes & !enemiesInRange.isEmpty(); hits++) {
+            int enemyIndex = randomGenerator.nextInt(enemiesInRange.size() - 1);
+            Enemy enemy = enemiesInRange.get(enemyIndex);
+            boolean died = this.attack(enemy, this.spellPower);
+            if (died) {
+                enemiesInRange.remove(enemyIndex);
             }
         }
     }
@@ -149,6 +148,7 @@ public class Mage extends Player {
         return new Mage(
                 this.name,
                 this.healthPool, this.attack, this.defense,
+                this.experience, this.level,
                 this.spellPower, this.manaPool, this.cost,
                 this.hitTimes, this.range,
                 position,

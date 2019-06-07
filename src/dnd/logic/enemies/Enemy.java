@@ -78,11 +78,14 @@ public abstract class Enemy extends Unit {
 
     @Override
     public MoveResult visit(Player player, Object state) throws GameException {
+        callEngageObservers(player);
+        return this.meleeAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
+    }
+
+    protected void callEngageObservers(Player player) {
         for (GameEventObserver observer : this.gameEventObservers) {
             observer.onEnemyEngage((EnemyDTO)this.createDTO(), (PlayerDTO)player.createDTO());
         }
-
-        return this.meleeAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
     }
 
     @Override

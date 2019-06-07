@@ -96,11 +96,12 @@ public class Trap extends Enemy {
     private void relocate() throws GameException {
         this.ticksCount = Tick.Zero;
         List<Point> freeTiles = this.board.getFreeTilesPositionsInRange(this.position, this.relocationRange);
-        int tileIndex = this.randomGenerator.nextInt(freeTiles.size());
+        int tileIndex = this.randomGenerator.nextInt(freeTiles.size() - 1);
         this.move(freeTiles.get(tileIndex));
     }
 
     private void engagePlayer(Player player) throws GameException {
+        callEngageObservers(player);
         this.meleeAttack(player);
     }
 

@@ -158,7 +158,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     public boolean defend(Unit attacker, int damage) throws GameException {
         int reduction = this.randomGenerator.nextInt(this.defense);
         this.callDefensePointsRollObservers(reduction);
-        damage -= reduction;
+        damage = Math.max(damage - reduction, 0);
         this.callOnHitObservers(attacker, damage);
         this.currentHealth = Math.max(this.currentHealth - damage, 0);
         return this.currentHealth == 0;

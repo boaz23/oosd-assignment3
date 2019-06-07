@@ -28,11 +28,12 @@ public class Warrior extends Player {
 
     protected Warrior(String name,
                       int healthPool, int attack, int defense,
+                      int experience, int level,
                       Tick cooldown,
                       Point position,
                       RandomGenerator randomGenerator,
                       Board board) {
-        super(name, healthPool, attack, defense, randomGenerator, board);
+        super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
         this.init(cooldown);
         this.position = position;
     }
@@ -97,6 +98,7 @@ public class Warrior extends Player {
         return new Warrior(
                 this.name,
                 this.healthPool, this.attack, this.defense,
+                this.experience, this.level,
                 this.coolDown,
                 position,
                 randomGenerator, board

@@ -43,7 +43,7 @@ abstract class PrintEventsView implements View {
 
     @Override
     public void onEnemyDeath(EnemyDTO enemy) {
-        String output = enemy.name + " died.";
+        String output = enemy.name + " died. ";
         printer.print(output);
     }
 
@@ -71,7 +71,7 @@ abstract class PrintEventsView implements View {
 
     @Override
     public void onDefensePointsRoll(UnitDTO unit, int defensePoints) {
-        String output = unit.name + " rolled " + defensePoints + " attack points.";
+        String output = unit.name + " rolled " + defensePoints + " defense points.";
         printer.printLine(output);
     }
 
@@ -87,12 +87,12 @@ abstract class PrintEventsView implements View {
     }
 
     private String formatString(UnitDTO unit) {
-        String unitInfo = unit.name + "\t\tHealth: " + unit.currentHealth + "\t\tAttack damage: " + unit.attack + "\t\tDefense: " + unit.defense + "\n";
+        String unitInfo = unit.name + "\t\tHealth: " + unit.currentHealth + "\t\tAttack damage: " + unit.attack + "\t\tDefense: " + unit.defense;
         return unitInfo;
     }
 
     private String formatString(PlayerDTO playerDTO) {
-        String playerInfo = formatString((UnitDTO)playerDTO);
+        String playerInfo = formatString((UnitDTO)playerDTO) + "\n";
         playerInfo += "\t\tLevel: " + playerDTO.level + "\t\tExperience: " + playerDTO.experience + "/" + playerDTO.totalExperienceToNextLevel;
         return playerInfo;
     }

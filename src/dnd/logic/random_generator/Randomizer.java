@@ -6,6 +6,6 @@ public class Randomizer implements RandomGenerator {
     @Override
     public int nextInt(int n) {
         Random rnd = new Random();
-        return rnd.nextInt(n+1);
+        return rnd.nextInt(n + 1);
     }
 }

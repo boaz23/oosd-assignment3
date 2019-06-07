@@ -81,12 +81,13 @@ public class Monster extends Enemy {
     }
 
     private void actRandomly() throws GameException {
-        // 0 - move left
-        // 1 - move right
-        // 2 - move up
-        // 3 - move down
+        // 0 - move down
+        // 1 - move up
+        // 2 - move right
+        // 3 - move left
+        // 4 - do nothing
 
-        int move = this.randomGenerator.nextInt(3);
+        int move = this.randomGenerator.nextInt(MoveDirections.length - 1);
         MoveDirections[move].move(this);
     }
 
