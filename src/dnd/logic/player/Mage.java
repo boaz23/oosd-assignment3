@@ -3,11 +3,11 @@ package dnd.logic.player;
 import dnd.dto.levelup.MageLevelUpDTO;
 import dnd.dto.units.MageDTO;
 import dnd.dto.units.UnitDTO;
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;

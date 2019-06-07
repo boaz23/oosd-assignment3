@@ -1,7 +1,6 @@
 package dnd.logic.available_units;
 
 import dnd.logic.Tick;
-import dnd.logic.enemies.Monster;
 import dnd.logic.enemies.Trap;
 
 public class AvailableTraps {

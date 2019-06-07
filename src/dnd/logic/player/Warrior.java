@@ -3,10 +3,10 @@ package dnd.logic.player;
 import dnd.dto.levelup.WarriorLevelUpDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.dto.units.WarriorDTO;
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Warrior extends Player {

@@ -4,7 +4,6 @@ import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class LevelFlow implements DeathObserver, LevelEndObserver {

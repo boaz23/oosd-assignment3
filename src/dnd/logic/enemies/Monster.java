@@ -1,9 +1,9 @@
 package dnd.logic.enemies;
 
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Monster extends Enemy {

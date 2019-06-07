@@ -1,10 +1,10 @@
 package dnd.logic.enemies;
 
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.FreeTile;
 import dnd.logic.tileOccupiers.TileOccupier;
 

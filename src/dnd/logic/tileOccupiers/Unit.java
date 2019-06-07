@@ -1,13 +1,12 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.GameEventObserver;
-import dnd.logic.DeathObserver;
 import dnd.dto.units.UnitDTO;
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.*;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
+import dnd.logic.random_generator.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

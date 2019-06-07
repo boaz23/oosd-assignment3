@@ -1,7 +1,7 @@
 package dnd.logic.board;
 
-import dnd.logic.LevelEndObserver;
 import dnd.logic.DeathObserver;
+import dnd.logic.LevelEndObserver;
 import dnd.logic.Point;
 import dnd.logic.PositionOutOfBoundsException;
 import dnd.logic.enemies.Enemy;

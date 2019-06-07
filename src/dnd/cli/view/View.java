@@ -1,8 +1,13 @@
 package dnd.cli.view;
 
 import dnd.GameEventObserver;
-import dnd.dto.levelup.*;
-import dnd.dto.units.*;
+import dnd.dto.levelup.MageLevelUpDTO;
+import dnd.dto.levelup.RougeLevelUpDTO;
+import dnd.dto.levelup.WarriorLevelUpDTO;
+import dnd.dto.units.EnemyDTO;
+import dnd.dto.units.MageDTO;
+import dnd.dto.units.RogueDTO;
+import dnd.dto.units.WarriorDTO;
 
 public interface View extends GameEventObserver {
     void onLevelComplete();

@@ -5,11 +5,11 @@ import dnd.dto.levelup.LevelUpDTO;
 import dnd.dto.units.EnemyDTO;
 import dnd.dto.units.PlayerDTO;
 import dnd.logic.DeathObserver;
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
+import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileVisitor;
 import dnd.logic.tileOccupiers.Unit;
 
