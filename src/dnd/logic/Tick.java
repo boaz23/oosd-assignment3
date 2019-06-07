@@ -58,8 +58,7 @@ public class Tick {
         return value >= other.value;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public boolean isEqual(Tick other) {
+    public boolean equals(Tick other) {
         if (other == null) {
             throw new IllegalArgumentException("other tick is null.");
         }
@@ -69,7 +68,7 @@ public class Tick {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Tick && isEqual((Tick)obj);
+        return obj instanceof Tick && equals((Tick)obj);
 
     }
 
