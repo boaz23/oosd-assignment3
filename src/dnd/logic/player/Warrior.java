@@ -16,8 +16,8 @@ public class Warrior extends Player {
 
     private static final int ABILITY_HEAL_POWER = 2;
 
-    Tick coolDown;
-    Tick remaining;
+    private Tick coolDown;
+    private Tick remaining;
 
     public Warrior(String name,
                    int healthPool, int attack, int defense,
@@ -26,13 +26,13 @@ public class Warrior extends Player {
         this.init(cooldown);
     }
 
-    protected Warrior(String name,
-                      int healthPool, int attack, int defense,
-                      int experience, int level,
-                      Tick cooldown,
-                      Point position,
-                      RandomGenerator randomGenerator,
-                      Board board) {
+     private Warrior(String name,
+                     int healthPool, int attack, int defense,
+                     int experience, int level,
+                     Tick cooldown,
+                     Point position,
+                     RandomGenerator randomGenerator,
+                     Board board) {
         super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
         this.init(cooldown);
         this.position = position;
@@ -79,6 +79,7 @@ public class Warrior extends Player {
         return "Heal";
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
         this.remaining = this.remaining.decrement();

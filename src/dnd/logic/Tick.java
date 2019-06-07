@@ -21,6 +21,7 @@ public class Tick {
     Returns a new tick with the value of 'value' if it is a non-negative number,
     otherwise return a tick representing zero.
      */
+    @SuppressWarnings("WeakerAccess")
     public static Tick fromValueOrZero(int value) {
         return new Tick(Math.max(value, Zero.value));
     }
@@ -57,6 +58,7 @@ public class Tick {
         return this.value >= other.value;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isEqual(Tick other) {
         if (other == null) {
             throw new IllegalArgumentException("other tick is null.");

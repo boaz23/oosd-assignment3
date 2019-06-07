@@ -2,6 +2,7 @@ package dnd.logic;
 
 import dnd.GameException;
 
+@SuppressWarnings("unused")
 public class LogicException extends GameException {
     public LogicException() {
         super();

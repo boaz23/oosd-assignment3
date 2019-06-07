@@ -4,7 +4,7 @@ import dnd.GameEventObserver;
 import dnd.controllers.UnitFactory;
 import dnd.logic.LevelFlow;
 import dnd.logic.Point;
-import dnd.logic.board.BoardImpl;
+import dnd.logic.board.InitializableBoard;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileOccupier;
@@ -19,7 +19,7 @@ public class EnemyFactory extends UnitFactory {
     public TileOccupier createTileOccupier(
         Point position,
         RandomGenerator randomGenerator,
-        BoardImpl board,
+        InitializableBoard board,
         LevelFlow levelFlow,
         GameEventObserver gameEventObserver) {
         Enemy enemy = (Enemy)this.enemy.clone(position, randomGenerator, board);

@@ -6,8 +6,8 @@ import dnd.logic.tileOccupiers.TileOccupier;
 import java.util.ArrayList;
 
 public class PositionMatrixBuilder {
-    private ArrayList<BoardSquare[]> boardSquares;
-    private int columns;
+    private final ArrayList<BoardSquare[]> boardSquares;
+    private final int columns;
 
     public PositionMatrixBuilder(int columns) {
         boardSquares = new ArrayList<>();

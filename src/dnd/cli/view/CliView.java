@@ -151,8 +151,8 @@ public class CliView extends PrintEventsView {
 
     private void printBoard() {
         char[][] board = this.levelController.getBoard();
-        for (int i = 0; i < board.length; i++) {
-            String row = new String(board[i]);
+        for (char[] chars : board) {
+            String row = new String(chars);
             this.printer.printLine(row);
         }
     }

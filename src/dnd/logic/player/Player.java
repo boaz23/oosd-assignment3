@@ -20,20 +20,20 @@ public abstract class Player extends Unit {
     private static final int LEVEL_ATTACK_DIFF = 5;
     private static final int LEVEL_DEFENSE_DIFF = 2;
 
-    protected int experience;
-    protected int level;
+    int experience;
+    int level;
 
-    public Player(String name,
-                  int healthPool, int attack, int defense) {
+    Player(String name,
+           int healthPool, int attack, int defense) {
         super(name, healthPool, attack, defense);
         this.init();
     }
 
-    protected Player(String name,
-                     int healthPool, int attack, int defense,
-                     int experience, int level,
-                     RandomGenerator randomGenerator,
-                     Board board) {
+    Player(String name,
+           int healthPool, int attack, int defense,
+           int experience, int level,
+           RandomGenerator randomGenerator,
+           Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
         this.init(experience, level);
     }
@@ -52,13 +52,13 @@ public abstract class Player extends Unit {
         return '@';
     }
 
-    protected void callLevelUpObservers(LevelUpDTO levelUpDTO) {
+    void callLevelUpObservers(LevelUpDTO levelUpDTO) {
         for (GameEventObserver observer : this.gameEventObservers) {
             observer.onLevelUp(levelUpDTO.clone());
         }
     }
 
-    protected void levelUp() {
+    void levelUp() {
         this.experience -= getExperienceRequiredForLevel();
         this.level++;
 
@@ -68,7 +68,7 @@ public abstract class Player extends Unit {
         this.defense += this.level * LEVEL_DEFENSE_DIFF;
     }
 
-    public void gainExp(int exp) {
+    private void gainExp(int exp) {
         if (exp < 0) {
             throw new IllegalArgumentException("exp gained must be a non-negative number.");
         }
@@ -115,21 +115,21 @@ public abstract class Player extends Unit {
     protected abstract void useSpecialAbilityCore() throws GameException;
 
     @Override
-    public Object accept(TileVisitor visitor, Object state) throws GameException {
-        return visitor.visit(this, state);
+    public MoveResult accept(TileVisitor visitor) throws GameException {
+        return visitor.visit(this);
     }
 
     @Override
-    public MoveResult visit(Player player, Object state) throws LogicException {
+    public MoveResult visit(Player player) throws LogicException {
         throw new LogicException("player fights another player");
     }
 
     @Override
-    public MoveResult visit(Enemy enemy, Object state) throws GameException {
+    public MoveResult visit(Enemy enemy) throws GameException {
         return this.moveMeleeAttack(enemy);
     }
 
-    protected boolean attack(Enemy enemy, int damage) throws GameException {
+    boolean attack(Enemy enemy, int damage) throws GameException {
         boolean died = super.attackCore(enemy, damage);
         if (died) {
             this.gainExp(enemy.getExperienceValue());
@@ -138,7 +138,7 @@ public abstract class Player extends Unit {
         return died;
     }
 
-    protected MoveResult moveMeleeAttack(Enemy enemy) throws GameException {
+    private MoveResult moveMeleeAttack(Enemy enemy) throws GameException {
         this.callOnPlayerEngageObservers(enemy);
 
         boolean died = super.meleeAttack(enemy);
@@ -155,8 +155,7 @@ public abstract class Player extends Unit {
         }
     }
 
-    @Override
-    protected void callDeathObservers() throws GameException {
+    private void callDeathObservers() throws GameException {
         for (DeathObserver observer : this.deathObservers) {
             observer.onDeath(this);
         }
@@ -181,7 +180,7 @@ public abstract class Player extends Unit {
 
     protected abstract String getSpecialAbilityName();
 
-    protected void fillPlayerDtoFields(PlayerDTO playerDTO) {
+    void fillPlayerDtoFields(PlayerDTO playerDTO) {
         this.fillUnitDtoFields(playerDTO);
         playerDTO.level = this.level;
         playerDTO.experience = this.experience;
@@ -189,14 +188,14 @@ public abstract class Player extends Unit {
         playerDTO.specialAbilityName = this.getSpecialAbilityName();
     }
 
-    protected <T extends LevelUpDTO> T initLevelUpDto(T levelUpDTO) {
+    <T extends LevelUpDTO> T initLevelUpDto(T levelUpDTO) {
         levelUpDTO.healthBonus = this.healthPool;
         levelUpDTO.attackBonus = this.attack;
         levelUpDTO.defenseBonus = this.defense;
         return levelUpDTO;
     }
 
-    protected void calculateLevelUpStatsDiffs(LevelUpDTO levelUpDTO) {
+    void calculateLevelUpStatsDiffs(LevelUpDTO levelUpDTO) {
         levelUpDTO.healthBonus = this.healthPool - levelUpDTO.healthBonus;
         levelUpDTO.attackBonus = this.attack - levelUpDTO.attackBonus;
         levelUpDTO.defenseBonus = this.defense - levelUpDTO.defenseBonus;

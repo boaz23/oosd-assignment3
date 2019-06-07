@@ -10,7 +10,7 @@ import dnd.dto.units.*;
 abstract class PrintEventsView implements View {
     private Printer printer;
 
-    public PrintEventsView(Printer printer) {
+    PrintEventsView(Printer printer) {
         if (printer == null) {
             throw new IllegalArgumentException("printer is null.");
         }
@@ -81,17 +81,19 @@ abstract class PrintEventsView implements View {
         printer.printLine(output);
     }
 
-    protected String resolveFormatString(PlayerDTO playerDTO) {
+    String resolveFormatString(PlayerDTO playerDTO) {
         return playerDTO.accept(this);
     }
 
-    protected String resolveFormatString(LevelUpDTO levelUp) {
+    @SuppressWarnings("WeakerAccess")
+    String resolveFormatString(LevelUpDTO levelUp) {
         return levelUp.accept(this);
     }
 
     private String formatString(UnitDTO unit) {
-        String unitInfo = unit.name + "\t\tHealth: " + unit.currentHealth + "\t\tAttack damage: " + unit.attack + "\t\tDefense: " + unit.defense;
-        return unitInfo;
+        return unit.name + "\t\tHealth: " + unit.currentHealth +
+            "\t\tAttack damage: " + unit.attack +
+            "\t\tDefense: " + unit.defense;
     }
 
     private String formatString(PlayerDTO playerDTO) {
@@ -126,17 +128,19 @@ abstract class PrintEventsView implements View {
         return formatString((UnitDTO)enemy);
     }
 
-    public String formatString(LevelUpDTO levelUpDTO) {
-        String levelUpInfo = "Level up: +" + levelUpDTO.healthBonus + " Health, +" + levelUpDTO.attackBonus + " Attack, +" + levelUpDTO.defenseBonus + " Defense";
-        return levelUpInfo;
+    @SuppressWarnings("WeakerAccess")
+    String formatString(LevelUpDTO levelUpDTO) {
+        return "Level up: +" +
+            levelUpDTO.healthBonus + " Health, +" +
+            levelUpDTO.attackBonus + " Attack, +" +
+            levelUpDTO.defenseBonus + " Defense";
     }
 
     @Override
     public String formatString(MageLevelUpDTO mageLevelUp) {
-        String mageLevelUpInfo = formatString((LevelUpDTO)mageLevelUp) +
+        return formatString((LevelUpDTO)mageLevelUp) +
             "\n\t\t+" + mageLevelUp.manaPoolBonus + " maximum mana, +"
             + mageLevelUp.spellPowerBonus + " spell power";
-        return mageLevelUpInfo;
     }
 
     @Override

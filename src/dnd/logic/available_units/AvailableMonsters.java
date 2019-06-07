@@ -2,6 +2,7 @@ package dnd.logic.available_units;
 
 import dnd.logic.enemies.Monster;
 
+@SuppressWarnings("WeakerAccess")
 public class AvailableMonsters {
     public static final Monster LannisterSolider = new Monster(
         "Lannister Solider",

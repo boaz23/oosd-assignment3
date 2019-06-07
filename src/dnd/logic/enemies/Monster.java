@@ -27,13 +27,14 @@ public class Monster extends Enemy {
         this.init(range);
     }
 
-    protected Monster(String name,
-                      int healthPool, int attack, int defense,
-                      int experienceValue, char tile,
-                      int range,
-                      Point position,
-                      RandomGenerator randomGenerator,
-                      Board board) {
+    @SuppressWarnings("WeakerAccess")
+    Monster(String name,
+            int healthPool, int attack, int defense,
+            int experienceValue, char tile,
+            int range,
+            Point position,
+            RandomGenerator randomGenerator,
+            Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
         this.init(range);
         this.position = position;
@@ -47,6 +48,7 @@ public class Monster extends Enemy {
         this.range = range;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) throws GameException {
         Player player = this.board.getPlayerInRange(this.position, this.range);
@@ -91,6 +93,7 @@ public class Monster extends Enemy {
         MoveDirections[move].move(this);
     }
 
+    @SuppressWarnings("EmptyMethod")
     private void doNothing() {
     }
 

@@ -15,7 +15,7 @@ import dnd.logic.random_generator.Randomizer;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Main {
+class Main {
     public static void main(String[] args) {
         ActionReader actionReader;
         RandomGenerator randomGenerator;

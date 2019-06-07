@@ -29,13 +29,13 @@ public class Trap extends Enemy {
         this.init(relocationRange, relocationTime, visibilityTime);
     }
 
-    protected Trap(String name,
-                   int healthPool, int attack, int defense,
-                   int experienceValue, char tile,
-                   int relocationRange, Tick relocationTime, Tick visibilityTime,
-                   Point position,
-                   RandomGenerator randomGenerator,
-                   Board board) {
+    private Trap(String name,
+                 int healthPool, int attack, int defense,
+                 int experienceValue, char tile,
+                 int relocationRange, Tick relocationTime, Tick visibilityTime,
+                 Point position,
+                 RandomGenerator randomGenerator,
+                 Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
         this.init(relocationRange, relocationTime, visibilityTime);
         this.position = position;
@@ -62,6 +62,7 @@ public class Trap extends Enemy {
         this.visible = true;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) throws GameException {
         boolean relocated = this.checkRelocation();
@@ -109,6 +110,7 @@ public class Trap extends Enemy {
         this.visible = this.visibilityTime.isGreaterThan(this.ticksCount);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isVisible() {
         return visible;
     }

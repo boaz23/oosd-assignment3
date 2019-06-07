@@ -13,7 +13,7 @@ import dnd.logic.tileOccupiers.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardImpl implements Board {
+public class BoardImpl implements InitializableBoard {
     private final TileFactory tileFactory;
     private PositionsMatrix board;
     private List<Enemy> enemies;
@@ -67,7 +67,7 @@ public class BoardImpl implements Board {
 
     @Override
     public List<Enemy> getEnemiesInRange(Point position, int range) {
-        List<Enemy> enemiesInRange = new ArrayList<Enemy>();
+        List<Enemy> enemiesInRange = new ArrayList<>();
         for (Enemy e : enemies) {
             if (Point.distance(position, e.getPosition()) < range) {
                 enemiesInRange.add(e);

@@ -5,6 +5,7 @@ import dnd.logic.tileOccupiers.FreeTile;
 import dnd.logic.tileOccupiers.TileOccupier;
 import dnd.logic.tileOccupiers.Wall;
 
+@SuppressWarnings("WeakerAccess")
 public class AvailableInanimate {
     public static final FreeTile FreeTile = new FreeTile();
     public static final Wall Wall = new Wall();

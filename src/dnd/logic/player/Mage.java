@@ -20,13 +20,13 @@ public class Mage extends Player {
     private static final int MANA_REGEN = 1;
     private static final int MANA_ADDITION_DIV = 4;
 
-    int spellPower;
-    int manaPool;
-    int currentMana;
+    private int spellPower;
+    private int manaPool;
+    private int currentMana;
 
-    int cost;
-    int hitTimes;
-    int range;
+    private int cost;
+    private int hitTimes;
+    private int range;
 
     public Mage(String name,
                 int healthPool, int attack, int defense,
@@ -36,14 +36,14 @@ public class Mage extends Player {
         this.init(spellPower, manaPool, cost, hitTimes, range);
     }
 
-    protected Mage(String name,
-                   int healthPool, int attack, int defense,
-                   int experience, int level,
-                   int spellPower, int manaPool, int cost,
-                   int hitTimes, int range,
-                   Point position,
-                   RandomGenerator randomGenerator,
-                   Board board) {
+    private Mage(String name,
+                 int healthPool, int attack, int defense,
+                 int experience, int level,
+                 int spellPower, int manaPool, int cost,
+                 int hitTimes, int range,
+                 Point position,
+                 RandomGenerator randomGenerator,
+                 Board board) {
         super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
         this.init(spellPower, manaPool, cost, hitTimes, range);
         this.position = position;
@@ -128,6 +128,7 @@ public class Mage extends Player {
         return "Blizzard";
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
         this.currentMana = Math.min(this.manaPool, this.currentMana + MANA_REGEN);

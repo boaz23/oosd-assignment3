@@ -2,7 +2,7 @@ package dnd.logic.board;
 
 import dnd.logic.tileOccupiers.TileOccupier;
 
-public class BoardSquare {
+class BoardSquare {
     private TileOccupier tileOccupier;
 
     public BoardSquare(TileOccupier tileOccupier) {

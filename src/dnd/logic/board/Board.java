@@ -1,7 +1,6 @@
 package dnd.logic.board;
 
 import dnd.logic.DeathObserver;
-import dnd.logic.LevelEndObserver;
 import dnd.logic.Point;
 import dnd.logic.PositionOutOfBoundsException;
 import dnd.logic.enemies.Enemy;
@@ -24,8 +23,4 @@ public interface Board extends DeathObserver {
     List<Enemy> getEnemiesInRange(Point position, int range);
 
     Player getPlayerInRange(Point position, int range);
-
-    PositionsMatrix getBoard();
-
-    void addLevelEndObserver(LevelEndObserver observer);
 }

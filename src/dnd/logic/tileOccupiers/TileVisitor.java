@@ -2,12 +2,14 @@ package dnd.logic.tileOccupiers;
 
 import dnd.GameException;
 import dnd.logic.LogicException;
+import dnd.logic.MoveResult;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 
+@SuppressWarnings({ "RedundantThrows", "SameReturnValue" })
 public interface TileVisitor {
-    Object visit(Wall wall, Object state) throws LogicException;
-    Object visit(FreeTile freeTile, Object state) throws LogicException;
-    Object visit(Enemy enemy, Object state) throws GameException;
-    Object visit(Player player, Object state) throws GameException;
+    MoveResult visit(Wall wall) throws LogicException;
+    MoveResult visit(FreeTile freeTile) throws LogicException;
+    MoveResult visit(Enemy enemy) throws GameException;
+    MoveResult visit(Player player) throws GameException;
 }

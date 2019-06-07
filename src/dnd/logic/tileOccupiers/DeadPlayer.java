@@ -1,6 +1,7 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.logic.LogicException;
+import dnd.logic.MoveResult;
 import dnd.logic.Point;
 import dnd.logic.board.Board;
 import dnd.logic.random_generator.RandomGenerator;
@@ -12,7 +13,7 @@ public class DeadPlayer implements TileOccupier {
     }
 
     @Override
-    public Object accept(TileVisitor visitor, Object state) throws LogicException {
+    public MoveResult accept(TileVisitor visitor) throws LogicException {
         throw new LogicException("Player is dead, cannot accept unit.");
     }
 

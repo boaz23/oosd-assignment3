@@ -9,7 +9,7 @@ import java.util.List;
 
 public class LevelFlow implements DeathObserver, LevelEndObserver {
     private Tick tick;
-    private List<TickObserver> tickObservers;
+    private final List<TickObserver> tickObservers;
 
     private boolean stopTurns;
 

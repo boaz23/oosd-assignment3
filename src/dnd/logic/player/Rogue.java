@@ -20,8 +20,8 @@ public class Rogue extends Player {
     private static final int ENERGY_REGEN = 10;
     private static final int ABILITY_RANGE = 2;
 
-    int cost;
-    int currentEnergy;
+    private int cost;
+    private int currentEnergy;
 
     public Rogue(String name,
                  int healthPool, int attack, int defense,
@@ -30,13 +30,13 @@ public class Rogue extends Player {
         this.init(cost);
     }
 
-    protected Rogue(String name,
-                    int healthPool, int attack, int defense,
-                    int experience, int level,
-                    int cost,
-                    Point position,
-                    RandomGenerator randomGenerator,
-                    Board board) {
+    private Rogue(String name,
+                  int healthPool, int attack, int defense,
+                  int experience, int level,
+                  int cost,
+                  Point position,
+                  RandomGenerator randomGenerator,
+                  Board board) {
         super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
         this.init(cost);
         this.position = position;
@@ -81,6 +81,7 @@ public class Rogue extends Player {
         return "Fan of Knives";
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
         this.currentEnergy = Math.min(this.currentEnergy + ENERGY_REGEN, MAX_ENERGY);

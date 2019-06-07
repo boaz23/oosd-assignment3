@@ -26,8 +26,8 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
     protected List<DeathObserver> deathObservers;
     protected List<GameEventObserver> gameEventObservers;
 
-    public Unit(String name,
-                int healthPool, int attack, int defense) {
+    protected Unit(String name,
+                   int healthPool, int attack, int defense) {
         if (name == null || name.equals("")) {
             throw new IllegalArgumentException("a unit's name cannot be null or empty.");
         }
@@ -79,7 +79,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         MoveResult moveResult;
         try {
             TileOccupier targetTileOccupier = this.board.getTileOccupier(newPosition);
-            moveResult = (MoveResult)targetTileOccupier.accept(this, null);
+            moveResult = targetTileOccupier.accept(this);
             if (moveResult == MoveResult.Allowed) {
                 boolean moved = this.moveActual(newPosition);
                 if (!moved) {
@@ -105,7 +105,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         }
     }
 
-    public MoveResult visit(FreeTile freeTile, Object state) {
+    public MoveResult visit(FreeTile freeTile) {
         if (freeTile == null) {
             throw new IllegalArgumentException("freeTile is null.");
         }
@@ -113,7 +113,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         return MoveResult.Allowed;
     }
 
-    public MoveResult visit(Wall wall, Object state) {
+    public MoveResult visit(Wall wall) {
         if (wall == null) {
             throw new IllegalArgumentException("wall is null.");
         }
@@ -121,9 +121,9 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         return MoveResult.Invalid;
     }
 
-    public abstract MoveResult visit(Enemy enemy, Object state) throws GameException;
+    public abstract MoveResult visit(Enemy enemy) throws GameException;
 
-    public abstract MoveResult visit(Player player, Object state) throws GameException;
+    public abstract MoveResult visit(Player player) throws GameException;
 
     protected boolean meleeAttack(Unit unit) throws GameException {
         if (unit == null) {
@@ -189,8 +189,6 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
 
         this.gameEventObservers.add(observer);
     }
-
-    protected abstract void callDeathObservers() throws GameException;
 
     @Override
     public boolean isFree() {

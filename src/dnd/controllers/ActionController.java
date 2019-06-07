@@ -7,8 +7,8 @@ import dnd.logic.MoveResult;
 import dnd.logic.player.Player;
 
 public class ActionController {
-    private Player player;
-    private LevelFlow levelFlow;
+    private final Player player;
+    private final LevelFlow levelFlow;
 
     public ActionController(Player player, LevelFlow levelFlow) {
         this.levelFlow = levelFlow;
