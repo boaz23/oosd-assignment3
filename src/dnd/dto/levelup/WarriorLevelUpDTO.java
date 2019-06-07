@@ -9,7 +9,7 @@ public class WarriorLevelUpDTO extends LevelUpDTO {
     }
 
     @Override
-    protected LevelUpDTO clone() {
+    public LevelUpDTO clone() {
         WarriorLevelUpDTO warriorLevelUpDTO = new WarriorLevelUpDTO();
         warriorLevelUpDTO.healthBonus = this.healthBonus;
         warriorLevelUpDTO.attackBonus = this.attackBonus;

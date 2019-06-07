@@ -12,7 +12,7 @@ public class MageLevelUpDTO extends LevelUpDTO {
     }
 
     @Override
-    protected LevelUpDTO clone() {
+    public LevelUpDTO clone() {
         MageLevelUpDTO mageLevelUpDTO = new MageLevelUpDTO();
         mageLevelUpDTO.healthBonus = this.healthBonus;
         mageLevelUpDTO.attackBonus = this.attackBonus;

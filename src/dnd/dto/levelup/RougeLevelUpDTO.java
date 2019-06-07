@@ -9,7 +9,7 @@ public class RougeLevelUpDTO extends LevelUpDTO {
     }
 
     @Override
-    protected LevelUpDTO clone() {
+    public LevelUpDTO clone() {
         RougeLevelUpDTO rougeLevelUpDTO = new RougeLevelUpDTO();
         rougeLevelUpDTO.healthBonus = this.healthBonus;
         rougeLevelUpDTO.attackBonus = this.attackBonus;
