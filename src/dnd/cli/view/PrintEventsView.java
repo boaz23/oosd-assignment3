@@ -1,6 +1,7 @@
 package dnd.cli.view;
 
 import dnd.cli.printer.Printer;
+import dnd.dto.DTO;
 import dnd.dto.levelup.LevelUpDTO;
 import dnd.dto.levelup.MageLevelUpDTO;
 import dnd.dto.levelup.RougeLevelUpDTO;
@@ -81,13 +82,8 @@ abstract class PrintEventsView implements View {
         printer.printLine(output);
     }
 
-    String resolveFormatString(PlayerDTO playerDTO) {
-        return playerDTO.accept(this);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    String resolveFormatString(LevelUpDTO levelUp) {
-        return levelUp.accept(this);
+    String resolveFormatString(DTO dto) {
+        return dto.accept(this);
     }
 
     private String formatString(UnitDTO unit) {

@@ -9,9 +9,10 @@ import dnd.controllers.LevelController;
 import dnd.dto.units.PlayerDTO;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CliView extends PrintEventsView {
-    private static final HashMap<String, PlayerAction> actions = new HashMap<String, PlayerAction>() {{
+    private static final Map<String, PlayerAction> actions = new HashMap<String, PlayerAction>() {{
         put("w", actionController -> actionController.moveUp());
         put("s", actionController -> actionController.moveDown());
         put("a", actionController -> actionController.moveLeft());
@@ -45,39 +46,39 @@ public class CliView extends PrintEventsView {
         this.printer = printer;
         this.actionReader = actionReader;
         this.levelController = levelController;
-        this.currentLevel = 0;
+        currentLevel = 0;
 
         levelController.setView(this);
-        this.levelComplete = false;
+        levelComplete = false;
     }
 
     public void startGame() throws GameException {
-        this.selectPlayerAndShowControls();
-        this.startLevelsPlay();
+        selectPlayerAndShowControls();
+        startLevelsPlay();
     }
 
     private void selectPlayerAndShowControls() {
-        this.showPlayerSelectMenu();
-        PlayerDTO playerChoice = this.choosePlayer();
-        this.printPlayerChoice(playerChoice);
-        this.printControls();
+        showPlayerSelectMenu();
+        PlayerDTO playerChoice = choosePlayer();
+        printPlayerChoice(playerChoice);
+        printControls();
     }
 
     private void showPlayerSelectMenu() {
-        this.printer.printLine("Select player:");
-        PlayerDTO[] playerChoices = this.levelController.getPlayerChoices();
+        printer.printLine("Select player:");
+        PlayerDTO[] playerChoices = levelController.getPlayerChoices();
         for (int i = 0; i < playerChoices.length; i++) {
             PlayerDTO playerChoice = playerChoices[i];
-            this.printer.print((i + 1) + ". ");
-            this.printer.printLine(this.resolveFormatString(playerChoice));
+            printer.print((i + 1) + ". ");
+            printer.printLine(resolveFormatString(playerChoice));
         }
     }
 
     private PlayerDTO choosePlayer() {
-        PlayerDTO playerChoice = this.choosePlayerCore();
+        PlayerDTO playerChoice = choosePlayerCore();
         while (playerChoice == null) {
-            this.printer.printLine("Select Player:");
-            playerChoice = this.choosePlayerCore();
+            printer.printLine("Select Player:");
+            playerChoice = choosePlayerCore();
         }
 
         return playerChoice;
@@ -85,8 +86,8 @@ public class CliView extends PrintEventsView {
 
     private PlayerDTO choosePlayerCore() {
         try {
-            int choice = Integer.parseInt(this.actionReader.nextAction());
-            return this.levelController.choosePlayer(choice);
+            int choice = Integer.parseInt(actionReader.nextAction());
+            return levelController.choosePlayer(choice);
         }
         catch (NumberFormatException ignored) {
         }
@@ -95,53 +96,53 @@ public class CliView extends PrintEventsView {
     }
 
     private void printPlayerChoice(PlayerDTO playerChoice) {
-        this.printer.printLine("You have selected:");
-        this.printer.printLine(this.resolveFormatString(playerChoice));
+        printer.printLine("You have selected:");
+        printer.printLine(resolveFormatString(playerChoice));
     }
 
     private void printControls() {
-        this.printer.printLine("Use w/s/a/d to move.");
-        this.printer.printLine("Use e for special ability or q to pass.");
+        printer.printLine("Use w/s/a/d to move.");
+        printer.printLine("Use e for special ability or q to pass.");
     }
 
     private void startLevelsPlay() throws GameException {
-        this.loadNextLevel();
+        loadNextLevel();
         if (noLevelsExist()) {
-            this.printer.printLine("No levels are present. exiting...");
+            printer.printLine("No levels are present. exiting...");
         }
         else {
-            this.doGameLoop();
+            doGameLoop();
         }
     }
 
     private void loadNextLevel() {
-        this.currentLevel++;
-        this.actionController = this.levelController.loadLevel(this.currentLevel);
+        currentLevel++;
+        actionController = levelController.loadLevel(currentLevel);
     }
 
     private boolean noLevelsExist() {
-        return this.actionController == null;
+        return actionController == null;
     }
 
     private void doGameLoop() throws GameException {
         boolean gameFinished = false;
         while (!gameFinished) {
-            while (!this.levelComplete) {
-                this.printBoard();
-                this.printPlayerStats();
-                this.act();
+            while (!levelComplete) {
+                printBoard();
+                printPlayerStats();
+                act();
             }
 
-            this.levelComplete = false;
-            this.loadNextLevel();
-            if (this.gameResult != null) {
-                switch (this.gameResult) {
+            levelComplete = false;
+            loadNextLevel();
+            if (gameResult != null) {
+                switch (gameResult) {
                     case Win:
-                        this.playerWin();
+                        playerWin();
                         gameFinished = true;
                         break;
                     case Lose:
-                        this.playerLose();
+                        playerLose();
                         gameFinished = true;
                         break;
                 }
@@ -150,53 +151,53 @@ public class CliView extends PrintEventsView {
     }
 
     private void printBoard() {
-        char[][] board = this.levelController.getBoard();
+        char[][] board = levelController.getBoard();
         for (char[] chars : board) {
             String row = new String(chars);
-            this.printer.printLine(row);
+            printer.printLine(row);
         }
     }
 
     private void printPlayerStats() {
-        this.printer.printLine("\n");
-        this.printer.printLine(this.resolveFormatString(this.levelController.getPlayer()));
+        printer.printLine("\n");
+        printer.printLine(resolveFormatString(levelController.getPlayer()));
     }
 
     private void act() throws GameException {
-        String nextAction = this.actionReader.nextAction();
+        String nextAction = actionReader.nextAction();
         if (!actions.containsKey(nextAction)) {
-            this.printer.printLine("Action '" + nextAction + "' is not defined");
+            printer.printLine("Action '" + nextAction + "' is not defined");
         }
         else {
-            boolean result = actions.get(nextAction).doAction(this.actionController);
+            boolean result = actions.get(nextAction).doAction(actionController);
             if (!result) {
-                this.printer.printLine("Illegal move or action.");
+                printer.printLine("Illegal move or action.");
             }
         }
     }
 
     private void playerWin() {
-        this.printer.printLine("Game is finished. You won!");
+        printer.printLine("Game is finished. You won!");
     }
 
     private void playerLose() {
-        this.printer.printLine("You Lost.");
-        this.printBoard();
+        printer.printLine("You Lost.");
+        printBoard();
     }
 
     @Override
     public void onLevelComplete() {
-        this.levelComplete = true;
+        levelComplete = true;
     }
 
     @Override
     public void onGameLose() {
-        this.gameResult = GameFinishedResult.Lose;
+        gameResult = GameFinishedResult.Lose;
     }
 
     @Override
     public void onGameWin() {
-        this.gameResult = GameFinishedResult.Win;
+        gameResult = GameFinishedResult.Win;
     }
 
     private interface PlayerAction {

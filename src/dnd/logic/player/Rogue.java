@@ -27,7 +27,7 @@ public class Rogue extends Player {
                  int healthPool, int attack, int defense,
                  int cost) {
         super(name, healthPool, attack, defense);
-        this.init(cost);
+        init(cost);
     }
 
     private Rogue(String name,
@@ -38,7 +38,7 @@ public class Rogue extends Player {
                   RandomGenerator randomGenerator,
                   Board board) {
         super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
-        this.init(cost);
+        init(cost);
         this.position = position;
     }
 
@@ -48,31 +48,31 @@ public class Rogue extends Player {
         }
 
         this.cost = cost;
-        this.currentEnergy = MAX_ENERGY;
+        currentEnergy = MAX_ENERGY;
     }
 
     @Override
     protected void levelUp() {
-        RougeLevelUpDTO rougeLevelUpDTO = this.initLevelUpDto(new RougeLevelUpDTO());
+        RougeLevelUpDTO rougeLevelUpDTO = initLevelUpDto(new RougeLevelUpDTO());
 
         super.levelUp();
-        this.currentEnergy = MAX_ENERGY;
-        this.attack += this.level * LEVEL_ATTACK_DIFF;
+        currentEnergy = MAX_ENERGY;
+        attack += level * LEVEL_ATTACK_DIFF;
 
-        this.calculateLevelUpStatsDiffs(rougeLevelUpDTO);
-        this.callLevelUpObservers(rougeLevelUpDTO);
+        calculateLevelUpStatsDiffs(rougeLevelUpDTO);
+        callLevelUpObservers(rougeLevelUpDTO);
     }
 
     @Override
     public void useSpecialAbilityCore() throws GameException {
-        if (this.currentEnergy < this.cost) {
+        if (currentEnergy < cost) {
             throw new LogicException("Cannot use special ability due insufficient energy.");
         }
 
-        this.currentEnergy -= this.cost;
-        List<Enemy> enemiesInRange = this.board.getEnemiesInRange(this.position, ABILITY_RANGE);
+        currentEnergy -= cost;
+        List<Enemy> enemiesInRange = board.getEnemiesInRange(position, ABILITY_RANGE);
         for (Enemy enemy : enemiesInRange) {
-            super.attack(enemy, this.attack);
+            super.attack(enemy, attack);
         }
     }
 
@@ -84,14 +84,14 @@ public class Rogue extends Player {
     @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
-        this.currentEnergy = Math.min(this.currentEnergy + ENERGY_REGEN, MAX_ENERGY);
+        currentEnergy = Math.min(currentEnergy + ENERGY_REGEN, MAX_ENERGY);
     }
 
     @Override
     public UnitDTO createDTO() {
         RogueDTO rogueDTO = new RogueDTO();
-        this.fillPlayerDtoFields(rogueDTO);
-        rogueDTO.currentEnergy = this.currentEnergy;
+        fillPlayerDtoFields(rogueDTO);
+        rogueDTO.currentEnergy = currentEnergy;
         rogueDTO.maxEnergy = MAX_ENERGY;
         return rogueDTO;
     }
@@ -99,10 +99,10 @@ public class Rogue extends Player {
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Rogue(
-            this.name,
-            this.healthPool, this.attack, this.defense,
-            this.experience, this.level,
-            this.cost,
+            name,
+            healthPool, attack, defense,
+            experience, level,
+            cost,
             position,
             randomGenerator, board
         );

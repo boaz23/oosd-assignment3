@@ -24,7 +24,7 @@ public class Monster extends Enemy {
                    int experienceValue, char tile,
                    int range) {
         super(name, healthPool, attack, defense, experienceValue, tile);
-        this.init(range);
+        init(range);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -36,7 +36,7 @@ public class Monster extends Enemy {
             RandomGenerator randomGenerator,
             Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
-        this.init(range);
+        init(range);
         this.position = position;
     }
 
@@ -51,18 +51,18 @@ public class Monster extends Enemy {
     @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) throws GameException {
-        Player player = this.board.getPlayerInRange(this.position, this.range);
+        Player player = board.getPlayerInRange(position, range);
         if (player != null) {
-            this.chasePlayer(player);
+            chasePlayer(player);
         }
         else {
-            this.actRandomly();
+            actRandomly();
         }
     }
 
     private void chasePlayer(Player player) throws GameException {
-        int dx = this.position.getX() - player.getPosition().getX();
-        int dy = this.position.getY() - player.getPosition().getY();
+        int dx = position.getX() - player.getPosition().getX();
+        int dy = position.getY() - player.getPosition().getY();
 
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0) {
@@ -89,7 +89,7 @@ public class Monster extends Enemy {
         // 3 - move left
         // 4 - do nothing
 
-        int move = this.randomGenerator.nextInt(MoveDirections.length - 1);
+        int move = randomGenerator.nextInt(MoveDirections.length - 1);
         MoveDirections[move].move(this);
     }
 
@@ -100,10 +100,10 @@ public class Monster extends Enemy {
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Monster(
-            this.name,
-            this.healthPool, this.attack, this.defense,
-            this.experienceValue, this.tile,
-            this.range,
+            name,
+            healthPool, attack, defense,
+            experienceValue, tile,
+            range,
             position,
             randomGenerator, board);
     }

@@ -79,13 +79,13 @@ public class LevelController implements LevelEndObserver {
     }
 
     public ActionController loadLevel(int level) {
-        File levelFile = this.getLevelFile(level);
-        if (!this.hasLevel(levelFile)) {
-            this.view.onGameWin();
+        File levelFile = getLevelFile(level);
+        if (!hasLevel(levelFile)) {
+            view.onGameWin();
             return null;
         }
         else {
-            return this.loadLevel(levelFile);
+            return loadLevel(levelFile);
         }
     }
 
@@ -119,12 +119,12 @@ public class LevelController implements LevelEndObserver {
 
         Player player = AvailablePlayers.Players[choice - 1];
         this.player = player;
-        this.tilesFactory.put(player.toTileChar(), this.new PlayerFactory());
+        tilesFactory.put(player.toTileChar(), this.new PlayerFactory());
         return (PlayerDTO)player.createDTO();
     }
 
     public PlayerDTO getPlayer() {
-        return (PlayerDTO)this.player.createDTO();
+        return (PlayerDTO)player.createDTO();
     }
 
     @Override
@@ -142,7 +142,7 @@ public class LevelController implements LevelEndObserver {
     }
 
     private File getLevelFile(int level) {
-        return new File(this.levelsDirPath + "Level " + level + ".txt");
+        return new File(levelsDirPath + "Level " + level + ".txt");
     }
 
     private ActionController loadLevel(File levelFile) {
@@ -176,15 +176,15 @@ public class LevelController implements LevelEndObserver {
         LevelFlow levelFlow = new LevelFlow();
         this.board = board;
 
-        this.player.addDeathObserver(board);
-        this.player.addDeathObserver(levelFlow);
+        player.addDeathObserver(board);
+        player.addDeathObserver(levelFlow);
 
         PositionsMatrix positionsMatrix = parseFile(board, levelFlow, reader);
         board.setBoard(positionsMatrix);
 
         board.addLevelEndObserver(this);
         board.addLevelEndObserver(levelFlow);
-        levelFlow.insertTickObserverAsFirst(this.player);
+        levelFlow.insertTickObserverAsFirst(player);
 
         return new ActionController(board.getPlayer(), levelFlow);
     }
@@ -224,10 +224,10 @@ public class LevelController implements LevelEndObserver {
 
             TileOccupier tileOccupier = tilesFactory.get(tileChar).createTileOccupier(
                 positionMatrixBuilder.getPosition(lineNum, i),
-                this.randomGenerator,
+                randomGenerator,
                 board,
                 levelFlow,
-                this.view);
+                view);
             positionMatrixBuilder.set(lineNum, i, tileOccupier);
         }
     }

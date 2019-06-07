@@ -14,11 +14,11 @@ public class MageLevelUpDTO extends LevelUpDTO {
     @Override
     public LevelUpDTO clone() {
         MageLevelUpDTO mageLevelUpDTO = new MageLevelUpDTO();
-        mageLevelUpDTO.healthBonus = this.healthBonus;
-        mageLevelUpDTO.attackBonus = this.attackBonus;
-        mageLevelUpDTO.defenseBonus = this.defenseBonus;
-        mageLevelUpDTO.manaPoolBonus = this.manaPoolBonus;
-        mageLevelUpDTO.spellPowerBonus = this.spellPowerBonus;
+        mageLevelUpDTO.healthBonus = healthBonus;
+        mageLevelUpDTO.attackBonus = attackBonus;
+        mageLevelUpDTO.defenseBonus = defenseBonus;
+        mageLevelUpDTO.manaPoolBonus = manaPoolBonus;
+        mageLevelUpDTO.spellPowerBonus = spellPowerBonus;
         return mageLevelUpDTO;
     }
 }

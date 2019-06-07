@@ -27,8 +27,8 @@ public class BoardImpl implements InitializableBoard {
         }
 
         this.tileFactory = tileFactory;
-        this.levelEndObservers = new ArrayList<>();
-        this.enemies = new ArrayList<>();
+        levelEndObservers = new ArrayList<>();
+        enemies = new ArrayList<>();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class BoardImpl implements InitializableBoard {
     @Override
     public void onDeath(Player player) throws GameException {
         board.set(player.getPosition(), tileFactory.createDeadPlayer());
-        this.callPlayerDeathObservers();
+        callPlayerDeathObservers();
 
     }
 
@@ -98,7 +98,7 @@ public class BoardImpl implements InitializableBoard {
         enemies.remove(enemy);
 
         if (enemies.size() == 0) {
-            this.callLevelCompleteObservers();
+            callLevelCompleteObservers();
         }
     }
 
@@ -113,11 +113,11 @@ public class BoardImpl implements InitializableBoard {
             throw new IllegalArgumentException("observer is null.");
         }
 
-        this.levelEndObservers.add(observer);
+        levelEndObservers.add(observer);
     }
 
     public Player getPlayer() {
-        return this.player;
+        return player;
     }
 
     public void setPlayer(Player player) {
@@ -125,7 +125,7 @@ public class BoardImpl implements InitializableBoard {
     }
 
     public void addEnemy(Enemy enemy) {
-        this.enemies.add(enemy);
+        enemies.add(enemy);
     }
 
     public void setBoard(PositionsMatrix board) {
@@ -137,13 +137,13 @@ public class BoardImpl implements InitializableBoard {
     }
 
     private void callPlayerDeathObservers() {
-        for (LevelEndObserver observer : this.levelEndObservers) {
+        for (LevelEndObserver observer : levelEndObservers) {
             observer.onDeath(player);
         }
     }
 
     private void callLevelCompleteObservers() {
-        for (LevelEndObserver observer : this.levelEndObservers) {
+        for (LevelEndObserver observer : levelEndObservers) {
             observer.onLevelComplete();
         }
     }

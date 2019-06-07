@@ -23,7 +23,7 @@ public class Warrior extends Player {
                    int healthPool, int attack, int defense,
                    Tick cooldown) {
         super(name, healthPool, attack, defense);
-        this.init(cooldown);
+        init(cooldown);
     }
 
      private Warrior(String name,
@@ -34,7 +34,7 @@ public class Warrior extends Player {
                      RandomGenerator randomGenerator,
                      Board board) {
         super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
-        this.init(cooldown);
+         init(cooldown);
         this.position = position;
     }
 
@@ -43,35 +43,35 @@ public class Warrior extends Player {
             throw new IllegalArgumentException("cooldown cannot be null.");
         }
 
-        this.coolDown = cooldown;
-        this.resetCooldown();
+        coolDown = cooldown;
+        resetCooldown();
     }
 
     private void resetCooldown() {
-        this.remaining = Tick.Zero;
+        remaining = Tick.Zero;
     }
 
     @Override
     protected void levelUp() {
-        WarriorLevelUpDTO rougeLevelUpDTO = this.initLevelUpDto(new WarriorLevelUpDTO());
+        WarriorLevelUpDTO rougeLevelUpDTO = initLevelUpDto(new WarriorLevelUpDTO());
 
         super.levelUp();
-        this.resetCooldown();
-        this.healthPool = this.level * LEVEL_HEALTH_DIFF;
-        this.defense += this.level * LEVEL_DEFENSE_DIFF;
+        resetCooldown();
+        healthPool = level * LEVEL_HEALTH_DIFF;
+        defense += level * LEVEL_DEFENSE_DIFF;
 
-        this.calculateLevelUpStatsDiffs(rougeLevelUpDTO);
-        this.callLevelUpObservers(rougeLevelUpDTO);
+        calculateLevelUpStatsDiffs(rougeLevelUpDTO);
+        callLevelUpObservers(rougeLevelUpDTO);
     }
 
     @Override
     public void useSpecialAbilityCore() throws LogicException {
-        if (this.remaining.isGreaterThan(Tick.Zero)) {
+        if (remaining.isGreaterThan(Tick.Zero)) {
             throw new LogicException("Cannot use the special ability because the cooldown isn't ready.");
         }
 
-        this.remaining = this.coolDown;
-        this.currentHealth += Math.min(this.currentHealth + (this.defense * ABILITY_HEAL_POWER), this.healthPool);
+        remaining = coolDown;
+        currentHealth += Math.min(currentHealth + (defense * ABILITY_HEAL_POWER), healthPool);
     }
 
     @Override
@@ -82,25 +82,25 @@ public class Warrior extends Player {
     @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
-        this.remaining = this.remaining.decrement();
+        remaining = remaining.decrement();
     }
 
     @Override
     public UnitDTO createDTO() {
         WarriorDTO warriorDTO = new WarriorDTO();
-        this.fillPlayerDtoFields(warriorDTO);
-        warriorDTO.abilityCooldown = this.coolDown.getValue();
-        warriorDTO.remaining = this.remaining.getValue();
+        fillPlayerDtoFields(warriorDTO);
+        warriorDTO.abilityCooldown = coolDown.getValue();
+        warriorDTO.remaining = remaining.getValue();
         return warriorDTO;
     }
 
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Warrior(
-            this.name,
-            this.healthPool, this.attack, this.defense,
-            this.experience, this.level,
-            this.coolDown,
+            name,
+            healthPool, attack, defense,
+            experience, level,
+            coolDown,
             position,
             randomGenerator, board
         );

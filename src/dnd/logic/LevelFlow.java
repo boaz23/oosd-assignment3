@@ -16,22 +16,22 @@ public class LevelFlow implements DeathObserver, LevelEndObserver {
     public LevelFlow() {
         tickObservers = new ArrayList<>();
         tick = Tick.Zero;
-        this.stopTurns = false;
+        stopTurns = false;
     }
 
     public void insertTickObserverAsFirst(TickObserver observer) {
-        this.tickObservers.add(0, observer);
+        tickObservers.add(0, observer);
     }
 
     public void addTickObserver(TickObserver observer) {
-        this.tickObservers.add(observer);
+        tickObservers.add(observer);
     }
 
     public void onTick() throws GameException {
         tick = tick.increment();
 
         TickObserver[] tickObservers = this.tickObservers.toArray(new TickObserver[]{});
-        for (int i = 0; i < tickObservers.length & !this.stopTurns; i++) {
+        for (int i = 0; i < tickObservers.length & !stopTurns; i++) {
             TickObserver observer = tickObservers[i];
 
             // may have been removed
@@ -43,17 +43,17 @@ public class LevelFlow implements DeathObserver, LevelEndObserver {
 
     @Override
     public void onDeath(Player player) {
-        this.tickObservers.remove(player);
-        this.stopTurns = true;
+        tickObservers.remove(player);
+        stopTurns = true;
     }
 
     @Override
     public void onLevelComplete() {
-        this.stopTurns = true;
+        stopTurns = true;
     }
 
     @Override
     public void onDeath(Enemy enemy) {
-        this.tickObservers.remove(enemy);
+        tickObservers.remove(enemy);
     }
 }

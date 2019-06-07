@@ -21,7 +21,7 @@ public abstract class Enemy extends Unit {
           int healthPool, int attack, int defense,
           int experienceValue, char tile) {
         super(name, healthPool, attack, defense);
-        this.init(experienceValue, tile);
+        init(experienceValue, tile);
     }
 
     Enemy(String name,
@@ -30,7 +30,7 @@ public abstract class Enemy extends Unit {
           Board board,
           int experienceValue, char tile) {
         super(name, healthPool, attack, defense, randomGenerator, board);
-        this.init(experienceValue, tile);
+        init(experienceValue, tile);
     }
 
     private void init(int experienceValue, char tile) {
@@ -53,16 +53,16 @@ public abstract class Enemy extends Unit {
     public boolean defend(Unit attacker, int damage) throws GameException {
         boolean died = super.defend(attacker, damage);
         if (died) {
-            this.callDeathObservers();
-            this.callOnEnemyDeathObservers();
+            callDeathObservers();
+            callOnEnemyDeathObservers();
         }
 
         return died;
     }
 
     private void callOnEnemyDeathObservers() {
-        for (GameEventObserver observer : this.gameEventObservers) {
-            observer.onEnemyDeath((EnemyDTO)this.createDTO());
+        for (GameEventObserver observer : gameEventObservers) {
+            observer.onEnemyDeath((EnemyDTO)createDTO());
         }
     }
 
@@ -79,30 +79,30 @@ public abstract class Enemy extends Unit {
     @Override
     public MoveResult visit(Player player) throws GameException {
         callEngageObservers(player);
-        return this.meleeAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
+        return meleeAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
     }
 
     void callEngageObservers(Player player) {
-        for (GameEventObserver observer : this.gameEventObservers) {
-            observer.onEnemyEngage((EnemyDTO)this.createDTO(), (PlayerDTO)player.createDTO());
+        for (GameEventObserver observer : gameEventObservers) {
+            observer.onEnemyEngage((EnemyDTO)createDTO(), (PlayerDTO)player.createDTO());
         }
     }
 
     private void callDeathObservers() throws GameException {
-        for (DeathObserver observer : this.deathObservers) {
+        for (DeathObserver observer : deathObservers) {
             observer.onDeath(this);
         }
     }
 
     @Override
     public char toTileChar() {
-        return this.tile;
+        return tile;
     }
 
     @Override
     public UnitDTO createDTO() {
         EnemyDTO enemyDTO = new EnemyDTO();
-        this.fillUnitDtoFields(enemyDTO);
+        fillUnitDtoFields(enemyDTO);
         return enemyDTO;
     }
 

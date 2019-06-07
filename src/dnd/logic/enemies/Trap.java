@@ -26,7 +26,7 @@ public class Trap extends Enemy {
                 int experienceValue, char tile,
                 int relocationRange, Tick relocationTime, Tick visibilityTime) {
         super(name, healthPool, attack, defense, experienceValue, tile);
-        this.init(relocationRange, relocationTime, visibilityTime);
+        init(relocationRange, relocationTime, visibilityTime);
     }
 
     private Trap(String name,
@@ -37,7 +37,7 @@ public class Trap extends Enemy {
                  RandomGenerator randomGenerator,
                  Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
-        this.init(relocationRange, relocationTime, visibilityTime);
+        init(relocationRange, relocationTime, visibilityTime);
         this.position = position;
     }
 
@@ -58,36 +58,36 @@ public class Trap extends Enemy {
         this.relocationRange = relocationRange;
         this.relocationTime = relocationTime;
         this.visibilityTime = visibilityTime;
-        this.ticksCount = Tick.Zero;
-        this.visible = true;
+        ticksCount = Tick.Zero;
+        visible = true;
     }
 
     @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) throws GameException {
-        boolean relocated = this.checkRelocation();
+        boolean relocated = checkRelocation();
         if (!relocated) {
-            this.checkEngagePlayer();
+            checkEngagePlayer();
         }
 
-        this.updateVisibility();
+        updateVisibility();
     }
 
     private void checkEngagePlayer() throws GameException {
-        Player player = this.board.getPlayerInRange(this.position, ATTACK_RANGE);
+        Player player = board.getPlayerInRange(position, ATTACK_RANGE);
         if (player != null) {
-            this.engagePlayer(player);
+            engagePlayer(player);
         }
     }
 
     private boolean checkRelocation() throws GameException {
         boolean relocated;
-        if (this.ticksCount.equals(this.relocationTime)) {
-            this.relocate();
+        if (ticksCount.equals(relocationTime)) {
+            relocate();
             relocated = true;
         }
         else {
-            this.ticksCount = ticksCount.increment();
+            ticksCount = ticksCount.increment();
             relocated = false;
         }
 
@@ -95,19 +95,19 @@ public class Trap extends Enemy {
     }
 
     private void relocate() throws GameException {
-        this.ticksCount = Tick.Zero;
-        List<Point> freeTiles = this.board.getFreeTilesPositionsInRange(this.position, this.relocationRange);
-        int tileIndex = this.randomGenerator.nextInt(freeTiles.size() - 1);
-        this.move(freeTiles.get(tileIndex));
+        ticksCount = Tick.Zero;
+        List<Point> freeTiles = board.getFreeTilesPositionsInRange(position, relocationRange);
+        int tileIndex = randomGenerator.nextInt(freeTiles.size() - 1);
+        move(freeTiles.get(tileIndex));
     }
 
     private void engagePlayer(Player player) throws GameException {
         callEngageObservers(player);
-        this.meleeAttack(player);
+        meleeAttack(player);
     }
 
     private void updateVisibility() {
-        this.visible = this.visibilityTime.isGreaterThan(this.ticksCount);
+        visible = visibilityTime.isGreaterThan(ticksCount);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -127,11 +127,11 @@ public class Trap extends Enemy {
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Trap(
-            this.name,
-            this.healthPool, this.attack, this.defense,
-            this.experienceValue, this.tile,
-            this.relocationRange, this.relocationTime,
-            this.visibilityTime,
+            name,
+            healthPool, attack, defense,
+            experienceValue, tile,
+            relocationRange, relocationTime,
+            visibilityTime,
             position,
             randomGenerator, board
         );

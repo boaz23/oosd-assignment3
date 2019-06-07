@@ -11,9 +11,9 @@ public class RougeLevelUpDTO extends LevelUpDTO {
     @Override
     public LevelUpDTO clone() {
         RougeLevelUpDTO rougeLevelUpDTO = new RougeLevelUpDTO();
-        rougeLevelUpDTO.healthBonus = this.healthBonus;
-        rougeLevelUpDTO.attackBonus = this.attackBonus;
-        rougeLevelUpDTO.defenseBonus = this.defenseBonus;
+        rougeLevelUpDTO.healthBonus = healthBonus;
+        rougeLevelUpDTO.attackBonus = attackBonus;
+        rougeLevelUpDTO.defenseBonus = defenseBonus;
         return rougeLevelUpDTO;
     }
 }

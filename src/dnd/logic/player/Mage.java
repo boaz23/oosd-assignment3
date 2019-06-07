@@ -33,7 +33,7 @@ public class Mage extends Player {
                 int spellPower, int manaPool, int cost,
                 int hitTimes, int range) {
         super(name, healthPool, attack, defense);
-        this.init(spellPower, manaPool, cost, hitTimes, range);
+        init(spellPower, manaPool, cost, hitTimes, range);
     }
 
     private Mage(String name,
@@ -45,7 +45,7 @@ public class Mage extends Player {
                  RandomGenerator randomGenerator,
                  Board board) {
         super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
-        this.init(spellPower, manaPool, cost, hitTimes, range);
+        init(spellPower, manaPool, cost, hitTimes, range);
         this.position = position;
     }
 
@@ -69,7 +69,7 @@ public class Mage extends Player {
 
         this.spellPower = spellPower;
         this.manaPool = manaPool;
-        this.currentMana = this.getManaAddition();
+        currentMana = getManaAddition();
         this.cost = cost;
         this.hitTimes = hitTimes;
         this.range = range;
@@ -77,46 +77,46 @@ public class Mage extends Player {
 
     @Override
     protected void levelUp() {
-        MageLevelUpDTO mageLevelUpDTO = this.initLevelUpDto();
+        MageLevelUpDTO mageLevelUpDTO = initLevelUpDto();
 
         super.levelUp();
-        this.manaPool += this.level * LEVEL_MANA_DIFF;
-        this.currentMana = Math.min(this.currentMana + this.getManaAddition(), this.manaPool);
-        this.spellPower += this.level * LEVEL_SPELL_POWER_DIFF;
+        manaPool += level * LEVEL_MANA_DIFF;
+        currentMana = Math.min(currentMana + getManaAddition(), manaPool);
+        spellPower += level * LEVEL_SPELL_POWER_DIFF;
 
-        this.calculateLevelUpStatsDiffs(mageLevelUpDTO);
-        this.callLevelUpObservers(mageLevelUpDTO);
+        calculateLevelUpStatsDiffs(mageLevelUpDTO);
+        callLevelUpObservers(mageLevelUpDTO);
     }
 
     private MageLevelUpDTO initLevelUpDto() {
-        MageLevelUpDTO mageLevelUpDTO = this.initLevelUpDto(new MageLevelUpDTO());
-        mageLevelUpDTO.manaPoolBonus = this.manaPool;
-        mageLevelUpDTO.spellPowerBonus = this.spellPower;
+        MageLevelUpDTO mageLevelUpDTO = initLevelUpDto(new MageLevelUpDTO());
+        mageLevelUpDTO.manaPoolBonus = manaPool;
+        mageLevelUpDTO.spellPowerBonus = spellPower;
         return mageLevelUpDTO;
     }
 
     private void calculateLevelUpStatsDiffs(MageLevelUpDTO mageLevelUpDTO) {
         super.calculateLevelUpStatsDiffs(mageLevelUpDTO);
-        mageLevelUpDTO.manaPoolBonus = this.manaPool - mageLevelUpDTO.manaPoolBonus;
-        mageLevelUpDTO.spellPowerBonus = this.spellPower - mageLevelUpDTO.spellPowerBonus;
+        mageLevelUpDTO.manaPoolBonus = manaPool - mageLevelUpDTO.manaPoolBonus;
+        mageLevelUpDTO.spellPowerBonus = spellPower - mageLevelUpDTO.spellPowerBonus;
     }
 
     private int getManaAddition() {
-        return this.manaPool / MANA_ADDITION_DIV;
+        return manaPool / MANA_ADDITION_DIV;
     }
 
     @Override
     public void useSpecialAbilityCore() throws GameException {
-        if (this.currentMana < cost) {
+        if (currentMana < cost) {
             throw new LogicException("Cannot use special ability due insufficient mana.");
         }
 
-        this.currentMana -= this.cost;
-        List<Enemy> enemiesInRange = this.board.getEnemiesInRange(this.position, this.range);
-        for (int hits = 0; hits < this.hitTimes & !enemiesInRange.isEmpty(); hits++) {
+        currentMana -= cost;
+        List<Enemy> enemiesInRange = board.getEnemiesInRange(position, range);
+        for (int hits = 0; hits < hitTimes & !enemiesInRange.isEmpty(); hits++) {
             int enemyIndex = randomGenerator.nextInt(enemiesInRange.size() - 1);
             Enemy enemy = enemiesInRange.get(enemyIndex);
-            boolean died = this.attack(enemy, this.spellPower);
+            boolean died = attack(enemy, spellPower);
             if (died) {
                 enemiesInRange.remove(enemyIndex);
             }
@@ -131,27 +131,27 @@ public class Mage extends Player {
     @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
-        this.currentMana = Math.min(this.manaPool, this.currentMana + MANA_REGEN);
+        currentMana = Math.min(manaPool, currentMana + MANA_REGEN);
     }
 
     @Override
     public UnitDTO createDTO() {
         MageDTO mageDTO = new MageDTO();
-        this.fillPlayerDtoFields(mageDTO);
-        mageDTO.currentMana = this.currentMana;
-        mageDTO.manaPool = this.manaPool;
-        mageDTO.spellPower = this.spellPower;
+        fillPlayerDtoFields(mageDTO);
+        mageDTO.currentMana = currentMana;
+        mageDTO.manaPool = manaPool;
+        mageDTO.spellPower = spellPower;
         return mageDTO;
     }
 
     @Override
     public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Mage(
-            this.name,
-            this.healthPool, this.attack, this.defense,
-            this.experience, this.level,
-            this.spellPower, this.manaPool, this.cost,
-            this.hitTimes, this.range,
+            name,
+            healthPool, attack, defense,
+            experience, level,
+            spellPower, manaPool, cost,
+            hitTimes, range,
             position,
             randomGenerator,
             board

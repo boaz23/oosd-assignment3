@@ -6,7 +6,7 @@ class BoardSquare {
     private TileOccupier tileOccupier;
 
     public BoardSquare(TileOccupier tileOccupier) {
-        this.setTileOccupier(tileOccupier);
+        setTileOccupier(tileOccupier);
     }
 
     public TileOccupier getTileOccupier() {

@@ -6,7 +6,7 @@ public class Tick {
     public static final Tick Zero = new Tick();
 
     private Tick() {
-        this.value = 0;
+        value = 0;
     }
 
     public Tick(int value) {
@@ -35,11 +35,11 @@ public class Tick {
     }
 
     public Tick decrement() {
-        return fromValueOrZero(this.value - 1);
+        return fromValueOrZero(value - 1);
     }
 
     public Tick increment() {
-        return new Tick(this.value + 1);
+        return new Tick(value + 1);
     }
 
     public boolean isGreaterThan(Tick other) {
@@ -47,7 +47,7 @@ public class Tick {
             throw new IllegalArgumentException("other tick is null.");
         }
 
-        return this.value > other.value;
+        return value > other.value;
     }
 
     public boolean isGreaterOrEqualTo(Tick other) {
@@ -55,7 +55,7 @@ public class Tick {
             throw new IllegalArgumentException("other tick is null.");
         }
 
-        return this.value >= other.value;
+        return value >= other.value;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -64,7 +64,7 @@ public class Tick {
             throw new IllegalArgumentException("other tick is null.");
         }
 
-        return this.value == other.value;
+        return value == other.value;
     }
 
     @Override
@@ -73,16 +73,16 @@ public class Tick {
             return false;
         }
 
-        return this.isEqual((Tick)obj);
+        return isEqual((Tick)obj);
     }
 
     @Override
     public int hashCode() {
-        return this.value;
+        return value;
     }
 
     @Override
     public String toString() {
-        return this.value + "";
+        return value + "";
     }
 }

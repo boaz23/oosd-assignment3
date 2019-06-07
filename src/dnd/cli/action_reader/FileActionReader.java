@@ -17,7 +17,7 @@ public class FileActionReader implements ActionReader, Closeable {
     public String nextAction() {
         try {
             String action = reader.readLine();
-            this.printer.printLine(action);
+            printer.printLine(action);
             return action;
         }
         catch (IOException e) {
