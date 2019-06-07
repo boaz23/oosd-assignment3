@@ -130,7 +130,7 @@ public abstract class Player extends Unit {
     }
 
     boolean attack(Enemy enemy, int damage) throws GameException {
-        boolean died = super.attackCore(enemy, damage);
+        boolean died = attackCore(enemy, damage);
         if (died) {
             gainExp(enemy.getExperienceValue());
         }
@@ -141,7 +141,7 @@ public abstract class Player extends Unit {
     private MoveResult moveMeleeAttack(Enemy enemy) throws GameException {
         callOnPlayerEngageObservers(enemy);
 
-        boolean died = super.meleeAttack(enemy);
+        boolean died = meleeAttack(enemy);
         if (died) {
             gainExp(enemy.getExperienceValue());
         }

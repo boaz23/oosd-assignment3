@@ -72,7 +72,7 @@ public class Rogue extends Player {
         currentEnergy -= cost;
         List<Enemy> enemiesInRange = board.getEnemiesInRange(position, ABILITY_RANGE);
         for (Enemy enemy : enemiesInRange) {
-            super.attack(enemy, attack);
+            attack(enemy, attack);
         }
     }
 

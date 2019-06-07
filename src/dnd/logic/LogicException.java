@@ -5,7 +5,6 @@ import dnd.GameException;
 @SuppressWarnings("unused")
 public class LogicException extends GameException {
     public LogicException() {
-        super();
     }
 
     public LogicException(String message) {

@@ -5,7 +5,6 @@ import dnd.GameException;
 @SuppressWarnings("unused")
 public class PositionOutOfBoundsException extends GameException {
     public PositionOutOfBoundsException() {
-        super();
     }
 
     public PositionOutOfBoundsException(String message) {

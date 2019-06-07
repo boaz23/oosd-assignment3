@@ -69,11 +69,8 @@ public class Tick {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Tick)) {
-            return false;
-        }
+        return obj instanceof Tick && isEqual((Tick)obj);
 
-        return isEqual((Tick)obj);
     }
 
     @Override

@@ -16,10 +16,10 @@ import java.util.List;
 public class BoardImpl implements InitializableBoard {
     private final TileFactory tileFactory;
     private PositionsMatrix board;
-    private List<Enemy> enemies;
+    private final List<Enemy> enemies;
     private Player player;
 
-    private List<LevelEndObserver> levelEndObservers;
+    private final List<LevelEndObserver> levelEndObservers;
 
     public BoardImpl(TileFactory tileFactory) {
         if (tileFactory == null) {
@@ -97,7 +97,7 @@ public class BoardImpl implements InitializableBoard {
         board.set(enemy.getPosition(), tileFactory.createFreeTile());
         enemies.remove(enemy);
 
-        if (enemies.size() == 0) {
+        if (enemies.isEmpty()) {
             callLevelCompleteObservers();
         }
     }

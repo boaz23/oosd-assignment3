@@ -25,7 +25,7 @@ public class EnemyFactory extends UnitFactory {
         Enemy enemy = (Enemy)this.enemy.clone(position, randomGenerator, board);
         board.addEnemy(enemy);
         levelFlow.addTickObserver(enemy);
-        super.registerEventObservers(enemy, board, levelFlow, gameEventObserver);
+        registerEventObservers(enemy, board, levelFlow, gameEventObserver);
         return enemy;
     }
 }

@@ -243,7 +243,7 @@ public class LevelController implements LevelEndObserver {
             Player player = (Player)LevelController.this.player.clone(position, randomGenerator, board);
             LevelController.this.player = player;
             board.setPlayer(player);
-            super.registerEventObservers(player, board, levelFlow, gameEventObserver);
+            registerEventObservers(player, board, levelFlow, gameEventObserver);
             return player;
         }
     }

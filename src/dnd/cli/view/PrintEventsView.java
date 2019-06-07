@@ -9,7 +9,7 @@ import dnd.dto.levelup.WarriorLevelUpDTO;
 import dnd.dto.units.*;
 
 abstract class PrintEventsView implements View {
-    private Printer printer;
+    private final Printer printer;
 
     PrintEventsView(Printer printer) {
         if (printer == null) {
