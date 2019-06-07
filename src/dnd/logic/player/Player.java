@@ -25,6 +25,7 @@ public abstract class Player extends Unit {
     public Player(String name,
                   int healthPool, int attack, int defense) {
         super(name, healthPool, attack, defense);
+        this.init();
     }
 
     protected Player(String name,
@@ -32,6 +33,11 @@ public abstract class Player extends Unit {
                      RandomGenerator randomGenerator,
                      Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
+        this.init();
+    }
+
+    private void init() {
+        this.level = 1;
     }
 
     @Override

@@ -4,6 +4,7 @@ import dnd.dto.levelup.RougeLevelUpDTO;
 import dnd.dto.units.RogueDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.LogicException;
+import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
@@ -31,10 +32,12 @@ public class Rogue extends Player {
     protected Rogue(String name,
                     int healthPool, int attack, int defense,
                     int cost,
+                    Point position,
                     RandomGenerator randomGenerator,
                     Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
         this.init(cost);
+        this.position = position;
     }
 
     private void init(int cost) {
@@ -91,11 +94,12 @@ public class Rogue extends Player {
     }
 
     @Override
-    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Rogue(
                 this.name,
                 this.healthPool, this.attack, this.defense,
                 this.cost,
+                position,
                 randomGenerator, board
         );
     }

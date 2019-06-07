@@ -32,10 +32,12 @@ public class Trap extends Enemy {
                    int healthPool, int attack, int defense,
                    int experienceValue, char tile,
                    int relocationRange, Tick relocationTime, Tick visibilityTime,
+                   Point position,
                    RandomGenerator randomGenerator,
                    Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
         this.init(relocationRange, relocationTime, visibilityTime);
+        this.position = position;
     }
 
     private void init(int relocationRange, Tick relocationTime, Tick visibilityTime) {
@@ -124,13 +126,14 @@ public class Trap extends Enemy {
     }
 
     @Override
-    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Trap(
                 this.name,
                 this.healthPool, this.attack, this.defense,
                 this.experienceValue, this.tile,
                 this.relocationRange, this.relocationTime,
                 this.visibilityTime,
+                position,
                 randomGenerator, board
         );
     }

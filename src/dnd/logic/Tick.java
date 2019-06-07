@@ -3,8 +3,11 @@ package dnd.logic;
 public class Tick {
     private final int value;
 
-    public static final Tick Zero = new Tick(0);
+    public static final Tick Zero = new Tick();
 
+    private Tick() {
+        this.value = 0;
+    }
     public Tick(int value) {
         if (value < Zero.value) {
             throw new IllegalArgumentException("tick value must be a non-negative number.");

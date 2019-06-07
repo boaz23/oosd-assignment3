@@ -67,7 +67,9 @@ public class CliView extends PrintEventsView {
     private void showPlayerSelectMenu() {
         this.printer.printLine("Select player:");
         PlayerDTO[] playerChoises = this.levelController.getPlayerChoises();
-        for (PlayerDTO playerChoise : playerChoises) {
+        for (int i = 0; i < playerChoises.length; i++) {
+            PlayerDTO playerChoise = playerChoises[i];
+            this.printer.print((i + 1) + ". ");
             this.printer.printLine(this.resolveFormatString(playerChoise));
         }
     }
@@ -157,7 +159,7 @@ public class CliView extends PrintEventsView {
     }
 
     private void printPlayerStats() {
-        this.printer.printLine("");
+        this.printer.printLine("\n");
         this.printer.printLine(this.resolveFormatString(this.levelController.getPlayer()));
     }
 

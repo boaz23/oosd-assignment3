@@ -8,6 +8,7 @@ import dnd.controllers.tile_occupiers_factories.TileOccupierFactory;
 import dnd.dto.units.PlayerDTO;
 import dnd.logic.LevelEndObserver;
 import dnd.logic.LevelFlow;
+import dnd.logic.Point;
 import dnd.logic.available_units.AvailableInanimate;
 import dnd.logic.available_units.AvailableMonsters;
 import dnd.logic.available_units.AvailablePlayers;
@@ -20,7 +21,6 @@ import dnd.logic.player.Player;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileFactoryImpl;
 import dnd.logic.tileOccupiers.TileOccupier;
-import dnd.logic.tileOccupiers.Unit;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -113,11 +113,11 @@ public class LevelController implements LevelEndObserver {
     }
 
     public PlayerDTO choosePlayer(int choise) {
-        if (0 > choise | choise >= AvailablePlayers.Players.length) {
+        if (0 >= choise | choise > AvailablePlayers.Players.length) {
             return null;
         }
 
-        Player player = AvailablePlayers.Players[choise];
+        Player player = AvailablePlayers.Players[choise - 1];
         this.player = player;
         this.tilesFactory.put(player.toTileChar(), this.new PlayerFactory(player));
         return (PlayerDTO)player.createDTO();
@@ -179,7 +179,7 @@ public class LevelController implements LevelEndObserver {
 
         List<BoardSquare[]> boardSquares = parseFile(board, levelFlow, reader);
 
-        board.setBoard((BoardSquare[][])boardSquares.toArray());
+        board.setBoard(boardSquares.toArray(new BoardSquare[][] {}));
         board.addLevelEndObserver(this);
         board.addLevelEndObserver(levelFlow);
         levelFlow.addTickObserver(this.player);
@@ -192,22 +192,24 @@ public class LevelController implements LevelEndObserver {
 
         String line = reader.readLine();
         if (line != null) {
+            int lineNum = 0;
             int boardWidth = line.length();
-            boardSquares.add(parseFileLine(line, board, levelFlow));
+            boardSquares.add(parseFileLine(line, lineNum, board, levelFlow));
 
             while ((line = reader.readLine()) != null) {
                 if (line.length() != boardWidth) {
                     throw new RuntimeException("Invalid board, not a matrix.");
                 }
 
-                boardSquares.add(parseFileLine(line, board, levelFlow));
+                lineNum++;
+                boardSquares.add(parseFileLine(line, lineNum, board, levelFlow));
             }
         }
 
         return boardSquares;
     }
 
-    private BoardSquare[] parseFileLine(String line, BoardImpl board, LevelFlow levelFlow) {
+    private BoardSquare[] parseFileLine(String line, int lineNum, BoardImpl board, LevelFlow levelFlow) {
         BoardSquare[] squares = new BoardSquare[line.length()];
         for (int i = 0; i < line.length(); i++) {
             char tileChar = line.charAt(i);
@@ -216,6 +218,7 @@ public class LevelController implements LevelEndObserver {
             }
 
             squares[i] = new BoardSquare(tilesFactory.get(tileChar).createTileOccupier(
+                    new Point(lineNum, i),
                     this.randomGenerator,
                     board,
                     levelFlow,
@@ -223,12 +226,6 @@ public class LevelController implements LevelEndObserver {
         }
 
         return squares;
-    }
-
-    static void registerEventObservers(Unit unit, BoardImpl board, LevelFlow levelFlow, GameEventObserver gameEventObserver) {
-        unit.addDeathObserver(board);
-        unit.addDeathObserver(levelFlow);
-        unit.addGameEventObserver(gameEventObserver);
     }
 
     private class PlayerFactory extends UnitFactory {
@@ -239,8 +236,13 @@ public class LevelController implements LevelEndObserver {
         }
 
         @Override
-        public TileOccupier createTileOccupier(RandomGenerator randomGenerator, BoardImpl board, LevelFlow levelFlow, GameEventObserver gameEventObserver) {
-            Player player = (Player)this.player.clone(randomGenerator, board);
+        public TileOccupier createTileOccupier(
+                Point position,
+                RandomGenerator randomGenerator,
+                BoardImpl board,
+                LevelFlow levelFlow,
+                GameEventObserver gameEventObserver) {
+            Player player = (Player)this.player.clone(position, randomGenerator, board);
             LevelController.this.player = player;
             board.setPlayer(player);
             super.registerEventObservers(player, board, levelFlow, gameEventObserver);

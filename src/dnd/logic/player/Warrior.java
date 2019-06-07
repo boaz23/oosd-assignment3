@@ -4,6 +4,7 @@ import dnd.dto.levelup.WarriorLevelUpDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.dto.units.WarriorDTO;
 import dnd.logic.LogicException;
+import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.random_generator.RandomGenerator;
@@ -28,10 +29,12 @@ public class Warrior extends Player {
     protected Warrior(String name,
                       int healthPool, int attack, int defense,
                       Tick cooldown,
+                      Point position,
                       RandomGenerator randomGenerator,
                       Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
         this.init(cooldown);
+        this.position = position;
     }
 
     private void init(Tick cooldown) {
@@ -90,11 +93,12 @@ public class Warrior extends Player {
     }
 
     @Override
-    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Warrior(
                 this.name,
                 this.healthPool, this.attack, this.defense,
                 this.coolDown,
+                position,
                 randomGenerator, board
         );
     }

@@ -1,6 +1,7 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.logic.LogicException;
+import dnd.logic.Point;
 import dnd.logic.board.Board;
 import dnd.logic.random_generator.RandomGenerator;
 
@@ -23,7 +24,7 @@ public class FreeTile implements TileOccupier {
     }
 
     @Override
-    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new FreeTile();
     }
 }

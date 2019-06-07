@@ -93,28 +93,28 @@ abstract class PrintEventsView implements View {
 
     private String formatString(PlayerDTO playerDTO) {
         String playerInfo = formatString((UnitDTO)playerDTO);
-        playerInfo += "\t\tLevel: " + playerDTO.level + "\t\tExperience: " + playerDTO.experience + "/" + playerDTO.totalExperienceToNextLevel + "\n";
+        playerInfo += "\t\tLevel: " + playerDTO.level + "\t\tExperience: " + playerDTO.experience + "/" + playerDTO.totalExperienceToNextLevel;
         return playerInfo;
     }
 
     @Override
     public String formatString(MageDTO mage) {
         String mageInfo = formatString((PlayerDTO)mage);
-        mageInfo += "\t\tSpellPower: " + mage.spellPower + "\t\tMana: " + mage.currentMana + "/" + mage.manaPool + "\n";
+        mageInfo += "\t\tSpellPower: " + mage.spellPower + "\t\tMana: " + mage.currentMana + "/" + mage.manaPool;
         return mageInfo;
     }
 
     @Override
     public String formatString(WarriorDTO warrior) {
         String warriorInfo = formatString((PlayerDTO)warrior);
-        warriorInfo += "\t\tAbility cooldown: " + warrior.abilityCooldown + "\t\tRemaining: " + warrior.remaining + "\n";
+        warriorInfo += "\t\tAbility cooldown: " + warrior.abilityCooldown + "\t\tRemaining: " + warrior.remaining;
         return warriorInfo;
     }
 
     @Override
     public String formatString(RogueDTO rouge) {
         String rougeInfo = formatString((PlayerDTO)rouge);
-        rougeInfo += "\t\tEnergy: " + rouge.currentEnergy + "/" + rouge.maxEnergy + "\n";
+        rougeInfo += "\t\tEnergy: " + rouge.currentEnergy + "/" + rouge.maxEnergy;
         return rougeInfo;
     }
 
@@ -124,14 +124,14 @@ abstract class PrintEventsView implements View {
     }
 
     public String formatString(LevelUpDTO levelUpDTO) {
-        String levelUpInfo = "Level up: +" + levelUpDTO.healthBonus + " Health, +" + levelUpDTO.attackBonus + " Attack, +" + levelUpDTO.defenseBonus + " Defense\n";
+        String levelUpInfo = "Level up: +" + levelUpDTO.healthBonus + " Health, +" + levelUpDTO.attackBonus + " Attack, +" + levelUpDTO.defenseBonus + " Defense";
         return levelUpInfo;
     }
 
     @Override
     public String formatString(MageLevelUpDTO mageLevelUp) {
         String mageLevelUpInfo = formatString((LevelUpDTO)mageLevelUp) +
-                                "\t\t+" + mageLevelUp.manaPoolBonus + " maximum mana, +"
+                                "\n\t\t+" + mageLevelUp.manaPoolBonus + " maximum mana, +"
                                  + mageLevelUp.spellPowerBonus + " spell power";
         return mageLevelUpInfo;
     }

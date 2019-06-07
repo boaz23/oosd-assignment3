@@ -3,23 +3,23 @@ package dnd.logic;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LevelFlow implements DeathObserver, LevelEndObserver {
     private Tick tick;
-    private Set<TickObserver> tickObservers;
+    private List<TickObserver> tickObservers;
 
     private boolean stopTurns;
 
     public LevelFlow() {
-        tickObservers = new HashSet<>();
+        tickObservers = new ArrayList<>();
         tick = Tick.Zero;
         this.stopTurns = false;
     }
 
     public void addTickObserver(TickObserver observer) {
-        tickObservers.add(observer);
+        this.tickObservers.add(observer);
     }
 
     public void onTick() {
@@ -28,6 +28,8 @@ public class LevelFlow implements DeathObserver, LevelEndObserver {
         TickObserver[] tickObservers = this.tickObservers.toArray(new TickObserver[] {});
         for (int i = 0; i < tickObservers.length & !this.stopTurns; i++) {
             TickObserver observer = tickObservers[i];
+
+            // may have been removed
             if (this.tickObservers.contains(observer)) {
                 observer.onTick(tick);
             }

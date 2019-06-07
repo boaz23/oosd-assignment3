@@ -1,5 +1,6 @@
 package dnd.logic.enemies;
 
+import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
@@ -28,10 +29,12 @@ public class Monster extends Enemy {
                       int healthPool, int attack, int defense,
                       int experienceValue, char tile,
                       int range,
+                      Point position,
                       RandomGenerator randomGenerator,
                       Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
         this.init(range);
+        this.position = position;
     }
 
     private void init(int range) {
@@ -86,12 +89,13 @@ public class Monster extends Enemy {
     }
 
     @Override
-    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Monster(
                 this.name,
                 this.healthPool, this.attack, this.defense,
                 this.experienceValue, this.tile,
                 this.range,
+                position,
                 randomGenerator, board);
     }
 

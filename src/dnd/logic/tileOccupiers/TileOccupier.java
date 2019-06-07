@@ -1,6 +1,7 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.logic.LogicException;
+import dnd.logic.Point;
 import dnd.logic.board.Board;
 import dnd.logic.random_generator.RandomGenerator;
 
@@ -10,5 +11,5 @@ public interface TileOccupier {
 
     boolean isFree();
 
-    TileOccupier clone(RandomGenerator randomGenerator, Board board);
+    TileOccupier clone(Point poisiton, RandomGenerator randomGenerator, Board board);
 }

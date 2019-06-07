@@ -4,6 +4,7 @@ import dnd.dto.levelup.MageLevelUpDTO;
 import dnd.dto.units.MageDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.LogicException;
+import dnd.logic.Point;
 import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
@@ -38,10 +39,12 @@ public class Mage extends Player {
                    int healthPool, int attack, int defense,
                    int spellPower, int manaPool, int cost,
                    int hitTimes, int range,
+                   Point position,
                    RandomGenerator randomGenerator,
                    Board board) {
         super(name, healthPool, attack, defense, randomGenerator, board);
         this.init(spellPower, manaPool, cost, hitTimes, range);
+        this.position = position;
     }
 
     private void init(int spellPower, int manaPool, int cost, int hitTimes, int range) {
@@ -141,12 +144,13 @@ public class Mage extends Player {
     }
 
     @Override
-    public TileOccupier clone(RandomGenerator randomGenerator, Board board) {
+    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
         return new Mage(
                 this.name,
                 this.healthPool, this.attack, this.defense,
                 this.spellPower, this.manaPool, this.cost,
                 this.hitTimes, this.range,
+                position,
                 randomGenerator,
                 board
         );

@@ -16,10 +16,11 @@ public class AvailablePlayers {
             400, 20, 6,
             new Tick(4));
 
+    // TODO: change spellpower back to 40
     public static final Mage Melisandre = new Mage(
             "Melisandre",
             160, 10, 1,
-            40, 300, 30,
+            15, 300, 30,
             5, 6
     );
     public static final Mage ThorosOfMyr = new Mage(
