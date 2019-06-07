@@ -19,20 +19,19 @@ public class Main {
         ActionReader actionReader;
         RandomGenerator randomGenerator;
         Printer printer = new ConsolePrinter();
-        if (args != null && args.length >= 2 && args[1].equals("-D")) {
-            try {
-                String filesDirPath = args[0];
-                char lastPathChar = filesDirPath.charAt(filesDirPath.length() - 1);
-                if (lastPathChar != '/' & lastPathChar != '\\') {
-                    filesDirPath += "\\";
-                }
+        if (args == null || args.length == 0) {
+            return 1;
+        }
 
+        String filesDirPath = getFilesDirPath(args[0]);
+        if (args.length >= 2 && args[1].equals("-D")) {
+            try {
                 actionReader = new FileActionReader(filesDirPath + "user_actions.txt");
                 randomGenerator = new FileRandomGenerator(filesDirPath + "random_numbers.txt");
             } catch (FileNotFoundException e) {
                 System.out.println("file not found.");
                 e.printStackTrace();
-                return 1;
+                return 2;
             }
         }
         else {
@@ -40,9 +39,18 @@ public class Main {
             randomGenerator = new Randomizer();
         }
 
-        LevelController levelController = new LevelController(System.getProperty("user.dir"), randomGenerator);
+        LevelController levelController = new LevelController(filesDirPath, randomGenerator);
         CliView view  = new CliView(printer, actionReader, levelController);
         view.startGame();
         return 0;
+    }
+
+    private static String getFilesDirPath(String arg) {
+        String filesDirPath = arg;
+        char lastPathChar = filesDirPath.charAt(filesDirPath.length() - 1);
+        if (lastPathChar != '/' & lastPathChar != '\\') {
+            filesDirPath += "\\";
+        }
+        return filesDirPath;
     }
 }

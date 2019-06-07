@@ -81,8 +81,8 @@ abstract class PrintEventsView implements View {
         printer.printLine(output);
     }
 
-    private String resolveFormatString(PlayerDTO playerDTO) { return playerDTO.accept(this); }
-    private String resolveFormatString(LevelUpDTO levelUp) {
+    protected String resolveFormatString(PlayerDTO playerDTO) { return playerDTO.accept(this); }
+    protected String resolveFormatString(LevelUpDTO levelUp) {
         return levelUp.accept(this);
     }
 

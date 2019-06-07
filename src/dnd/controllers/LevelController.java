@@ -4,12 +4,13 @@ import dnd.GameEventObserver;
 import dnd.cli.view.View;
 import dnd.controllers.tile_occupiers_factories.EnemyFactory;
 import dnd.controllers.tile_occupiers_factories.InanimateFactory;
-import dnd.controllers.tile_occupiers_factories.PlayerFactory;
 import dnd.controllers.tile_occupiers_factories.TileOccupierFactory;
+import dnd.dto.units.PlayerDTO;
 import dnd.logic.LevelEndObserver;
 import dnd.logic.LevelFlow;
 import dnd.logic.available_units.AvailableInanimate;
 import dnd.logic.available_units.AvailableMonsters;
+import dnd.logic.available_units.AvailablePlayers;
 import dnd.logic.available_units.AvailableTraps;
 import dnd.logic.board.Board;
 import dnd.logic.board.BoardImpl;
@@ -35,10 +36,6 @@ public class LevelController implements LevelEndObserver {
     private Player player;
     private Board board;
     private View view;
-
-    static {
-
-    }
 
     public LevelController(String levelsDirPath, RandomGenerator randomGenerator) {
         if (randomGenerator == null) {
@@ -105,10 +102,29 @@ public class LevelController implements LevelEndObserver {
         return tiles;
     }
 
-    public void choosePlayer(int choise) {
-        Player player;
+    public PlayerDTO[] getPlayerChoises() {
+        Player[] avaiablePlayers = AvailablePlayers.Players;
+        PlayerDTO[] playerChoises = new PlayerDTO[avaiablePlayers.length];
+        for (int i = 0; i < avaiablePlayers.length; i++) {
+            playerChoises[i] = (PlayerDTO)avaiablePlayers[i].createDTO();
+        }
+
+        return playerChoises;
+    }
+
+    public PlayerDTO choosePlayer(int choise) {
+        if (0 > choise | choise >= AvailablePlayers.Players.length) {
+            return null;
+        }
+
+        Player player = AvailablePlayers.Players[choise];
         this.player = player;
-        this.tilesFactory.put(player.toTileChar(), new PlayerFactory(player));
+        this.tilesFactory.put(player.toTileChar(), this.new PlayerFactory(player));
+        return (PlayerDTO)player.createDTO();
+    }
+
+    public PlayerDTO getPlayer() {
+        return (PlayerDTO)this.player.createDTO();
     }
 
     @Override
@@ -126,7 +142,7 @@ public class LevelController implements LevelEndObserver {
     }
 
     private File getLevelFile(int level) {
-        return new File(this.levelsDirPath + "\\Level_" + level + ".txt");
+        return new File(this.levelsDirPath + "Level " + level + ".txt");
     }
 
     private ActionController loadLevel(File levelFile) {
@@ -213,5 +229,22 @@ public class LevelController implements LevelEndObserver {
         unit.addDeathObserver(board);
         unit.addDeathObserver(levelFlow);
         unit.addGameEventObserver(gameEventObserver);
+    }
+
+    private class PlayerFactory extends UnitFactory {
+        private final Player player;
+
+        PlayerFactory(Player player) {
+            this.player = player;
+        }
+
+        @Override
+        public TileOccupier createTileOccupier(RandomGenerator randomGenerator, BoardImpl board, LevelFlow levelFlow, GameEventObserver gameEventObserver) {
+            Player player = (Player)this.player.clone(randomGenerator, board);
+            LevelController.this.player = player;
+            board.setPlayer(player);
+            super.registerEventObservers(player, board, levelFlow, gameEventObserver);
+            return player;
+        }
     }
 }

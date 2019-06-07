@@ -5,6 +5,7 @@ import dnd.cli.action_reader.ActionReader;
 import dnd.cli.printer.Printer;
 import dnd.controllers.ActionController;
 import dnd.controllers.LevelController;
+import dnd.dto.units.PlayerDTO;
 
 import java.util.HashMap;
 
@@ -51,32 +52,70 @@ public class CliView extends PrintEventsView {
         this.levelComplete = false;
     }
 
-    private void loadNextLevel() {
-        this.currentLevel++;
-        this.actionController = this.levelController.loadLevel(this.currentLevel);
-    }
-
-    private void act() {
-        String nextAction = this.actionReader.nextAction();
-        if (!actions.containsKey(nextAction)) {
-            this.printer.printLine("Action '" + nextAction + "' is not defined");
-        }
-        else {
-            boolean result = actions.get(nextAction).doAction(this.actionController);
-            if (!result) {
-                this.printer.printLine("Illegal move or action.");
-            }
-        }
-    }
-
     public void startGame() {
+        this.selectPlayerAndShowControls();
+        this.startLevelsPlay();
+    }
+
+    private void selectPlayerAndShowControls() {
+        this.showPlayerSelectMenu();
+        PlayerDTO playerChoise = this.choosePlayer();
+        this.printPlayerChoise(playerChoise);
+        this.printControls();
+    }
+
+    private void showPlayerSelectMenu() {
+        this.printer.printLine("Select player:");
+        PlayerDTO[] playerChoises = this.levelController.getPlayerChoises();
+        for (PlayerDTO playerChoise : playerChoises) {
+            this.printer.printLine(this.resolveFormatString(playerChoise));
+        }
+    }
+
+    private PlayerDTO choosePlayer() {
+        PlayerDTO playerChoise = this.choosePlayerCore();
+        while (playerChoise == null) {
+            this.printer.printLine("Select Player:");
+            playerChoise = this.choosePlayerCore();
+        }
+
+        return playerChoise;
+    }
+
+    private PlayerDTO choosePlayerCore() {
+        try {
+            int choise = Integer.parseInt(this.actionReader.nextAction());
+            return this.levelController.choosePlayer(choise);
+        }
+        catch (NumberFormatException ignored) {
+        }
+
+        return null;
+    }
+
+    private void printPlayerChoise(PlayerDTO playerChoise) {
+        this.printer.printLine("You have selected:");
+        this.printer.printLine(this.resolveFormatString(playerChoise));
+    }
+
+    private void printControls() {
+        this.printer.printLine("Use w/s/a/d to move.");
+        this.printer.printLine("Use e for special ability or q to pass.");
+    }
+
+    private void startLevelsPlay() {
         this.loadNextLevel();
         if (noLevelsExist()) {
-            this.printer.printLine("No levels are present.");
+            this.printer.printLine("No levels are present. exiting...");
         }
         else {
             this.doGameLoop();
         }
+    }
+
+    private void loadNextLevel() {
+        this.currentLevel++;
+        this.actionController = this.levelController.loadLevel(this.currentLevel);
     }
 
     private boolean noLevelsExist() {
@@ -87,10 +126,9 @@ public class CliView extends PrintEventsView {
         boolean gameFinished = false;
         while (!gameFinished) {
             while (!this.levelComplete) {
+                this.printBoard();
+                this.printPlayerStats();
                 this.act();
-                if (!this.levelComplete) {
-                    this.printBoard();
-                }
             }
 
             this.levelComplete = false;
@@ -110,6 +148,32 @@ public class CliView extends PrintEventsView {
         }
     }
 
+    private void printBoard() {
+        char[][] board = this.levelController.getBoard();
+        for (int i = 0; i < board.length; i++) {
+            String row = new String(board[i]);
+            this.printer.printLine(row);
+        }
+    }
+
+    private void printPlayerStats() {
+        this.printer.printLine("");
+        this.printer.printLine(this.resolveFormatString(this.levelController.getPlayer()));
+    }
+
+    private void act() {
+        String nextAction = this.actionReader.nextAction();
+        if (!actions.containsKey(nextAction)) {
+            this.printer.printLine("Action '" + nextAction + "' is not defined");
+        }
+        else {
+            boolean result = actions.get(nextAction).doAction(this.actionController);
+            if (!result) {
+                this.printer.printLine("Illegal move or action.");
+            }
+        }
+    }
+
     private void playerWin() {
         this.printer.printLine("Game is finished. You won!");
     }
@@ -117,14 +181,6 @@ public class CliView extends PrintEventsView {
     private void playerLose() {
         this.printer.printLine("You Lost.");
         this.printBoard();
-    }
-
-    private void printBoard() {
-        char[][] board = this.levelController.getBoard();
-        for (int i = 0; i < board.length; i++) {
-            String row = new String(board[i]);
-            this.printer.printLine(row);
-        }
     }
 
     @Override

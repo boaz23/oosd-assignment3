@@ -2,6 +2,7 @@ package dnd.logic.available_units;
 
 import dnd.logic.Tick;
 import dnd.logic.player.Mage;
+import dnd.logic.player.Player;
 import dnd.logic.player.Rogue;
 import dnd.logic.player.Warrior;
 
@@ -38,4 +39,13 @@ public class AvailablePlayers {
             250, 35, 3,
             60
     );
+
+    public static final Player[] Players = {
+            JonSnow,
+            TheHound,
+            Melisandre,
+            ThorosOfMyr,
+            AryaStark,
+            Bronn
+    };
 }
