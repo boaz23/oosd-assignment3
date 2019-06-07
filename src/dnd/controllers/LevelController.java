@@ -80,12 +80,12 @@ public class LevelController implements LevelEndObserver {
 
     public ActionController loadLevel(int level) {
         File levelFile = getLevelFile(level);
-        if (!hasLevel(levelFile)) {
-            view.onGameWin();
-            return null;
+        if (hasLevel(levelFile)) {
+            return loadLevel(levelFile);
         }
         else {
-            return loadLevel(levelFile);
+            view.onGameWin();
+            return null;
         }
     }
 

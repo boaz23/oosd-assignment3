@@ -21,8 +21,6 @@ public class FileRandomGenerator implements RandomGenerator, Closeable {
 
     @Override
     public void close() throws IOException {
-        if (reader != null) {
-            reader.close();
-        }
+        reader.close();
     }
 }

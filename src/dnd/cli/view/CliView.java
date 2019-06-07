@@ -165,14 +165,14 @@ public class CliView extends PrintEventsView {
 
     private void act() throws GameException {
         String nextAction = actionReader.nextAction();
-        if (!actions.containsKey(nextAction)) {
-            printer.printLine("Action '" + nextAction + "' is not defined");
-        }
-        else {
+        if (actions.containsKey(nextAction)) {
             boolean result = actions.get(nextAction).doAction(actionController);
             if (!result) {
                 printer.printLine("Illegal move or action.");
             }
+        }
+        else {
+            printer.printLine("Action '" + nextAction + "' is not defined");
         }
     }
 
