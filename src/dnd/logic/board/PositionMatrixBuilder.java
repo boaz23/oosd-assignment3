@@ -19,7 +19,7 @@ public class PositionMatrixBuilder {
     }
 
     public Point getPosition(int row, int column) {
-        return new PositionsMatrix.Indices(new Point(row, column)).getPosition();
+        return PositionsMatrix.Indices.getPosition(row, column);
     }
 
     public void set(int row, int column, TileOccupier tileOccupier) {

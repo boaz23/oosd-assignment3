@@ -66,8 +66,8 @@ public class PositionsMatrix {
     }
 
     static class Indices {
-        int i;
-        int j;
+        private int i;
+        private int j;
 
         Indices(Point position) {
             if (position == null) {
@@ -78,8 +78,9 @@ public class PositionsMatrix {
             j = position.getX();
         }
 
-        Point getPosition() {
-            return new Point(i, j);
+        static Point getPosition(int row, int column) {
+            Indices indices = new Indices(new Point(row, column));
+            return new Point(indices.i, indices.j);
         }
     }
 }
