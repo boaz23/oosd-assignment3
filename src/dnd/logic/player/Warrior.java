@@ -41,7 +41,7 @@ public class Warrior extends Player {
 
         super.levelUp();
         resetCooldown();
-        healthPool = level * LEVEL_HEALTH_DIFF;
+        healthPool += level * LEVEL_HEALTH_DIFF;
         defense += level * LEVEL_DEFENSE_DIFF;
 
         calculateLevelUpStatsDiffs(warriorLevelUpDTO);
@@ -60,7 +60,7 @@ public class Warrior extends Player {
     @Override
     protected void useSpecialAbilityCore() {
         remaining = coolDown;
-        currentHealth += Math.min(currentHealth + (defense * ABILITY_HEAL_POWER), healthPool);
+        currentHealth = Math.min(currentHealth + (defense * ABILITY_HEAL_POWER), healthPool);
     }
 
     @Override

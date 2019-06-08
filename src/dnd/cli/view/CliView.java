@@ -77,7 +77,7 @@ public class CliView extends PrintEventsView {
     private PlayerDTO choosePlayer() {
         PlayerDTO playerChoice = choosePlayerCore();
         while (playerChoice == null) {
-            printer.printLine("Select Player:");
+            printer.printLine("Invalid player selection.");
             playerChoice = choosePlayerCore();
         }
 
@@ -127,14 +127,18 @@ public class CliView extends PrintEventsView {
     private void doGameLoop() throws GameException {
         boolean gameFinished = false;
         while (!gameFinished) {
-            while (!levelComplete) {
+            while (!levelComplete && gameResult == null) {
                 printBoard();
                 printPlayerStats();
-                act();
+                while (!act()) { }
             }
 
             levelComplete = false;
-            loadNextLevel();
+            if (gameResult == null) {
+                loadNextLevel();
+            }
+
+            // may have been changed by loading the next level
             if (gameResult != null) {
                 switch (gameResult) {
                     case Win:
@@ -163,17 +167,21 @@ public class CliView extends PrintEventsView {
         printer.printLine(resolveFormatString(levelController.getPlayer()));
     }
 
-    private void act() throws GameException {
+    private boolean act() throws GameException {
+        boolean isActionValid;
         String nextAction = actionReader.nextAction();
         if (actions.containsKey(nextAction)) {
-            boolean result = actions.get(nextAction).doAction(actionController);
-            if (!result) {
+            isActionValid = actions.get(nextAction).doAction(actionController);
+            if (!isActionValid) {
                 printer.printLine("Illegal move or action.");
             }
         }
         else {
+            isActionValid = false;
             printer.printLine("Action '" + nextAction + "' is not defined");
         }
+
+        return isActionValid;
     }
 
     private void playerWin() {
