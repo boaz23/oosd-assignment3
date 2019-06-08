@@ -86,46 +86,46 @@ abstract class PrintEventsView implements View {
         return dto.accept(this);
     }
 
-    private String formatString(UnitDTO unit) {
+    private String formatUnitString(UnitDTO unit) {
         return unit.name + "\t\tHealth: " + unit.currentHealth +
             "\t\tAttack damage: " + unit.attack +
             "\t\tDefense: " + unit.defense;
     }
 
-    private String formatString(PlayerDTO playerDTO) {
-        String playerInfo = formatString((UnitDTO)playerDTO) + "\n";
+    private String formatPlayerString(PlayerDTO playerDTO) {
+        String playerInfo = formatUnitString(playerDTO) + "\n";
         playerInfo += "\t\tLevel: " + playerDTO.level + "\t\tExperience: " + playerDTO.experience + "/" + playerDTO.totalExperienceToNextLevel;
         return playerInfo;
     }
 
     @Override
     public String formatString(MageDTO mage) {
-        String mageInfo = formatString((PlayerDTO)mage);
+        String mageInfo = formatPlayerString(mage);
         mageInfo += "\t\tSpellPower: " + mage.spellPower + "\t\tMana: " + mage.currentMana + "/" + mage.manaPool;
         return mageInfo;
     }
 
     @Override
     public String formatString(WarriorDTO warrior) {
-        String warriorInfo = formatString((PlayerDTO)warrior);
+        String warriorInfo = formatPlayerString(warrior);
         warriorInfo += "\t\tAbility cooldown: " + warrior.abilityCooldown + "\t\tRemaining: " + warrior.remaining;
         return warriorInfo;
     }
 
     @Override
-    public String formatString(RogueDTO rouge) {
-        String rougeInfo = formatString((PlayerDTO)rouge);
-        rougeInfo += "\t\tEnergy: " + rouge.currentEnergy + "/" + rouge.maxEnergy;
+    public String formatString(RogueDTO rogueDTO) {
+        String rougeInfo = formatPlayerString(rogueDTO);
+        rougeInfo += "\t\tEnergy: " + rogueDTO.currentEnergy + "/" + rogueDTO.maxEnergy;
         return rougeInfo;
     }
 
     @Override
     public String formatString(EnemyDTO enemy) {
-        return formatString((UnitDTO)enemy);
+        return formatUnitString(enemy);
     }
 
     @SuppressWarnings("WeakerAccess")
-    String formatString(LevelUpDTO levelUpDTO) {
+    String formatLevelUpString(LevelUpDTO levelUpDTO) {
         return "Level up: +" +
             levelUpDTO.healthBonus + " Health, +" +
             levelUpDTO.attackBonus + " Attack, +" +
@@ -134,18 +134,18 @@ abstract class PrintEventsView implements View {
 
     @Override
     public String formatString(MageLevelUpDTO mageLevelUp) {
-        return formatString((LevelUpDTO)mageLevelUp) +
+        return formatLevelUpString(mageLevelUp) +
             "\n\t\t+" + mageLevelUp.manaPoolBonus + " maximum mana, +"
             + mageLevelUp.spellPowerBonus + " spell power";
     }
 
     @Override
-    public String formatString(RogueLevelUpDTO rougeLevelUp) {
-        return formatString((LevelUpDTO)rougeLevelUp);
+    public String formatString(RogueLevelUpDTO rogueLevelUpDTO) {
+        return formatLevelUpString(rogueLevelUpDTO);
     }
 
     @Override
     public String formatString(WarriorLevelUpDTO warriorLevelUp) {
-        return formatString((LevelUpDTO)warriorLevelUp);
+        return formatLevelUpString(warriorLevelUp);
     }
 }

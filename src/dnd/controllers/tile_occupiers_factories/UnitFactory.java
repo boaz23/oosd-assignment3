@@ -1,7 +1,6 @@
-package dnd.controllers;
+package dnd.controllers.tile_occupiers_factories;
 
 import dnd.GameEventObserver;
-import dnd.controllers.tile_occupiers_factories.TileOccupierFactory;
 import dnd.logic.LevelFlow;
 import dnd.logic.board.InitializableBoard;
 import dnd.logic.tileOccupiers.Unit;

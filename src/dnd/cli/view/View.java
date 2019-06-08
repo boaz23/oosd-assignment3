@@ -16,9 +16,9 @@ public interface View extends GameEventObserver {
 
     String formatString(MageDTO mage);
     String formatString(WarriorDTO warrior);
-    String formatString(RogueDTO rouge);
+    String formatString(RogueDTO rogueDTO);
     String formatString(EnemyDTO enemy);
     String formatString(MageLevelUpDTO mageLevelUp);
-    String formatString(RogueLevelUpDTO rougeLevelUp);
+    String formatString(RogueLevelUpDTO rogueLevelUpDTO);
     String formatString(WarriorLevelUpDTO warriorLevelUp);
 }

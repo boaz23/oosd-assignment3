@@ -66,8 +66,8 @@ public class PositionsMatrix {
     }
 
     static class Indices {
-        private int i;
-        private int j;
+        private final int i;
+        private final int j;
 
         Indices(Point position) {
             if (position == null) {

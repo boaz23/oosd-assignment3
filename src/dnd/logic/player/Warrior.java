@@ -53,15 +53,15 @@ public class Warrior extends Player {
 
     @Override
     protected void levelUp() {
-        WarriorLevelUpDTO rougeLevelUpDTO = initLevelUpDto(new WarriorLevelUpDTO());
+        WarriorLevelUpDTO warriorLevelUpDTO = initLevelUpDto(new WarriorLevelUpDTO());
 
         super.levelUp();
         resetCooldown();
         healthPool = level * LEVEL_HEALTH_DIFF;
         defense += level * LEVEL_DEFENSE_DIFF;
 
-        calculateLevelUpStatsDiffs(rougeLevelUpDTO);
-        callLevelUpObservers(rougeLevelUpDTO);
+        calculateLevelUpStatsDiffs(warriorLevelUpDTO);
+        callLevelUpObservers(warriorLevelUpDTO);
     }
 
     @Override

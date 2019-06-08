@@ -9,7 +9,7 @@ public class RogueLevelUpDTO extends LevelUpDTO {
     }
 
     @Override
-    public LevelUpDTO clone() {
+    public RogueLevelUpDTO clone() {
         RogueLevelUpDTO rogueLevelUpDTO = new RogueLevelUpDTO();
         rogueLevelUpDTO.healthBonus = healthBonus;
         rogueLevelUpDTO.attackBonus = attackBonus;

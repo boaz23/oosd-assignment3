@@ -1,7 +1,7 @@
 package dnd.logic.player;
 
 import dnd.GameException;
-import dnd.dto.levelup.RougeLevelUpDTO;
+import dnd.dto.levelup.RogueLevelUpDTO;
 import dnd.dto.units.RogueDTO;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.LogicException;
@@ -53,14 +53,14 @@ public class Rogue extends Player {
 
     @Override
     protected void levelUp() {
-        RougeLevelUpDTO rougeLevelUpDTO = initLevelUpDto(new RougeLevelUpDTO());
+        RogueLevelUpDTO rogueLevelUpDTO = initLevelUpDto(new RogueLevelUpDTO());
 
         super.levelUp();
         currentEnergy = MAX_ENERGY;
         attack += level * LEVEL_ATTACK_DIFF;
 
-        calculateLevelUpStatsDiffs(rougeLevelUpDTO);
-        callLevelUpObservers(rougeLevelUpDTO);
+        calculateLevelUpStatsDiffs(rogueLevelUpDTO);
+        callLevelUpObservers(rogueLevelUpDTO);
     }
 
     @Override

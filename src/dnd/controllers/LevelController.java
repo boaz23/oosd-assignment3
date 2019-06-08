@@ -5,6 +5,7 @@ import dnd.cli.view.View;
 import dnd.controllers.tile_occupiers_factories.EnemyFactory;
 import dnd.controllers.tile_occupiers_factories.InanimateFactory;
 import dnd.controllers.tile_occupiers_factories.TileOccupierFactory;
+import dnd.controllers.tile_occupiers_factories.UnitFactory;
 import dnd.dto.units.PlayerDTO;
 import dnd.logic.LevelEndObserver;
 import dnd.logic.LevelFlow;
