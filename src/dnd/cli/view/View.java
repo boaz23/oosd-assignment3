@@ -2,7 +2,7 @@ package dnd.cli.view;
 
 import dnd.GameEventObserver;
 import dnd.dto.levelup.MageLevelUpDTO;
-import dnd.dto.levelup.RougeLevelUpDTO;
+import dnd.dto.levelup.RogueLevelUpDTO;
 import dnd.dto.levelup.WarriorLevelUpDTO;
 import dnd.dto.units.EnemyDTO;
 import dnd.dto.units.MageDTO;
@@ -19,6 +19,6 @@ public interface View extends GameEventObserver {
     String formatString(RogueDTO rouge);
     String formatString(EnemyDTO enemy);
     String formatString(MageLevelUpDTO mageLevelUp);
-    String formatString(RougeLevelUpDTO rougeLevelUp);
+    String formatString(RogueLevelUpDTO rougeLevelUp);
     String formatString(WarriorLevelUpDTO warriorLevelUp);
 }

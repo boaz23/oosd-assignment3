@@ -4,7 +4,7 @@ import dnd.cli.printer.Printer;
 import dnd.dto.DTO;
 import dnd.dto.levelup.LevelUpDTO;
 import dnd.dto.levelup.MageLevelUpDTO;
-import dnd.dto.levelup.RougeLevelUpDTO;
+import dnd.dto.levelup.RogueLevelUpDTO;
 import dnd.dto.levelup.WarriorLevelUpDTO;
 import dnd.dto.units.*;
 
@@ -140,7 +140,7 @@ abstract class PrintEventsView implements View {
     }
 
     @Override
-    public String formatString(RougeLevelUpDTO rougeLevelUp) {
+    public String formatString(RogueLevelUpDTO rougeLevelUp) {
         return formatString((LevelUpDTO)rougeLevelUp);
     }
 
