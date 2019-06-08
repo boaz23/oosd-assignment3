@@ -1,12 +1,8 @@
 package dnd.logic.enemies;
 
 import dnd.GameException;
-import dnd.logic.Point;
 import dnd.logic.Tick;
-import dnd.logic.board.Board;
 import dnd.logic.player.Player;
-import dnd.logic.random_generator.RandomGenerator;
-import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Monster extends Enemy {
     private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[]{
@@ -27,19 +23,6 @@ public class Monster extends Enemy {
         init(range);
     }
 
-    @SuppressWarnings("WeakerAccess")
-    Monster(String name,
-            int healthPool, int attack, int defense,
-            int experienceValue, char tile,
-            int range,
-            Point position,
-            RandomGenerator randomGenerator,
-            Board board) {
-        super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
-        init(range);
-        this.position = position;
-    }
-
     private void init(int range) {
         if (range <= 0) {
             throw new IllegalArgumentException("monster vision range must be a positive number.");
@@ -48,7 +31,6 @@ public class Monster extends Enemy {
         this.range = range;
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) throws GameException {
         Player player = board.getPlayerInRange(position, range);
@@ -93,19 +75,17 @@ public class Monster extends Enemy {
         MoveDirections[move].move(this);
     }
 
-    @SuppressWarnings("EmptyMethod")
     private void doNothing() {
     }
 
     @Override
-    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
+    public Monster clone() {
         return new Monster(
             name,
             healthPool, attack, defense,
             experienceValue, tile,
-            range,
-            position,
-            randomGenerator, board);
+            range
+        );
     }
 
     private interface MoveInDirectionAction {

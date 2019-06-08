@@ -2,15 +2,17 @@ package dnd.logic.tileOccupiers;
 
 import dnd.GameException;
 import dnd.logic.MoveResult;
-import dnd.logic.Point;
-import dnd.logic.board.Board;
-import dnd.logic.random_generator.RandomGenerator;
 
-public interface TileOccupier {
-    char toTileChar();
-    MoveResult accept(TileVisitor visitor) throws GameException;
+public abstract class TileOccupier {
+    public abstract char toTileChar();
+    protected abstract MoveResult accept(TileVisitor visitor) throws GameException;
 
-    boolean isFree();
+    public abstract boolean isFree();
 
-    TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board);
+    @Override
+    public String toString() {
+        return toTileChar() + "";
+    }
+
+    public abstract TileOccupier clone();
 }

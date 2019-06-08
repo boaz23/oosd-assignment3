@@ -2,7 +2,6 @@ package dnd.logic;
 
 import dnd.GameException;
 
-@SuppressWarnings("unused")
 public class PositionOutOfBoundsException extends GameException {
     public PositionOutOfBoundsException() {
     }

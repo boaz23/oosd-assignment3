@@ -3,14 +3,9 @@ package dnd.logic.player;
 import dnd.GameException;
 import dnd.dto.levelup.MageLevelUpDTO;
 import dnd.dto.units.MageDTO;
-import dnd.dto.units.UnitDTO;
 import dnd.logic.LogicException;
-import dnd.logic.Point;
 import dnd.logic.Tick;
-import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
-import dnd.logic.random_generator.RandomGenerator;
-import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -34,19 +29,6 @@ public class Mage extends Player {
                 int hitTimes, int range) {
         super(name, healthPool, attack, defense);
         init(spellPower, manaPool, cost, hitTimes, range);
-    }
-
-    private Mage(String name,
-                 int healthPool, int attack, int defense,
-                 int experience, int level,
-                 int spellPower, int manaPool, int cost,
-                 int hitTimes, int range,
-                 Point position,
-                 RandomGenerator randomGenerator,
-                 Board board) {
-        super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
-        init(spellPower, manaPool, cost, hitTimes, range);
-        this.position = position;
     }
 
     private void init(int spellPower, int manaPool, int cost, int hitTimes, int range) {
@@ -106,11 +88,16 @@ public class Mage extends Player {
     }
 
     @Override
-    public void useSpecialAbilityCore() throws GameException {
+    public void useSpecialAbility() throws GameException {
         if (currentMana < cost) {
             throw new LogicException("Cannot use special ability due insufficient mana.");
         }
 
+        super.useSpecialAbility();
+    }
+
+    @Override
+    protected void useSpecialAbilityCore() throws GameException {
         currentMana -= cost;
         List<Enemy> enemiesInRange = board.getEnemiesInRange(position, range);
         for (int hits = 0; hits < hitTimes & !enemiesInRange.isEmpty(); hits++) {
@@ -128,14 +115,13 @@ public class Mage extends Player {
         return "Blizzard";
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
         currentMana = Math.min(manaPool, currentMana + MANA_REGEN);
     }
 
     @Override
-    public UnitDTO createDTO() {
+    public MageDTO createDTO() {
         MageDTO mageDTO = new MageDTO();
         fillPlayerDtoFields(mageDTO);
         mageDTO.currentMana = currentMana;
@@ -145,16 +131,12 @@ public class Mage extends Player {
     }
 
     @Override
-    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
+    public Mage clone() {
         return new Mage(
             name,
             healthPool, attack, defense,
-            experience, level,
             spellPower, manaPool, cost,
-            hitTimes, range,
-            position,
-            randomGenerator,
-            board
+            hitTimes, range
         );
     }
 }

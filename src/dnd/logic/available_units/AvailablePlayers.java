@@ -6,7 +6,6 @@ import dnd.logic.player.Player;
 import dnd.logic.player.Rogue;
 import dnd.logic.player.Warrior;
 
-@SuppressWarnings("WeakerAccess")
 public class AvailablePlayers {
     public static final Warrior JonSnow = new Warrior(
         "Jon Snow",

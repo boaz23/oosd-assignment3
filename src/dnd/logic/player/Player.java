@@ -3,14 +3,11 @@ package dnd.logic.player;
 import dnd.GameEventObserver;
 import dnd.GameException;
 import dnd.dto.levelup.LevelUpDTO;
-import dnd.dto.units.EnemyDTO;
 import dnd.dto.units.PlayerDTO;
 import dnd.logic.DeathObserver;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
-import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileVisitor;
 import dnd.logic.tileOccupiers.Unit;
 
@@ -29,22 +26,8 @@ public abstract class Player extends Unit {
         init();
     }
 
-    Player(String name,
-           int healthPool, int attack, int defense,
-           int experience, int level,
-           RandomGenerator randomGenerator,
-           Board board) {
-        super(name, healthPool, attack, defense, randomGenerator, board);
-        init(experience, level);
-    }
-
     private void init() {
         level = 1;
-    }
-
-    private void init(int experience, int level) {
-        this.experience = experience;
-        this.level = level;
     }
 
     @Override
@@ -88,7 +71,7 @@ public abstract class Player extends Unit {
 
     private void callOnExpGainObservers(int exp) {
         for (GameEventObserver observer : gameEventObservers) {
-            observer.onExpGain((PlayerDTO)createDTO(), exp);
+            observer.onExpGain(createDTO(), exp);
         }
     }
 
@@ -102,13 +85,12 @@ public abstract class Player extends Unit {
 
     public void useSpecialAbility() throws GameException {
         callSpecialAbilityUseObservers();
-
         useSpecialAbilityCore();
     }
 
     private void callSpecialAbilityUseObservers() {
         for (GameEventObserver observer : gameEventObservers) {
-            observer.onCastingSpecialAbility((PlayerDTO)createDTO());
+            observer.onCastingSpecialAbility(createDTO());
         }
     }
 
@@ -151,7 +133,7 @@ public abstract class Player extends Unit {
 
     private void callOnPlayerEngageObservers(Enemy enemy) {
         for (GameEventObserver observer : gameEventObservers) {
-            observer.onPlayerEngage((PlayerDTO)createDTO(), (EnemyDTO)enemy.createDTO());
+            observer.onPlayerEngage(createDTO(), enemy.createDTO());
         }
     }
 
@@ -174,11 +156,17 @@ public abstract class Player extends Unit {
 
     private void callPlayerDeathObservers() {
         for (GameEventObserver observer : gameEventObservers) {
-            observer.onPlayerDeath((PlayerDTO)createDTO());
+            observer.onPlayerDeath(createDTO());
         }
     }
 
+    @Override
+    public abstract Player clone();
+
     protected abstract String getSpecialAbilityName();
+
+    @Override
+    public abstract PlayerDTO createDTO();
 
     void fillPlayerDtoFields(PlayerDTO playerDTO) {
         fillUnitDtoFields(playerDTO);

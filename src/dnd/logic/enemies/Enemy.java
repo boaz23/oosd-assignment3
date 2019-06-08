@@ -3,13 +3,9 @@ package dnd.logic.enemies;
 import dnd.GameEventObserver;
 import dnd.GameException;
 import dnd.dto.units.EnemyDTO;
-import dnd.dto.units.PlayerDTO;
-import dnd.dto.units.UnitDTO;
 import dnd.logic.DeathObserver;
 import dnd.logic.MoveResult;
-import dnd.logic.board.Board;
 import dnd.logic.player.Player;
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileVisitor;
 import dnd.logic.tileOccupiers.Unit;
 
@@ -21,15 +17,6 @@ public abstract class Enemy extends Unit {
           int healthPool, int attack, int defense,
           int experienceValue, char tile) {
         super(name, healthPool, attack, defense);
-        init(experienceValue, tile);
-    }
-
-    Enemy(String name,
-          int healthPool, int attack, int defense,
-          RandomGenerator randomGenerator,
-          Board board,
-          int experienceValue, char tile) {
-        super(name, healthPool, attack, defense, randomGenerator, board);
         init(experienceValue, tile);
     }
 
@@ -62,7 +49,7 @@ public abstract class Enemy extends Unit {
 
     private void callOnEnemyDeathObservers() {
         for (GameEventObserver observer : gameEventObservers) {
-            observer.onEnemyDeath((EnemyDTO)createDTO());
+            observer.onEnemyDeath(createDTO());
         }
     }
 
@@ -84,7 +71,7 @@ public abstract class Enemy extends Unit {
 
     void callEngageObservers(Player player) {
         for (GameEventObserver observer : gameEventObservers) {
-            observer.onEnemyEngage((EnemyDTO)createDTO(), (PlayerDTO)player.createDTO());
+            observer.onEnemyEngage(createDTO(), player.createDTO());
         }
     }
 
@@ -100,7 +87,7 @@ public abstract class Enemy extends Unit {
     }
 
     @Override
-    public UnitDTO createDTO() {
+    public EnemyDTO createDTO() {
         EnemyDTO enemyDTO = new EnemyDTO();
         fillUnitDtoFields(enemyDTO);
         return enemyDTO;
@@ -114,4 +101,7 @@ public abstract class Enemy extends Unit {
     public String toString() {
         return getTileChar() + ", " + name;
     }
+
+    @Override
+    public abstract Enemy clone();
 }

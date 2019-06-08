@@ -3,11 +3,8 @@ package dnd.logic.enemies;
 import dnd.GameException;
 import dnd.logic.Point;
 import dnd.logic.Tick;
-import dnd.logic.board.Board;
 import dnd.logic.player.Player;
-import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.FreeTile;
-import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -27,18 +24,6 @@ public class Trap extends Enemy {
                 int relocationRange, Tick relocationTime, Tick visibilityTime) {
         super(name, healthPool, attack, defense, experienceValue, tile);
         init(relocationRange, relocationTime, visibilityTime);
-    }
-
-    private Trap(String name,
-                 int healthPool, int attack, int defense,
-                 int experienceValue, char tile,
-                 int relocationRange, Tick relocationTime, Tick visibilityTime,
-                 Point position,
-                 RandomGenerator randomGenerator,
-                 Board board) {
-        super(name, healthPool, attack, defense, randomGenerator, board, experienceValue, tile);
-        init(relocationRange, relocationTime, visibilityTime);
-        this.position = position;
     }
 
     private void init(int relocationRange, Tick relocationTime, Tick visibilityTime) {
@@ -62,22 +47,13 @@ public class Trap extends Enemy {
         visible = true;
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) throws GameException {
         boolean relocated = checkRelocation();
         if (!relocated) {
             checkEngagePlayer();
         }
-
         updateVisibility();
-    }
-
-    private void checkEngagePlayer() throws GameException {
-        Player player = board.getPlayerInRange(position, ATTACK_RANGE);
-        if (player != null) {
-            engagePlayer(player);
-        }
     }
 
     private boolean checkRelocation() throws GameException {
@@ -101,6 +77,13 @@ public class Trap extends Enemy {
         move(freeTiles.get(tileIndex));
     }
 
+    private void checkEngagePlayer() throws GameException {
+        Player player = board.getPlayerInRange(position, ATTACK_RANGE);
+        if (player != null) {
+            engagePlayer(player);
+        }
+    }
+
     private void engagePlayer(Player player) throws GameException {
         callEngageObservers(player);
         meleeAttack(player);
@@ -110,7 +93,6 @@ public class Trap extends Enemy {
         visible = visibilityTime.isGreaterThan(ticksCount);
     }
 
-    @SuppressWarnings("WeakerAccess")
     public boolean isVisible() {
         return visible;
     }
@@ -125,15 +107,12 @@ public class Trap extends Enemy {
     }
 
     @Override
-    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
+    public Trap clone() {
         return new Trap(
             name,
             healthPool, attack, defense,
             experienceValue, tile,
-            relocationRange, relocationTime,
-            visibilityTime,
-            position,
-            randomGenerator, board
+            relocationRange, relocationTime, visibilityTime
         );
     }
 }

@@ -12,14 +12,14 @@ import dnd.logic.random_generator.RandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
+public abstract class Unit extends TileOccupier implements TickObserver, TileVisitor {
     protected final String name;
     protected int healthPool;
     protected int currentHealth;
     protected int attack;
     protected int defense;
-    protected Point position;
 
+    protected Point position;
     protected Board board;
     protected RandomGenerator randomGenerator;
 
@@ -46,25 +46,6 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         currentHealth = healthPool;
         this.attack = attack;
         this.defense = defense;
-
-        deathObservers = new ArrayList<>();
-        gameEventObservers = new ArrayList<>();
-    }
-
-    protected Unit(String name,
-                   int healthPool, int attack, int defense,
-                   RandomGenerator randomGenerator,
-                   Board board) {
-        this(name, healthPool, attack, defense);
-        if (randomGenerator == null) {
-            throw new IllegalArgumentException("randomGenerator is null.");
-        }
-        if (board == null) {
-            throw new IllegalArgumentException("unitsInRangeFinder is null.");
-        }
-
-        this.randomGenerator = randomGenerator;
-        this.board = board;
     }
 
     public Point getPosition() {
@@ -211,7 +192,7 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         return move(new Point(position.getX(), position.getY() + 1));
     }
 
-    public abstract UnitDTO createDTO();
+    protected abstract UnitDTO createDTO();
 
     protected void fillUnitDtoFields(UnitDTO unitDTO) {
         unitDTO.name = name;
@@ -219,6 +200,21 @@ public abstract class Unit implements TickObserver, TileOccupier, TileVisitor {
         unitDTO.currentHealth = currentHealth;
         unitDTO.attack = attack;
         unitDTO.defense = defense;
+    }
+
+    public void initNewLevelState(Point position, RandomGenerator randomGenerator, Board board) {
+        if (randomGenerator == null) {
+            throw new IllegalArgumentException("randomGenerator is null.");
+        }
+        if (board == null) {
+            throw new IllegalArgumentException("unitsInRangeFinder is null.");
+        }
+
+        deathObservers = new ArrayList<>();
+        gameEventObservers = new ArrayList<>();
+        this.randomGenerator = randomGenerator;
+        this.board = board;
+        this.position = position;
     }
 
     @Override

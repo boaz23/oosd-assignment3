@@ -3,7 +3,6 @@ package dnd.logic.available_units;
 import dnd.logic.Tick;
 import dnd.logic.enemies.Trap;
 
-@SuppressWarnings("WeakerAccess")
 public class AvailableTraps {
     public static final Trap BonusTrap = new Trap(
         "Bonus \"Trap\"",

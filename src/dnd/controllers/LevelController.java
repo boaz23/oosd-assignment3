@@ -2,8 +2,7 @@ package dnd.controllers;
 
 import dnd.GameEventObserver;
 import dnd.cli.view.View;
-import dnd.controllers.tile_occupiers_factories.EnemyFactory;
-import dnd.controllers.tile_occupiers_factories.InanimateFactory;
+import dnd.controllers.tile_occupiers_factories.FactoriesMapBuilder;
 import dnd.controllers.tile_occupiers_factories.TileOccupierFactory;
 import dnd.controllers.tile_occupiers_factories.UnitFactory;
 import dnd.dto.units.PlayerDTO;
@@ -18,19 +17,15 @@ import dnd.logic.board.BoardImpl;
 import dnd.logic.board.InitializableBoard;
 import dnd.logic.board.PositionMatrixBuilder;
 import dnd.logic.board.PositionsMatrix;
-import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileFactoryImpl;
 import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public class LevelController implements LevelEndObserver {
-    private Map<Character, TileOccupierFactory> tilesFactory;
-
     private final RandomGenerator randomGenerator;
     private final String levelsDirPath;
     private Player player;
@@ -44,27 +39,6 @@ public class LevelController implements LevelEndObserver {
 
         this.randomGenerator = randomGenerator;
         this.levelsDirPath = levelsDirPath;
-        initFactoriesMap();
-    }
-
-    private void initFactoriesMap() {
-        tilesFactory = new HashMap<>();
-        addEnemyFactories(AvailableMonsters.Monsters);
-        addEnemyFactories(AvailableTraps.Traps);
-        addInanimateFactories(AvailableInanimate.Inanimates);
-    }
-
-    private <T extends Enemy> void addEnemyFactories(T[] enemies) {
-        for (Enemy enemy : enemies) {
-            tilesFactory.put(enemy.getTileChar(), new EnemyFactory(enemy));
-        }
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private void addInanimateFactories(TileOccupier[] inanimates) {
-        for (TileOccupier inanimate : inanimates) {
-            tilesFactory.put(inanimate.toTileChar(), new InanimateFactory(inanimate));
-        }
     }
 
     public void setView(View view) {
@@ -107,7 +81,7 @@ public class LevelController implements LevelEndObserver {
         Player[] availablePlayers = AvailablePlayers.Players;
         PlayerDTO[] playerChoices = new PlayerDTO[availablePlayers.length];
         for (int i = 0; i < availablePlayers.length; i++) {
-            playerChoices[i] = (PlayerDTO)availablePlayers[i].createDTO();
+            playerChoices[i] = availablePlayers[i].createDTO();
         }
 
         return playerChoices;
@@ -119,13 +93,12 @@ public class LevelController implements LevelEndObserver {
         }
 
         Player player = AvailablePlayers.Players[choice - 1];
-        this.player = player;
-        tilesFactory.put(player.toTileChar(), this.new PlayerFactory());
-        return (PlayerDTO)player.createDTO();
+        this.player = player.clone();
+        return player.createDTO();
     }
 
     public PlayerDTO getPlayer() {
-        return (PlayerDTO)player.createDTO();
+        return player.createDTO();
     }
 
     @Override
@@ -175,22 +148,40 @@ public class LevelController implements LevelEndObserver {
     private ActionController loadLevel(BufferedReader reader) throws IOException {
         InitializableBoard board = new BoardImpl(new TileFactoryImpl());
         LevelFlow levelFlow = new LevelFlow();
-        this.board = board;
 
-        player.addDeathObserver(board);
-        player.addDeathObserver(levelFlow);
-
-        PositionsMatrix positionsMatrix = parseFile(board, levelFlow, reader);
-        board.setBoard(positionsMatrix);
-
+        levelFlow.addTickObserver(player);
         board.addLevelEndObserver(this);
         board.addLevelEndObserver(levelFlow);
-        levelFlow.insertTickObserverAsFirst(player);
+        this.board = board;
 
+        Map<Character, TileOccupierFactory> tileOccupierFactoryMap = prepareFactoriesMap(board, levelFlow);
+        PositionsMatrix positionsMatrix = parseFile(reader, tileOccupierFactoryMap);
+        board.setBoard(positionsMatrix);
         return new ActionController(board.getPlayer(), levelFlow);
     }
 
-    private PositionsMatrix parseFile(InitializableBoard board, LevelFlow levelFlow, BufferedReader reader) throws IOException {
+    private Map<Character, TileOccupierFactory> prepareFactoriesMap(InitializableBoard board, LevelFlow levelFlow) {
+        Map<Character, TileOccupierFactory> tileOccupierFactoryMap = new FactoriesMapBuilder()
+            .addEnemyFactories(AvailableMonsters.Monsters, randomGenerator, board, levelFlow, view)
+            .addEnemyFactories(AvailableTraps.Traps, randomGenerator, board, levelFlow, view)
+            .addInanimatesFactories(AvailableInanimate.Inanimates)
+            .build();
+        addPlayerFactory(board, levelFlow, tileOccupierFactoryMap);
+        return tileOccupierFactoryMap;
+    }
+
+    private void addPlayerFactory(
+        InitializableBoard board,
+        LevelFlow levelFlow,
+        Map<Character, TileOccupierFactory> tileOccupierFactoryMap
+    ) {
+        tileOccupierFactoryMap.put(player.toTileChar(), this.new PlayerFactory(randomGenerator, board, levelFlow, view));
+    }
+
+    private PositionsMatrix parseFile(
+        BufferedReader reader,
+        Map<Character, TileOccupierFactory> tileOccupierFactoryMap
+    ) throws IOException {
         PositionsMatrix positionsMatrix = null;
 
         String line = reader.readLine();
@@ -198,7 +189,7 @@ public class LevelController implements LevelEndObserver {
             int lineNum = 0;
             int boardWidth = line.length();
             PositionMatrixBuilder positionMatrixBuilder = new PositionMatrixBuilder(boardWidth);
-            parseFileLine(line, lineNum, positionMatrixBuilder, board, levelFlow);
+            parseFileLine(line, lineNum, positionMatrixBuilder, tileOccupierFactoryMap);
 
             while ((line = reader.readLine()) != null) {
                 if (line.length() != boardWidth) {
@@ -206,7 +197,7 @@ public class LevelController implements LevelEndObserver {
                 }
 
                 lineNum++;
-                parseFileLine(line, lineNum, positionMatrixBuilder, board, levelFlow);
+                parseFileLine(line, lineNum, positionMatrixBuilder, tileOccupierFactoryMap);
             }
 
             positionsMatrix = positionMatrixBuilder.build();
@@ -215,36 +206,39 @@ public class LevelController implements LevelEndObserver {
         return positionsMatrix;
     }
 
-    private void parseFileLine(String line, int lineNum, PositionMatrixBuilder positionMatrixBuilder, InitializableBoard board, LevelFlow levelFlow) {
+    private void parseFileLine(
+        String line,
+        int lineNum,
+        PositionMatrixBuilder positionMatrixBuilder,
+        Map<Character, TileOccupierFactory> tileOccupierFactoryMap
+    ) {
         positionMatrixBuilder.addRow();
         for (int i = 0; i < line.length(); i++) {
             char tileChar = line.charAt(i);
-            if (!tilesFactory.containsKey(tileChar)) {
+            if (!tileOccupierFactoryMap.containsKey(tileChar)) {
                 throw new RuntimeException("invalid tile character");
             }
 
-            TileOccupier tileOccupier = tilesFactory.get(tileChar).createTileOccupier(
-                positionMatrixBuilder.getPosition(lineNum, i),
-                randomGenerator,
-                board,
-                levelFlow,
-                view);
+            Point position = positionMatrixBuilder.getPosition(lineNum, i);
+            TileOccupier tileOccupier = tileOccupierFactoryMap.get(tileChar).createTileOccupier(position);
             positionMatrixBuilder.set(lineNum, i, tileOccupier);
         }
     }
 
     private class PlayerFactory extends UnitFactory {
-        @Override
-        public TileOccupier createTileOccupier(
-            Point position,
+        PlayerFactory(
             RandomGenerator randomGenerator,
             InitializableBoard board,
             LevelFlow levelFlow,
             GameEventObserver gameEventObserver) {
-            Player player = (Player)LevelController.this.player.clone(position, randomGenerator, board);
-            LevelController.this.player = player;
+            super(randomGenerator, board, levelFlow, gameEventObserver);
+        }
+
+        @Override
+        public TileOccupier createTileOccupier(Point position) {
+            Player player = LevelController.this.player;
             board.setPlayer(player);
-            registerEventObservers(player, board, levelFlow, gameEventObserver);
+            prepareForNewLevel(player, position);
             return player;
         }
     }

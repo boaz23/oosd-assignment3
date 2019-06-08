@@ -1,14 +1,10 @@
 package dnd.logic.player;
 
+import dnd.GameException;
 import dnd.dto.levelup.WarriorLevelUpDTO;
-import dnd.dto.units.UnitDTO;
 import dnd.dto.units.WarriorDTO;
 import dnd.logic.LogicException;
-import dnd.logic.Point;
 import dnd.logic.Tick;
-import dnd.logic.board.Board;
-import dnd.logic.random_generator.RandomGenerator;
-import dnd.logic.tileOccupiers.TileOccupier;
 
 public class Warrior extends Player {
     private static final int LEVEL_HEALTH_DIFF = 5;
@@ -24,18 +20,6 @@ public class Warrior extends Player {
                    Tick cooldown) {
         super(name, healthPool, attack, defense);
         init(cooldown);
-    }
-
-     private Warrior(String name,
-                     int healthPool, int attack, int defense,
-                     int experience, int level,
-                     Tick cooldown,
-                     Point position,
-                     RandomGenerator randomGenerator,
-                     Board board) {
-        super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
-         init(cooldown);
-        this.position = position;
     }
 
     private void init(Tick cooldown) {
@@ -65,11 +49,16 @@ public class Warrior extends Player {
     }
 
     @Override
-    public void useSpecialAbilityCore() throws LogicException {
+    public void useSpecialAbility() throws GameException {
         if (remaining.isGreaterThan(Tick.Zero)) {
             throw new LogicException("Cannot use the special ability because the cooldown isn't ready.");
         }
 
+        super.useSpecialAbility();
+    }
+
+    @Override
+    protected void useSpecialAbilityCore() {
         remaining = coolDown;
         currentHealth += Math.min(currentHealth + (defense * ABILITY_HEAL_POWER), healthPool);
     }
@@ -79,14 +68,13 @@ public class Warrior extends Player {
         return "Heal";
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
         remaining = remaining.decrement();
     }
 
     @Override
-    public UnitDTO createDTO() {
+    public WarriorDTO createDTO() {
         WarriorDTO warriorDTO = new WarriorDTO();
         fillPlayerDtoFields(warriorDTO);
         warriorDTO.abilityCooldown = coolDown.getValue();
@@ -95,14 +83,11 @@ public class Warrior extends Player {
     }
 
     @Override
-    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
+    public Warrior clone() {
         return new Warrior(
             name,
             healthPool, attack, defense,
-            experience, level,
-            coolDown,
-            position,
-            randomGenerator, board
+            coolDown
         );
     }
 }

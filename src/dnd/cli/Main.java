@@ -15,8 +15,6 @@ import dnd.logic.random_generator.Randomizer;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-// TODO: override return values to be more specific (e.g. in tile occupier clone)
-// TODO: get rid of every cast possible
 // TODO: add comments
 class Main {
     public static void main(String[] args) {

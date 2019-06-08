@@ -6,7 +6,6 @@ import dnd.logic.MoveResult;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 
-@SuppressWarnings({ "RedundantThrows", "SameReturnValue" })
 public interface TileVisitor {
     MoveResult visit(Wall wall) throws LogicException;
     MoveResult visit(FreeTile freeTile) throws LogicException;

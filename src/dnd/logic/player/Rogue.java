@@ -3,14 +3,9 @@ package dnd.logic.player;
 import dnd.GameException;
 import dnd.dto.levelup.RogueLevelUpDTO;
 import dnd.dto.units.RogueDTO;
-import dnd.dto.units.UnitDTO;
 import dnd.logic.LogicException;
-import dnd.logic.Point;
 import dnd.logic.Tick;
-import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
-import dnd.logic.random_generator.RandomGenerator;
-import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.List;
 
@@ -28,18 +23,6 @@ public class Rogue extends Player {
                  int cost) {
         super(name, healthPool, attack, defense);
         init(cost);
-    }
-
-    private Rogue(String name,
-                  int healthPool, int attack, int defense,
-                  int experience, int level,
-                  int cost,
-                  Point position,
-                  RandomGenerator randomGenerator,
-                  Board board) {
-        super(name, healthPool, attack, defense, experience, level, randomGenerator, board);
-        init(cost);
-        this.position = position;
     }
 
     private void init(int cost) {
@@ -64,11 +47,16 @@ public class Rogue extends Player {
     }
 
     @Override
-    public void useSpecialAbilityCore() throws GameException {
+    public void useSpecialAbility() throws GameException {
         if (currentEnergy < cost) {
             throw new LogicException("Cannot use special ability due insufficient energy.");
         }
 
+        super.useSpecialAbility();
+    }
+
+    @Override
+    protected void useSpecialAbilityCore() throws GameException {
         currentEnergy -= cost;
         List<Enemy> enemiesInRange = board.getEnemiesInRange(position, ABILITY_RANGE);
         for (Enemy enemy : enemiesInRange) {
@@ -81,14 +69,13 @@ public class Rogue extends Player {
         return "Fan of Knives";
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void onTick(Tick current) {
         currentEnergy = Math.min(currentEnergy + ENERGY_REGEN, MAX_ENERGY);
     }
 
     @Override
-    public UnitDTO createDTO() {
+    public RogueDTO createDTO() {
         RogueDTO rogueDTO = new RogueDTO();
         fillPlayerDtoFields(rogueDTO);
         rogueDTO.currentEnergy = currentEnergy;
@@ -97,14 +84,11 @@ public class Rogue extends Player {
     }
 
     @Override
-    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
+    public Rogue clone() {
         return new Rogue(
             name,
             healthPool, attack, defense,
-            experience, level,
-            cost,
-            position,
-            randomGenerator, board
+            cost
         );
     }
 }

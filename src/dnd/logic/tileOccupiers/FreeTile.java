@@ -2,11 +2,8 @@ package dnd.logic.tileOccupiers;
 
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
-import dnd.logic.Point;
-import dnd.logic.board.Board;
-import dnd.logic.random_generator.RandomGenerator;
 
-public class FreeTile implements TileOccupier {
+public class FreeTile extends Inanimate {
     public static final char TileChar = '.';
 
     @Override
@@ -25,12 +22,7 @@ public class FreeTile implements TileOccupier {
     }
 
     @Override
-    public TileOccupier clone(Point position, RandomGenerator randomGenerator, Board board) {
+    public FreeTile clone() {
         return new FreeTile();
-    }
-
-    @Override
-    public String toString() {
-        return toTileChar() + "";
     }
 }

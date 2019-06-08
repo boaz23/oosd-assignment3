@@ -124,7 +124,6 @@ abstract class PrintEventsView implements View {
         return formatUnitString(enemy);
     }
 
-    @SuppressWarnings("WeakerAccess")
     String formatLevelUpString(LevelUpDTO levelUpDTO) {
         return "Level up: +" +
             levelUpDTO.healthBonus + " Health, +" +

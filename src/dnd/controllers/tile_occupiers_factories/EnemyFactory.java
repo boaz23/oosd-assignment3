@@ -11,20 +11,21 @@ import dnd.logic.tileOccupiers.TileOccupier;
 public class EnemyFactory extends UnitFactory {
     private final Enemy enemy;
 
-    public EnemyFactory(Enemy enemy) {
-        this.enemy = enemy;
-    }
-
-    public TileOccupier createTileOccupier(
-        Point position,
+    public EnemyFactory(
+        Enemy enemy,
         RandomGenerator randomGenerator,
         InitializableBoard board,
         LevelFlow levelFlow,
         GameEventObserver gameEventObserver) {
-        Enemy enemy = (Enemy)this.enemy.clone(position, randomGenerator, board);
-        board.addEnemy(enemy);
-        levelFlow.addTickObserver(enemy);
-        registerEventObservers(enemy, board, levelFlow, gameEventObserver);
-        return enemy;
+        super(randomGenerator, board, levelFlow, gameEventObserver);
+        this.enemy = enemy;
+    }
+
+    public TileOccupier createTileOccupier(Point position) {
+        Enemy clone = enemy.clone();
+        board.addEnemy(clone);
+        levelFlow.addTickObserver(clone);
+        prepareForNewLevel(clone, position);
+        return clone;
     }
 }

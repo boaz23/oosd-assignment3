@@ -21,14 +21,13 @@ public class Tick {
     Returns a new tick with the value of 'value' if it is a non-negative number,
     otherwise return a tick representing zero.
      */
-    @SuppressWarnings("WeakerAccess")
     public static Tick fromValueOrZero(int value) {
         return new Tick(Math.max(value, Zero.value));
     }
 
-//    public Tick clone() {
-//        return new Tick(this.value);
-//    }
+    public Tick clone() {
+        return new Tick(value);
+    }
 
     public int getValue() {
         return value;
