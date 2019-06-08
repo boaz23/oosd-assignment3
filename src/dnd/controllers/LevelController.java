@@ -1,6 +1,7 @@
 package dnd.controllers;
 
 import dnd.GameEventObserver;
+import dnd.GameException;
 import dnd.cli.view.View;
 import dnd.controllers.tile_occupiers_factories.FactoriesMapBuilder;
 import dnd.controllers.tile_occupiers_factories.TileOccupierFactory;
@@ -49,32 +50,18 @@ public class LevelController implements LevelEndObserver {
         this.view = view;
     }
 
-    private boolean hasLevel(File levelFile) {
-        return levelFile.exists();
-    }
-
-    public ActionController loadLevel(int level) {
-        File levelFile = getLevelFile(level);
-        if (hasLevel(levelFile)) {
-            return loadLevel(levelFile);
-        }
-        else {
-            view.onGameWin();
-            return null;
+    @Override
+    public void onDeath(Player player) {
+        if (view != null) {
+            view.onGameLose();
         }
     }
 
-    public char[][] getBoard() {
-        PositionsMatrix boardSquares = board.getBoard();
-        int rows = boardSquares.rows();
-        int columns = boardSquares.columns();
-        char[][] tiles = new char[rows][columns];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                tiles[i][j] = boardSquares.get(i, j).toTileChar();
-            }
+    @Override
+    public void onLevelComplete() {
+        if (view != null) {
+            view.onLevelComplete();
         }
-        return tiles;
     }
 
     public PlayerDTO[] getPlayerChoices() {
@@ -101,17 +88,27 @@ public class LevelController implements LevelEndObserver {
         return player.createDTO();
     }
 
-    @Override
-    public void onDeath(Player player) {
-        if (view != null) {
-            view.onGameLose();
+    public char[][] getBoard() {
+        PositionsMatrix boardSquares = board.getBoard();
+        int rows = boardSquares.rows();
+        int columns = boardSquares.columns();
+        char[][] tiles = new char[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                tiles[i][j] = boardSquares.get(i, j).toTileChar();
+            }
         }
+        return tiles;
     }
 
-    @Override
-    public void onLevelComplete() {
-        if (view != null) {
-            view.onLevelComplete();
+    public ActionController loadLevel(int level) throws GameException {
+        File levelFile = getLevelFile(level);
+        if (hasLevel(levelFile)) {
+            return loadLevel(levelFile);
+        }
+        else {
+            view.onGameWin();
+            return null;
         }
     }
 
@@ -119,7 +116,11 @@ public class LevelController implements LevelEndObserver {
         return new File(levelsDirPath + "Level " + level + ".txt");
     }
 
-    private ActionController loadLevel(File levelFile) {
+    private boolean hasLevel(File levelFile) {
+        return levelFile.exists();
+    }
+
+    private ActionController loadLevel(File levelFile) throws GameException {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(levelFile));
@@ -145,7 +146,7 @@ public class LevelController implements LevelEndObserver {
         }
     }
 
-    private ActionController loadLevel(BufferedReader reader) throws IOException {
+    private ActionController loadLevel(BufferedReader reader) throws IOException, GameException {
         InitializableBoard board = new BoardImpl(new TileFactoryImpl());
         LevelFlow levelFlow = new LevelFlow();
 
@@ -181,7 +182,7 @@ public class LevelController implements LevelEndObserver {
     private PositionsMatrix parseFile(
         BufferedReader reader,
         Map<Character, TileOccupierFactory> tileOccupierFactoryMap
-    ) throws IOException {
+    ) throws IOException, GameException {
         PositionsMatrix positionsMatrix = null;
 
         String line = reader.readLine();
@@ -193,7 +194,7 @@ public class LevelController implements LevelEndObserver {
 
             while ((line = reader.readLine()) != null) {
                 if (line.length() != boardWidth) {
-                    throw new RuntimeException("Invalid board, not a matrix.");
+                    throw new GameException("Invalid board, not a matrix.");
                 }
 
                 lineNum++;
@@ -211,12 +212,12 @@ public class LevelController implements LevelEndObserver {
         int lineNum,
         PositionMatrixBuilder positionMatrixBuilder,
         Map<Character, TileOccupierFactory> tileOccupierFactoryMap
-    ) {
+    ) throws GameException {
         positionMatrixBuilder.addRow();
         for (int i = 0; i < line.length(); i++) {
             char tileChar = line.charAt(i);
             if (!tileOccupierFactoryMap.containsKey(tileChar)) {
-                throw new RuntimeException("invalid tile character");
+                throw new GameException("invalid tile character");
             }
 
             Point position = positionMatrixBuilder.getPosition(lineNum, i);

@@ -58,6 +58,11 @@ public class Mage extends Player {
     }
 
     @Override
+    public void onTick(Tick current) {
+        currentMana = Math.min(manaPool, currentMana + MANA_REGEN);
+    }
+
+    @Override
     protected void levelUp() {
         MageLevelUpDTO mageLevelUpDTO = initLevelUpDto();
 
@@ -68,23 +73,6 @@ public class Mage extends Player {
 
         calculateLevelUpStatsDiffs(mageLevelUpDTO);
         callLevelUpObservers(mageLevelUpDTO);
-    }
-
-    private MageLevelUpDTO initLevelUpDto() {
-        MageLevelUpDTO mageLevelUpDTO = initLevelUpDto(new MageLevelUpDTO());
-        mageLevelUpDTO.manaPoolBonus = manaPool;
-        mageLevelUpDTO.spellPowerBonus = spellPower;
-        return mageLevelUpDTO;
-    }
-
-    private void calculateLevelUpStatsDiffs(MageLevelUpDTO mageLevelUpDTO) {
-        super.calculateLevelUpStatsDiffs(mageLevelUpDTO);
-        mageLevelUpDTO.manaPoolBonus = manaPool - mageLevelUpDTO.manaPoolBonus;
-        mageLevelUpDTO.spellPowerBonus = spellPower - mageLevelUpDTO.spellPowerBonus;
-    }
-
-    private int getManaAddition() {
-        return manaPool / MANA_ADDITION_DIV;
     }
 
     @Override
@@ -105,6 +93,7 @@ public class Mage extends Player {
             Enemy enemy = enemiesInRange.get(enemyIndex);
             boolean died = attack(enemy, spellPower);
             if (died) {
+                // We don't want to roll a dead enemy
                 enemiesInRange.remove(enemyIndex);
             }
         }
@@ -116,11 +105,6 @@ public class Mage extends Player {
     }
 
     @Override
-    public void onTick(Tick current) {
-        currentMana = Math.min(manaPool, currentMana + MANA_REGEN);
-    }
-
-    @Override
     public MageDTO createDTO() {
         MageDTO mageDTO = new MageDTO();
         fillPlayerDtoFields(mageDTO);
@@ -128,6 +112,23 @@ public class Mage extends Player {
         mageDTO.manaPool = manaPool;
         mageDTO.spellPower = spellPower;
         return mageDTO;
+    }
+
+    private int getManaAddition() {
+        return manaPool / MANA_ADDITION_DIV;
+    }
+
+    private MageLevelUpDTO initLevelUpDto() {
+        MageLevelUpDTO mageLevelUpDTO = initLevelUpDto(new MageLevelUpDTO());
+        mageLevelUpDTO.manaPoolBonus = manaPool;
+        mageLevelUpDTO.spellPowerBonus = spellPower;
+        return mageLevelUpDTO;
+    }
+
+    private void calculateLevelUpStatsDiffs(MageLevelUpDTO mageLevelUpDTO) {
+        super.calculateLevelUpStatsDiffs(mageLevelUpDTO);
+        mageLevelUpDTO.manaPoolBonus = manaPool - mageLevelUpDTO.manaPoolBonus;
+        mageLevelUpDTO.spellPowerBonus = spellPower - mageLevelUpDTO.spellPowerBonus;
     }
 
     @Override

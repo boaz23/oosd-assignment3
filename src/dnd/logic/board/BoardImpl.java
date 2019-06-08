@@ -89,7 +89,6 @@ public class BoardImpl implements InitializableBoard {
     public void onDeath(Player player) throws GameException {
         board.set(player.getPosition(), tileFactory.createDeadPlayer());
         callPlayerDeathObservers();
-
     }
 
     @Override
@@ -100,11 +99,6 @@ public class BoardImpl implements InitializableBoard {
         if (enemies.isEmpty()) {
             callLevelCompleteObservers();
         }
-    }
-
-    @Override
-    public PositionsMatrix getBoard() {
-        return board;
     }
 
     @Override
@@ -128,12 +122,18 @@ public class BoardImpl implements InitializableBoard {
         enemies.add(enemy);
     }
 
+    @Override
     public void setBoard(PositionsMatrix board) {
         if (board == null) {
             throw new IllegalArgumentException("board is null.");
         }
 
         this.board = board;
+    }
+
+    @Override
+    public PositionsMatrix getBoard() {
+        return board;
     }
 
     private void callPlayerDeathObservers() {

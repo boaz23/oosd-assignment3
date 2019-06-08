@@ -36,21 +36,13 @@ public abstract class Enemy extends Unit {
         return experienceValue;
     }
 
-    @Override
-    public boolean defend(Unit attacker, int damage) throws GameException {
-        boolean died = super.defend(attacker, damage);
-        if (died) {
-            callDeathObservers();
-            callOnEnemyDeathObservers();
-        }
-
-        return died;
+    public char getTileChar() {
+        return tile;
     }
 
-    private void callOnEnemyDeathObservers() {
-        for (GameEventObserver observer : gameEventObservers) {
-            observer.onEnemyDeath(createDTO());
-        }
+    @Override
+    public char toTileChar() {
+        return tile;
     }
 
     @Override
@@ -69,6 +61,38 @@ public abstract class Enemy extends Unit {
         return meleeAttack(player) ? MoveResult.Dead : MoveResult.Engaged;
     }
 
+    @Override
+    public boolean defend(Unit attacker, int damage) throws GameException {
+        boolean died = super.defend(attacker, damage);
+        if (died) {
+            callDeathObservers();
+            callOnEnemyDeathObservers();
+        }
+
+        return died;
+    }
+
+    @Override
+    public abstract Enemy clone();
+
+    @Override
+    public EnemyDTO createDTO() {
+        EnemyDTO enemyDTO = new EnemyDTO();
+        fillUnitDtoFields(enemyDTO);
+        return enemyDTO;
+    }
+
+    @Override
+    public String toString() {
+        return getTileChar() + ", " + name;
+    }
+
+    private void callOnEnemyDeathObservers() {
+        for (GameEventObserver observer : gameEventObservers) {
+            observer.onEnemyDeath(createDTO());
+        }
+    }
+
     void callEngageObservers(Player player) {
         for (GameEventObserver observer : gameEventObservers) {
             observer.onEnemyEngage(createDTO(), player.createDTO());
@@ -80,28 +104,4 @@ public abstract class Enemy extends Unit {
             observer.onDeath(this);
         }
     }
-
-    @Override
-    public char toTileChar() {
-        return tile;
-    }
-
-    @Override
-    public EnemyDTO createDTO() {
-        EnemyDTO enemyDTO = new EnemyDTO();
-        fillUnitDtoFields(enemyDTO);
-        return enemyDTO;
-    }
-
-    public char getTileChar() {
-        return tile;
-    }
-
-    @Override
-    public String toString() {
-        return getTileChar() + ", " + name;
-    }
-
-    @Override
-    public abstract Enemy clone();
 }

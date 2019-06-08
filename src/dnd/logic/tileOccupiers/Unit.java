@@ -48,8 +48,29 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         this.defense = defense;
     }
 
+    @Override
+    public boolean isFree() {
+        return false;
+    }
+
     public Point getPosition() {
         return position;
+    }
+
+    public MoveResult moveLeft() throws GameException {
+        return move(new Point(position.getX() - 1, position.getY()));
+    }
+
+    public MoveResult moveRight() throws GameException {
+        return move(new Point(position.getX() + 1, position.getY()));
+    }
+
+    public MoveResult moveUp() throws GameException {
+        return move(new Point(position.getX(), position.getY() - 1));
+    }
+
+    public MoveResult moveDown() throws GameException {
+        return move(new Point(position.getX(), position.getY() + 1));
     }
 
     protected MoveResult move(Point newPosition) throws GameException {
@@ -75,17 +96,6 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         return moveResult;
     }
 
-    private boolean moveActual(Point newPosition) {
-        try {
-            board.move(this, newPosition);
-            position = newPosition;
-            return true;
-        }
-        catch (PositionOutOfBoundsException e) {
-            return false;
-        }
-    }
-
     public MoveResult visit(FreeTile freeTile) {
         if (freeTile == null) {
             throw new IllegalArgumentException("freeTile is null.");
@@ -106,55 +116,6 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
 
     public abstract MoveResult visit(Player player) throws GameException;
 
-    protected boolean meleeAttack(Unit unit) throws GameException {
-        if (unit == null) {
-            throw new IllegalArgumentException("unit is null.");
-        }
-
-        int damage = randomGenerator.nextInt(attack);
-        callAttackPointsRollObservers(damage);
-        return attackCore(unit, damage);
-    }
-
-    private void callAttackPointsRollObservers(int attackPointsRoll) {
-        for (GameEventObserver observer : gameEventObservers) {
-            observer.onAttackPointsRoll(createDTO(), attackPointsRoll);
-        }
-    }
-
-    private void callDefensePointsRollObservers(int defensePointsRoll) {
-        for (GameEventObserver observer : gameEventObservers) {
-            observer.onDefensePointsRoll(createDTO(), defensePointsRoll);
-        }
-    }
-
-    protected boolean attackCore(Unit unit, int damage) throws GameException {
-        return unit.defend(this, damage);
-    }
-
-    /**
-     * Defends from taking 'damage' amount of damage and lowers
-     * the current health according to the actual damage dealt
-     * (it might have been lowered by rolling a number between 0 and defense)
-     *
-     * @param damage The amount of damage to formatString from
-     * @return Whether the unit died
-     */
-    public boolean defend(Unit attacker, int damage) throws GameException {
-        int reduction = randomGenerator.nextInt(defense);
-        callDefensePointsRollObservers(reduction);
-        damage = Math.max(damage - reduction, 0);
-        callOnHitObservers(attacker, damage);
-        currentHealth = Math.max(currentHealth - damage, 0);
-        return currentHealth == 0;
-    }
-
-    private void callOnHitObservers(Unit attacker, int damage) {
-        for (GameEventObserver observer : gameEventObservers) {
-            observer.onHit(attacker.createDTO(), createDTO(), damage);
-        }
-    }
-
     public void addDeathObserver(DeathObserver observer) {
         if (observer == null) {
             throw new IllegalArgumentException("observer is null.");
@@ -171,35 +132,46 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         gameEventObservers.add(observer);
     }
 
-    @Override
-    public boolean isFree() {
-        return false;
+    protected boolean meleeAttack(Unit unit) throws GameException {
+        if (unit == null) {
+            throw new IllegalArgumentException("unit is null.");
+        }
+
+        int damage = randomGenerator.nextInt(attack);
+        callAttackPointsRollObservers(damage);
+        return attackCore(unit, damage);
     }
 
-    public MoveResult moveLeft() throws GameException {
-        return move(new Point(position.getX() - 1, position.getY()));
+    protected boolean attackCore(Unit unit, int damage) throws GameException {
+        return unit.defend(this, damage);
     }
 
-    public MoveResult moveRight() throws GameException {
-        return move(new Point(position.getX() + 1, position.getY()));
+    /**
+     * Defends from taking 'damage' amount of damage and lowers
+     * the current health according to the actual damage dealt
+     * (it might have been lowered by rolling a number between 0 and defense)
+     *
+     * @param damage The amount of damage to defend from
+     * @return Whether the unit died
+     */
+    public boolean defend(Unit attacker, int damage) throws GameException {
+        int reduction = randomGenerator.nextInt(defense);
+        callDefensePointsRollObservers(reduction);
+        damage = Math.max(damage - reduction, 0);
+        callOnHitObservers(attacker, damage);
+        currentHealth = Math.max(currentHealth - damage, 0);
+        return currentHealth == 0;
     }
 
-    public MoveResult moveUp() throws GameException {
-        return move(new Point(position.getX(), position.getY() - 1));
-    }
-
-    public MoveResult moveDown() throws GameException {
-        return move(new Point(position.getX(), position.getY() + 1));
-    }
-
-    protected abstract UnitDTO createDTO();
-
-    protected void fillUnitDtoFields(UnitDTO unitDTO) {
-        unitDTO.name = name;
-        unitDTO.healthPool = healthPool;
-        unitDTO.currentHealth = currentHealth;
-        unitDTO.attack = attack;
-        unitDTO.defense = defense;
+    private boolean moveActual(Point newPosition) {
+        try {
+            board.move(this, newPosition);
+            position = newPosition;
+            return true;
+        }
+        catch (PositionOutOfBoundsException e) {
+            return false;
+        }
     }
 
     public void initNewLevelState(Point position, RandomGenerator randomGenerator, Board board) {
@@ -215,6 +187,34 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         this.randomGenerator = randomGenerator;
         this.board = board;
         this.position = position;
+    }
+
+    protected abstract UnitDTO createDTO();
+
+    protected void fillUnitDtoFields(UnitDTO unitDTO) {
+        unitDTO.name = name;
+        unitDTO.healthPool = healthPool;
+        unitDTO.currentHealth = currentHealth;
+        unitDTO.attack = attack;
+        unitDTO.defense = defense;
+    }
+
+    private void callAttackPointsRollObservers(int attackPointsRoll) {
+        for (GameEventObserver observer : gameEventObservers) {
+            observer.onAttackPointsRoll(createDTO(), attackPointsRoll);
+        }
+    }
+
+    private void callDefensePointsRollObservers(int defensePointsRoll) {
+        for (GameEventObserver observer : gameEventObservers) {
+            observer.onDefensePointsRoll(createDTO(), defensePointsRoll);
+        }
+    }
+
+    private void callOnHitObservers(Unit attacker, int damage) {
+        for (GameEventObserver observer : gameEventObservers) {
+            observer.onHit(attacker.createDTO(), createDTO(), damage);
+        }
     }
 
     @Override

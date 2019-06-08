@@ -35,6 +35,11 @@ public class Rogue extends Player {
     }
 
     @Override
+    public void onTick(Tick current) {
+        currentEnergy = Math.min(currentEnergy + ENERGY_REGEN, MAX_ENERGY);
+    }
+
+    @Override
     protected void levelUp() {
         RogueLevelUpDTO rogueLevelUpDTO = initLevelUpDto(new RogueLevelUpDTO());
 
@@ -67,11 +72,6 @@ public class Rogue extends Player {
     @Override
     protected String getSpecialAbilityName() {
         return "Fan of Knives";
-    }
-
-    @Override
-    public void onTick(Tick current) {
-        currentEnergy = Math.min(currentEnergy + ENERGY_REGEN, MAX_ENERGY);
     }
 
     @Override

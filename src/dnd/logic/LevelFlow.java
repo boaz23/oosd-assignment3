@@ -30,7 +30,7 @@ public class LevelFlow implements DeathObserver, LevelEndObserver {
         for (int i = 0; i < tickObservers.length & !stopTurns; i++) {
             TickObserver observer = tickObservers[i];
 
-            // may have been removed
+            // may have been removed by previous onTick calls
             if (this.tickObservers.contains(observer)) {
                 observer.onTick(tick);
             }

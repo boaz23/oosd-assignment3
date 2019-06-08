@@ -31,8 +31,9 @@ public class Warrior extends Player {
         resetCooldown();
     }
 
-    private void resetCooldown() {
-        remaining = Tick.Zero;
+    @Override
+    public void onTick(Tick current) {
+        remaining = remaining.decrement();
     }
 
     @Override
@@ -68,9 +69,8 @@ public class Warrior extends Player {
         return "Heal";
     }
 
-    @Override
-    public void onTick(Tick current) {
-        remaining = remaining.decrement();
+    private void resetCooldown() {
+        remaining = Tick.Zero;
     }
 
     @Override

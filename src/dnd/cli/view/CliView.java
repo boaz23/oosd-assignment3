@@ -115,7 +115,7 @@ public class CliView extends PrintEventsView {
         }
     }
 
-    private void loadNextLevel() {
+    private void loadNextLevel() throws GameException {
         currentLevel++;
         actionController = levelController.loadLevel(currentLevel);
     }
@@ -134,11 +134,14 @@ public class CliView extends PrintEventsView {
             }
 
             levelComplete = false;
+
+            // We don't want to load the next level if there's a determined result
             if (gameResult == null) {
                 loadNextLevel();
             }
 
-            // may have been changed by loading the next level
+            // There's a determined result,
+            // It may have been changed by loading the next level
             if (gameResult != null) {
                 switch (gameResult) {
                     case Win:
