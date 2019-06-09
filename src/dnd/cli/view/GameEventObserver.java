@@ -1,4 +1,4 @@
-package dnd;
+package dnd.cli.view;
 
 import dnd.dto.levelup.LevelUpDTO;
 import dnd.dto.units.EnemyDTO;

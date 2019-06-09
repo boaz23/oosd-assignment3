@@ -1,6 +1,6 @@
 package dnd.logic.tileOccupiers;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.enemies.Enemy;

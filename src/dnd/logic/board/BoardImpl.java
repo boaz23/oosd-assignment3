@@ -1,6 +1,6 @@
 package dnd.logic.board;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.logic.LevelEndObserver;
 import dnd.logic.Point;
 import dnd.logic.PositionOutOfBoundsException;

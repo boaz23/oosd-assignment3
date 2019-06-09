@@ -113,9 +113,9 @@ abstract class PrintEventsView implements View {
     }
 
     @Override
-    public String formatString(RogueDTO rogueDTO) {
-        String rougeInfo = formatPlayerString(rogueDTO);
-        rougeInfo += "\t\tEnergy: " + rogueDTO.currentEnergy + "/" + rogueDTO.maxEnergy;
+    public String formatString(RogueDTO rogue) {
+        String rougeInfo = formatPlayerString(rogue);
+        rougeInfo += "\t\tEnergy: " + rogue.currentEnergy + "/" + rogue.maxEnergy;
         return rougeInfo;
     }
 
@@ -124,11 +124,11 @@ abstract class PrintEventsView implements View {
         return formatUnitString(enemy);
     }
 
-    String formatLevelUpString(LevelUpDTO levelUpDTO) {
+    String formatLevelUpString(LevelUpDTO levelUp) {
         return "Level up: +" +
-            levelUpDTO.healthBonus + " Health, +" +
-            levelUpDTO.attackBonus + " Attack, +" +
-            levelUpDTO.defenseBonus + " Defense";
+            levelUp.healthBonus + " Health, +" +
+            levelUp.attackBonus + " Attack, +" +
+            levelUp.defenseBonus + " Defense";
     }
 
     @Override
@@ -139,8 +139,8 @@ abstract class PrintEventsView implements View {
     }
 
     @Override
-    public String formatString(RogueLevelUpDTO rogueLevelUpDTO) {
-        return formatLevelUpString(rogueLevelUpDTO);
+    public String formatString(RogueLevelUpDTO rogueLevelUp) {
+        return formatLevelUpString(rogueLevelUp);
     }
 
     @Override

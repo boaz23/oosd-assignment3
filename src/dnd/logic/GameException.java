@@ -1,4 +1,4 @@
-package dnd;
+package dnd.logic;
 
 public class GameException extends Exception {
     public GameException() {

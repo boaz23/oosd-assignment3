@@ -1,6 +1,6 @@
 package dnd.cli.view;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.cli.GameFinishedResult;
 import dnd.cli.action_reader.ActionReader;
 import dnd.cli.printer.Printer;

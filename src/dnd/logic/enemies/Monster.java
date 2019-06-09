@@ -1,6 +1,6 @@
 package dnd.logic.enemies;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.logic.Tick;
 import dnd.logic.player.Player;
 

@@ -1,6 +1,6 @@
 package dnd.cli;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.cli.action_reader.ActionReader;
 import dnd.cli.action_reader.ConsoleActionReader;
 import dnd.cli.action_reader.FileActionReader;

@@ -1,7 +1,5 @@
 package dnd.logic;
 
-import dnd.GameException;
-
 public class LogicException extends GameException {
     public LogicException() {
     }

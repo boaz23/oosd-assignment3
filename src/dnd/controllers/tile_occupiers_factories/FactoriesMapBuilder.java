@@ -1,6 +1,6 @@
 package dnd.controllers.tile_occupiers_factories;
 
-import dnd.GameEventObserver;
+import dnd.cli.view.GameEventObserver;
 import dnd.logic.LevelFlow;
 import dnd.logic.board.InitializableBoard;
 import dnd.logic.enemies.Enemy;

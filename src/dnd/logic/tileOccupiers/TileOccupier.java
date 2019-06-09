@@ -1,6 +1,6 @@
 package dnd.logic.tileOccupiers;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.logic.MoveResult;
 
 public abstract class TileOccupier {

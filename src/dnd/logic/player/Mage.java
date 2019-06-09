@@ -1,6 +1,6 @@
 package dnd.logic.player;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.dto.levelup.MageLevelUpDTO;
 import dnd.dto.units.MageDTO;
 import dnd.logic.LogicException;

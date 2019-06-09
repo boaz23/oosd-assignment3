@@ -1,6 +1,6 @@
 package dnd.controllers;
 
-import dnd.GameException;
+import dnd.logic.GameException;
 import dnd.logic.LevelFlow;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
