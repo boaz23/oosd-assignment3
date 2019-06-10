@@ -20,7 +20,7 @@ public abstract class Player extends Unit {
     int experience;
     int level;
 
-    Player(String name,
+    protected Player(String name,
            int healthPool, int attack, int defense) {
         super(name, healthPool, attack, defense);
         init();

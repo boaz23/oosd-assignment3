@@ -15,13 +15,13 @@ public class Mage extends Player {
     private static final int MANA_REGEN = 1;
     private static final int MANA_ADDITION_DIV = 4;
 
-    private int spellPower;
-    private int manaPool;
-    private int currentMana;
+    protected int spellPower;
+    protected int manaPool;
+    protected int currentMana;
 
-    private int cost;
-    private int hitTimes;
-    private int range;
+    protected int cost;
+    protected int hitTimes;
+    protected int range;
 
     public Mage(String name,
                 int healthPool, int attack, int defense,

@@ -42,7 +42,7 @@ public class Monster extends Enemy {
         }
     }
 
-    private void chasePlayer(Player player) throws GameException {
+    protected void chasePlayer(Player player) throws GameException {
         int dx = position.getX() - player.getPosition().getX();
         int dy = position.getY() - player.getPosition().getY();
 
