@@ -13,6 +13,7 @@ import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.random_generator.Randomizer;
 
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 // TODO: add comments
@@ -26,11 +27,11 @@ class Main {
             return;
         }
 
-        String filesDirPath = getFilesDirPath(args[0]);
+        String levelFilesDirPath = getFilesDirPath(args[0]);
         if (args.length >= 2 && args[1].equals("-D")) {
             try {
-                actionReader = new FileActionReader(filesDirPath + "user_actions.txt", printer);
-                randomGenerator = new FileRandomGenerator(filesDirPath + "random_numbers.txt");
+                actionReader = new FileActionReader(getPath("user_actions.txt"), printer);
+                randomGenerator = new FileRandomGenerator(getPath("random_numbers.txt"));
             }
             catch (FileNotFoundException e) {
                 System.out.println("file not found.");
@@ -44,7 +45,7 @@ class Main {
             randomGenerator = new Randomizer();
         }
 
-        LevelController levelController = new LevelController(filesDirPath, randomGenerator);
+        LevelController levelController = new LevelController(levelFilesDirPath, randomGenerator);
         CliView view = new CliView(printer, actionReader, levelController);
         try {
             view.startGame();
@@ -54,6 +55,11 @@ class Main {
             e.printStackTrace();
         }
     }
+
+    private static String getPath(String file) {
+        return Paths.get(file).toString();
+    }
+
 
     private static String getFilesDirPath(String arg) {
         String filesDirPath = arg;
