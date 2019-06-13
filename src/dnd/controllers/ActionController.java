@@ -6,6 +6,9 @@ import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.player.Player;
 
+/**
+ * Takes commands and requests from the player to do them and then starts the next tick.
+ */
 public class ActionController {
     private final Player player;
     private final LevelFlow levelFlow;

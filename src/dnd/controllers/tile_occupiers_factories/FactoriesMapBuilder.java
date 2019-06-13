@@ -10,6 +10,9 @@ import dnd.logic.tileOccupiers.Inanimate;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Builds a map of characters to factories used to get the factory for the specific enemy from it's represeting character character
+ */
 public class FactoriesMapBuilder {
     private final Map<Character, TileOccupierFactory> tileOccupierFactoryMap;
 

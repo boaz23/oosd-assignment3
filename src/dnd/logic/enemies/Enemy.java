@@ -9,6 +9,9 @@ import dnd.logic.player.Player;
 import dnd.logic.tileOccupiers.TileVisitor;
 import dnd.logic.tileOccupiers.Unit;
 
+/**
+ * Base class for all enemies in the game
+ */
 public abstract class Enemy extends Unit {
     int experienceValue;
     char tile;
@@ -36,6 +39,10 @@ public abstract class Enemy extends Unit {
         return experienceValue;
     }
 
+    /**
+     * Used to get the tile char for the factory map when loading a level
+     * @return
+     */
     public char getTileChar() {
         return tile;
     }

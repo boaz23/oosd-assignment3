@@ -56,6 +56,9 @@ public class Trap extends Enemy {
         updateVisibility();
     }
 
+    /**
+     * Relocates when enough ticks passed.
+     */
     private boolean checkRelocation() throws GameException {
         boolean relocated;
         if (ticksCount.equals(relocationTime)) {
@@ -77,6 +80,9 @@ public class Trap extends Enemy {
         move(freeTiles.get(tileIndex));
     }
 
+    /**
+     * Engages the player if it's in range
+     */
     private void checkEngagePlayer() throws GameException {
         Player player = board.getPlayerInRange(position, ATTACK_RANGE);
         if (player != null) {
@@ -89,6 +95,9 @@ public class Trap extends Enemy {
         meleeAttack(player);
     }
 
+    /**
+     * Changes the visibility of trap according to the amount of tick passed
+     */
     private void updateVisibility() {
         visible = visibilityTime.isGreaterThan(ticksCount);
     }

@@ -5,6 +5,10 @@ import dnd.dto.units.EnemyDTO;
 import dnd.dto.units.PlayerDTO;
 import dnd.dto.units.UnitDTO;
 
+/**
+ * An observer which receives various game events when they happen (such as player or enemy dying).
+ * Data transportation is done through use of special data objects made just for that (DTO).
+ */
 public interface GameEventObserver {
     void onCastingSpecialAbility(PlayerDTO player);
     void onExpGain(PlayerDTO player, int experienceGained);

@@ -4,6 +4,9 @@ import dnd.logic.Point;
 import dnd.logic.PositionOutOfBoundsException;
 import dnd.logic.tileOccupiers.TileOccupier;
 
+/**
+ * Encapsulates the access to the game board matrix (It doesn't have to be an actual matrix in memory, it's a symbolic name).
+ */
 public class PositionsMatrix {
     private final BoardSquare[][] boardSquares;
 
@@ -32,22 +35,37 @@ public class PositionsMatrix {
         boardSquares[indices.i][indices.j].setTileOccupier(tileOccupier);
     }
 
+    /**
+     * Returns the last x point on the x axis
+     */
     int lastX() {
         return boardSquares[0].length - 1;
     }
 
+    /**
+     * Returns the last y point on the y axis
+     */
     int lastY() {
         return boardSquares.length - 1;
     }
 
+    /**
+     * Gets the tile occupier at the specified indices (required for printing the board).
+     */
     public TileOccupier get(int i, int j) {
         return boardSquares[i][j].getTileOccupier();
     }
 
+    /**
+     * Returns the numbers of rows of the actual matrix stored by this object (required for printing the board).
+     */
     public int rows() {
         return boardSquares.length;
     }
 
+    /**
+     * Returns the numbers of columns of the actual matrix stored by this object (required for printing the board).
+     */
     public int columns() {
         return boardSquares[0].length;
     }
@@ -65,6 +83,9 @@ public class PositionsMatrix {
         }
     }
 
+    /**
+     * Encapsulates the logic of mapping a position point to their indices on the actual matrix stored by the matrix object
+     */
     static class Indices {
         private final int i;
         private final int j;

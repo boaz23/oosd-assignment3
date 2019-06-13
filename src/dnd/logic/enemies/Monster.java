@@ -5,7 +5,10 @@ import dnd.logic.Tick;
 import dnd.logic.player.Player;
 
 public class Monster extends Enemy {
-    private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[]{
+    /**
+     * A map for random acting
+     */
+    private static final MoveInDirectionAction[] MoveDirections = new MoveInDirectionAction[] {
         monster -> monster.moveDown(),
         monster -> monster.moveUp(),
         monster -> monster.moveRight(),
@@ -42,6 +45,10 @@ public class Monster extends Enemy {
         }
     }
 
+    /**
+     * Performs the logic of chasing the player.
+     * @param player The player to chase
+     */
     protected void chasePlayer(Player player) throws GameException {
         int dx = position.getX() - player.getPosition().getX();
         int dy = position.getY() - player.getPosition().getY();

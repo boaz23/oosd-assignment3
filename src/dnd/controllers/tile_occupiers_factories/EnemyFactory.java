@@ -8,6 +8,9 @@ import dnd.logic.enemies.Enemy;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.tileOccupiers.TileOccupier;
 
+/**
+ * Responsible for creating new enemy units from a template enemy using the prototype pattern.
+ */
 public class EnemyFactory extends UnitFactory {
     private final Enemy enemy;
 

@@ -1,7 +1,6 @@
 package dnd.cli.view;
 
 import dnd.logic.GameException;
-import dnd.cli.GameFinishedResult;
 import dnd.cli.action_reader.ActionReader;
 import dnd.cli.printer.Printer;
 import dnd.controllers.ActionController;
@@ -11,6 +10,9 @@ import dnd.dto.units.PlayerDTO;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Responsible for the view logic (e.g. showing player select screen, mapping user input to commands etc.)
+ */
 public class CliView extends PrintEventsView {
     private static final Map<String, PlayerAction> actions = new HashMap<String, PlayerAction>() {{
         put("w", actionController -> actionController.moveUp());

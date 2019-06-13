@@ -5,6 +5,9 @@ import dnd.logic.tileOccupiers.TileOccupier;
 
 import java.util.ArrayList;
 
+/**
+ * Encapsulates the logic of building a game board matrix when loading a level
+ */
 public class PositionMatrixBuilder {
     private final ArrayList<BoardSquare[]> boardSquares;
     private final int columns;

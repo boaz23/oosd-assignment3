@@ -2,6 +2,10 @@ package dnd.logic.board;
 
 import dnd.logic.tileOccupiers.TileOccupier;
 
+/**
+ * Represents a square on the game board.
+ * Holds a tile occupier.
+ */
 class BoardSquare {
     private TileOccupier tileOccupier;
 

@@ -6,6 +6,9 @@ import dnd.logic.player.Player;
 import dnd.logic.player.Rogue;
 import dnd.logic.player.Warrior;
 
+/**
+ * Lists every defined player in the game.
+ */
 public class AvailablePlayers {
     public static final Warrior JonSnow = new Warrior(
         "Jon Snow",

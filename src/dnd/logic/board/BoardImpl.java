@@ -13,6 +13,9 @@ import dnd.logic.tileOccupiers.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the game board
+ */
 public class BoardImpl implements InitializableBoard {
     private final TileFactory tileFactory;
     private PositionsMatrix board;
@@ -110,14 +113,17 @@ public class BoardImpl implements InitializableBoard {
         levelEndObservers.add(observer);
     }
 
+    @Override
     public Player getPlayer() {
         return player;
     }
 
+    @Override
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    @Override
     public void addEnemy(Enemy enemy) {
         enemies.add(enemy);
     }

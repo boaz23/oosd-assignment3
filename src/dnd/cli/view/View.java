@@ -13,6 +13,7 @@ public interface View extends GameEventObserver {
     void onGameLose();
     void onGameWin();
 
+    // Visitor pattern for DTOs
     String formatString(MageDTO mage);
     String formatString(WarriorDTO warrior);
     String formatString(RogueDTO rogue);

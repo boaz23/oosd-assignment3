@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-// TODO: add comments
 class Main {
     public static void main(String[] args) {
         ActionReader actionReader;

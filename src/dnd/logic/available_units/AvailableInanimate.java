@@ -5,6 +5,9 @@ import dnd.logic.tileOccupiers.FreeTile;
 import dnd.logic.tileOccupiers.Inanimate;
 import dnd.logic.tileOccupiers.Wall;
 
+/**
+ * Lists the defined inanimate tile occupiers in the game (such as a dead player, wall and a free tile).
+ */
 public class AvailableInanimate {
     public static final FreeTile FreeTile = new FreeTile();
     public static final Wall Wall = new Wall();

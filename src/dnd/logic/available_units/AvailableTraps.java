@@ -3,6 +3,9 @@ package dnd.logic.available_units;
 import dnd.logic.Tick;
 import dnd.logic.enemies.Trap;
 
+/**
+ * Lists every defined trap in the game.
+ */
 public class AvailableTraps {
     public static final Trap BonusTrap = new Trap(
         "Bonus \"Trap\"",

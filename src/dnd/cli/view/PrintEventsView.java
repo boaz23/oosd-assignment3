@@ -8,6 +8,9 @@ import dnd.dto.levelup.RogueLevelUpDTO;
 import dnd.dto.levelup.WarriorLevelUpDTO;
 import dnd.dto.units.*;
 
+/**
+ * Responsible for printing the various game events that happen
+ */
 abstract class PrintEventsView implements View {
     private final Printer printer;
 

@@ -26,6 +26,10 @@ import dnd.logic.tileOccupiers.TileOccupier;
 import java.io.*;
 import java.util.Map;
 
+/**
+ * Responsible for loading levels and supplying view needs when there's a level in play.
+ * Notifies the view when a level is complete or when the game is lost.
+ */
 public class LevelController implements LevelEndObserver {
     private final RandomGenerator randomGenerator;
     private final String levelsDirPath;
