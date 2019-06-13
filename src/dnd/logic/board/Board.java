@@ -2,7 +2,6 @@ package dnd.logic.board;
 
 import dnd.logic.DeathObserver;
 import dnd.logic.Point;
-import dnd.logic.PositionOutOfBoundsException;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 import dnd.logic.tileOccupiers.TileOccupier;

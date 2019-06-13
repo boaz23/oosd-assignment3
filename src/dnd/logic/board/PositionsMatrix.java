@@ -1,7 +1,6 @@
 package dnd.logic.board;
 
 import dnd.logic.Point;
-import dnd.logic.PositionOutOfBoundsException;
 import dnd.logic.tileOccupiers.TileOccupier;
 
 /**

@@ -3,7 +3,7 @@ package tests.logic.enemies;
 import dnd.logic.GameException;
 import dnd.logic.MoveResult;
 import dnd.logic.Point;
-import dnd.logic.PositionOutOfBoundsException;
+import dnd.logic.board.PositionOutOfBoundsException;
 import dnd.logic.board.Board;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import tests.logic.player.PlayerMock;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MonsterTest {
     MonsterMock monster;

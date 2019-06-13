@@ -1,5 +1,8 @@
 package dnd.logic;
 
+/**
+ * A 2D point
+ */
 public class Point {
     private final int x;
     private final int y;

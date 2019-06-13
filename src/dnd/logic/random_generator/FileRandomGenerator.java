@@ -2,6 +2,9 @@ package dnd.logic.random_generator;
 
 import java.io.*;
 
+/**
+ * Reads "random" numbers from a file. Used in deterministic mode.
+ */
 public class FileRandomGenerator implements RandomGenerator, Closeable {
     private final BufferedReader reader;
 

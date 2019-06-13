@@ -6,6 +6,10 @@ import dnd.logic.MoveResult;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 
+/**
+ * Visitor pattern to allow acting differently based on the tile occupier type.
+ * Each method returns the result of move performed by the implementing class of this interface.
+ */
 public interface TileVisitor {
     MoveResult visit(Wall wall) throws LogicException;
     MoveResult visit(FreeTile freeTile) throws LogicException;

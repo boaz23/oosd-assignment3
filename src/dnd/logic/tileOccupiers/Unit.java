@@ -5,6 +5,7 @@ import dnd.logic.GameException;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.*;
 import dnd.logic.board.Board;
+import dnd.logic.board.PositionOutOfBoundsException;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
 import dnd.logic.random_generator.RandomGenerator;
@@ -12,6 +13,9 @@ import dnd.logic.random_generator.RandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Base class for every unit of the game (player and enemies).
+ */
 public abstract class Unit extends TileOccupier implements TickObserver, TileVisitor {
     protected final String name;
     protected int healthPool;
@@ -73,6 +77,11 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         return move(new Point(position.getX(), position.getY() + 1));
     }
 
+    /**
+     * Perform a move to the specified position. It may result in a combat or other logic
+     * @param newPosition The target position to attempt to move
+     * @return The result of the move
+     */
     protected MoveResult move(Point newPosition) throws GameException {
         if (newPosition == null) {
             throw new IllegalArgumentException("newPosition is null.");
@@ -96,6 +105,9 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         return moveResult;
     }
 
+    /**
+     * Act when moved on a free tile
+     */
     public MoveResult visit(FreeTile freeTile) {
         if (freeTile == null) {
             throw new IllegalArgumentException("freeTile is null.");
@@ -104,6 +116,9 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         return MoveResult.Allowed;
     }
 
+    /**
+     * Act when moved to a wall
+     */
     public MoveResult visit(Wall wall) {
         if (wall == null) {
             throw new IllegalArgumentException("wall is null.");
@@ -112,8 +127,14 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         return MoveResult.Invalid;
     }
 
+    /**
+     * Act when encoutered an enemy
+     */
     public abstract MoveResult visit(Enemy enemy) throws GameException;
 
+    /**
+     * Act when encountered a player
+     */
     public abstract MoveResult visit(Player player) throws GameException;
 
     public void addDeathObserver(DeathObserver observer) {
@@ -132,6 +153,9 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         gameEventObservers.add(observer);
     }
 
+    /**
+     * Melee attacks a unit
+     */
     protected boolean meleeAttack(Unit unit) throws GameException {
         if (unit == null) {
             throw new IllegalArgumentException("unit is null.");
@@ -142,6 +166,11 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         return attackCore(unit, damage);
     }
 
+    /**
+     * Core logic of attacking a unit
+     * @param unit The unit to attack
+     * @param damage The amount of damage to attack the unit with
+     */
     protected boolean attackCore(Unit unit, int damage) throws GameException {
         return unit.defend(this, damage);
     }
@@ -163,6 +192,11 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         return currentHealth == 0;
     }
 
+    /**
+     * Changes the position of this to the specfied position
+     * @param newPosition The position to change this unit's position to
+     * @return Whether the move was successful or not
+     */
     private boolean moveActual(Point newPosition) {
         try {
             board.move(this, newPosition);
@@ -174,6 +208,9 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         }
     }
 
+    /**
+     * Initializes this unit's state to new level ready state
+     */
     public void initNewLevelState(Point position, RandomGenerator randomGenerator, Board board) {
         if (randomGenerator == null) {
             throw new IllegalArgumentException("randomGenerator is null.");
@@ -189,8 +226,14 @@ public abstract class Unit extends TileOccupier implements TickObserver, TileVis
         this.position = position;
     }
 
+    /**
+     * Creates a DTO of this unit's stats
+     */
     protected abstract UnitDTO createDTO();
 
+    /**
+     * Fills the given unit DTO fields with this unit's stats
+     */
     protected void fillUnitDtoFields(UnitDTO unitDTO) {
         unitDTO.name = name;
         unitDTO.healthPool = healthPool;

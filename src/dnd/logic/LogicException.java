@@ -1,5 +1,8 @@
 package dnd.logic;
 
+/**
+ * An exception which occurs when an action which is against game's logic was attempted
+ */
 public class LogicException extends GameException {
     public LogicException() {
     }

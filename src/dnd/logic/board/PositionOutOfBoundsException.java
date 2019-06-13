@@ -1,5 +1,10 @@
-package dnd.logic;
+package dnd.logic.board;
 
+import dnd.logic.GameException;
+
+/**
+ * An exception which occurs when an attempt was made to access the board game matrix on a non-existing position
+ */
 public class PositionOutOfBoundsException extends GameException {
     public PositionOutOfBoundsException() {
     }

@@ -1,5 +1,8 @@
 package dnd.logic;
 
+/**
+ * Base class for every exception in the game's logic
+ */
 public class GameException extends Exception {
     public GameException() {
     }

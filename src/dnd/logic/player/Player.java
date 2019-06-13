@@ -47,14 +47,21 @@ public abstract class Player extends Unit {
 
     @Override
     public MoveResult visit(Enemy enemy) throws GameException {
-        return moveMeleeAttack(enemy);
+        return meleeAttack(enemy);
     }
 
+    /**
+     * Use the player's special ability.
+     * Derived classes may override this method to provide any validation checking before using the special ability
+     */
     public void useSpecialAbility() throws GameException {
         callSpecialAbilityUseObservers();
         useSpecialAbilityCore();
     }
 
+    /**
+     * Logic of the special ability
+     */
     protected abstract void useSpecialAbilityCore() throws GameException;
 
     @Override
@@ -76,6 +83,10 @@ public abstract class Player extends Unit {
     @Override
     public abstract PlayerDTO createDTO();
 
+    /**
+     * Attacks an enemy with the specified amount of damage
+     * @return Whether the enemy died
+     */
     boolean attack(Enemy enemy, int damage) throws GameException {
         boolean died = attackCore(enemy, damage);
         if (died) {
@@ -85,10 +96,14 @@ public abstract class Player extends Unit {
         return died;
     }
 
-    private MoveResult moveMeleeAttack(Enemy enemy) throws GameException {
+    /**
+     * Melee attacks an enemy
+     * @return The move result of melee attack
+     */
+    private MoveResult meleeAttack(Enemy enemy) throws GameException {
         callOnPlayerEngageObservers(enemy);
 
-        boolean died = meleeAttack(enemy);
+        boolean died = super.meleeAttack(enemy);
         if (died) {
             gainExp(enemy.getExperienceValue());
         }
@@ -140,6 +155,12 @@ public abstract class Player extends Unit {
         playerDTO.specialAbilityName = getSpecialAbilityName();
     }
 
+    /**
+     * Initiate a new level up DTO
+     * @param levelUpDTO An uninitialized level up DTO
+     * @param <T> The level up DTO type
+     * @return The given DTO
+     */
     <T extends LevelUpDTO> T initLevelUpDto(T levelUpDTO) {
         levelUpDTO.healthBonus = healthPool;
         levelUpDTO.attackBonus = attack;
@@ -147,6 +168,10 @@ public abstract class Player extends Unit {
         return levelUpDTO;
     }
 
+    /**
+     * Calculates the differences between the current stats and the stats in the level up DTO
+     * and then sets these as the new values of the DTO
+     */
     void calculateLevelUpStatsDiffs(LevelUpDTO levelUpDTO) {
         levelUpDTO.healthBonus = healthPool - levelUpDTO.healthBonus;
         levelUpDTO.attackBonus = attack - levelUpDTO.attackBonus;

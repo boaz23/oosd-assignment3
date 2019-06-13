@@ -6,6 +6,9 @@ import dnd.logic.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contains tick logic. Responsible for calling each unit to perform it's turn
+ */
 public class LevelFlow implements DeathObserver, LevelEndObserver {
     private Tick tick;
     private final List<TickObserver> tickObservers;

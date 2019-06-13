@@ -3,10 +3,8 @@ package dnd.logic.board;
 import dnd.logic.GameException;
 import dnd.logic.LevelEndObserver;
 import dnd.logic.Point;
-import dnd.logic.PositionOutOfBoundsException;
 import dnd.logic.enemies.Enemy;
 import dnd.logic.player.Player;
-import dnd.logic.tileOccupiers.TileFactory;
 import dnd.logic.tileOccupiers.TileOccupier;
 import dnd.logic.tileOccupiers.Unit;
 
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of the game board
+ * Implementation of the game board which holds every tile occupier in a positions matrix
  */
 public class BoardImpl implements InitializableBoard {
     private final TileFactory tileFactory;

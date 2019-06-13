@@ -1,6 +1,7 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.logic.available_units.AvailableInanimate;
+import dnd.logic.board.TileFactory;
 
 public class TileFactoryImpl implements TileFactory {
     @Override

@@ -1,5 +1,8 @@
 package dnd.logic;
 
+/**
+ * The game turns object
+ */
 public class Tick {
     private final int value;
 

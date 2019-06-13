@@ -114,6 +114,9 @@ public class Mage extends Player {
         return mageDTO;
     }
 
+    /**
+     * Reutns the amount of mana to add on level up and on initialization
+     */
     private int getManaAddition() {
         return manaPool / MANA_ADDITION_DIV;
     }
