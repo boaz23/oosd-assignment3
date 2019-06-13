@@ -19,7 +19,7 @@ public class AvailableMonsters {
     );
 
     public static final Monster QueensGuard = new Monster(
-        "Queen’s Guard",
+        "Queen's Guard",
         400, 20, 15,
         100, 'q', 5
     );
