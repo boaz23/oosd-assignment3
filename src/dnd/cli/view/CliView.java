@@ -1,11 +1,11 @@
 package dnd.cli.view;
 
-import dnd.logic.GameException;
 import dnd.cli.action_reader.ActionReader;
 import dnd.cli.printer.Printer;
 import dnd.controllers.ActionController;
 import dnd.controllers.LevelController;
 import dnd.dto.units.PlayerDTO;
+import dnd.logic.GameException;
 
 import java.util.HashMap;
 import java.util.Map;

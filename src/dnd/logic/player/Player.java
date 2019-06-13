@@ -1,10 +1,10 @@
 package dnd.logic.player;
 
 import dnd.cli.view.GameEventObserver;
-import dnd.logic.GameException;
 import dnd.dto.levelup.LevelUpDTO;
 import dnd.dto.units.PlayerDTO;
 import dnd.logic.DeathObserver;
+import dnd.logic.GameException;
 import dnd.logic.LogicException;
 import dnd.logic.MoveResult;
 import dnd.logic.enemies.Enemy;

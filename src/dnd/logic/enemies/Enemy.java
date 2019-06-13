@@ -1,9 +1,9 @@
 package dnd.logic.enemies;
 
 import dnd.cli.view.GameEventObserver;
-import dnd.logic.GameException;
 import dnd.dto.units.EnemyDTO;
 import dnd.logic.DeathObserver;
+import dnd.logic.GameException;
 import dnd.logic.MoveResult;
 import dnd.logic.player.Player;
 import dnd.logic.tileOccupiers.TileVisitor;

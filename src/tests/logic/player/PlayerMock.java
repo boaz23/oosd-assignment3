@@ -7,7 +7,6 @@ import dnd.logic.Tick;
 import dnd.logic.board.Board;
 import dnd.logic.player.Player;
 import dnd.logic.random_generator.RandomGenerator;
-import tests.logic.enemies.MonsterMock;
 
 import java.util.ArrayList;
 

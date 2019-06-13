@@ -1,7 +1,6 @@
 package dnd.logic.tileOccupiers;
 
 import dnd.cli.view.GameEventObserver;
-import dnd.logic.GameException;
 import dnd.dto.units.UnitDTO;
 import dnd.logic.*;
 import dnd.logic.board.Board;

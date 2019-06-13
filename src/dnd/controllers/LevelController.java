@@ -1,12 +1,12 @@
 package dnd.controllers;
 
 import dnd.cli.view.GameEventObserver;
-import dnd.logic.GameException;
 import dnd.cli.view.View;
 import dnd.controllers.tile_occupiers_factories.FactoriesMapBuilder;
 import dnd.controllers.tile_occupiers_factories.TileOccupierFactory;
 import dnd.controllers.tile_occupiers_factories.UnitFactory;
 import dnd.dto.units.PlayerDTO;
+import dnd.logic.GameException;
 import dnd.logic.LevelEndObserver;
 import dnd.logic.LevelFlow;
 import dnd.logic.Point;

@@ -1,6 +1,5 @@
 package dnd.cli;
 
-import dnd.logic.GameException;
 import dnd.cli.action_reader.ActionReader;
 import dnd.cli.action_reader.ConsoleActionReader;
 import dnd.cli.action_reader.FileActionReader;
@@ -8,6 +7,7 @@ import dnd.cli.printer.ConsolePrinter;
 import dnd.cli.printer.Printer;
 import dnd.cli.view.CliView;
 import dnd.controllers.LevelController;
+import dnd.logic.GameException;
 import dnd.logic.random_generator.FileRandomGenerator;
 import dnd.logic.random_generator.RandomGenerator;
 import dnd.logic.random_generator.Randomizer;
